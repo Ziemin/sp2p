@@ -1,0 +1,9 @@
+Testing
+CMake*
+!CMakeLists.txt
+*.cmake
+*.a
+*.swp
+Makefile
+build
+!Find*
