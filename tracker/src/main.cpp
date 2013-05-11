@@ -1,4 +1,5 @@
 #include <botan/botan.h>
+#include <boost/asio.hpp>
 #include <iostream>
 #include <vector>
 using namespace Botan;

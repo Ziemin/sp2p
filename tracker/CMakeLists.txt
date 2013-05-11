@@ -13,6 +13,8 @@ SET (CMAKE_LINKER  "/usr/bin/llvm-ld")
 #SET (CMAKE_OBJDUMP "/usr/bin/llvm-objdump")
 #SET (CMAKE_RANLIB  "/usr/bin/llvm-ranlib")
 
+include(FindProtobuf)
+
 add_definitions(-BOOST_ASIO_ENABLE_HANDLER_TRACKING)
 
 add_subdirectory(src)
