@@ -14,14 +14,12 @@ message ClientMessage {
 		CREATE_NETWORK = 7;         // Create new Network
 		DELETE_NETWORK = 8;         // Delete Network
 		INVITE_USER = 9;            // Invite user to network
-		LIST_INVITATIONS = 10; 		// List all pending invitations
-		ANSWER_INVITATION = 11; 	// Accept or decline invitation
-		REMOVE_USER = 12;  			// Remove user from network
-		USER_INFO = 13;             // Get information about user of Network
-		UPDATE_SERVER = 14;         // Update information about running server 
+		REMOVE_USER = 10;  			// Remove user from network
+		USER_INFO = 11;             // Get information about user of Network
+		UPDATE_SERVER = 12;         // Update information about running server 
 									// (add to list of active servers if previously inactive)
-		STOP_SERVER = 15;           // Stop running server 
-		SIGN_KEY = 16; 				// Sign new key related to Node itself or certain Network
+		STOP_SERVER = 13;           // Stop running server 
+		SIGN_KEY = 14; 				// Sign new key related to Node itself or certain Network
 	}
 	required RequestType request = 1;
 
@@ -33,7 +31,7 @@ message ClientMessage {
 	optional Register register_message = 2;
 
 	message Unregister {
-		required string cookie = 1
+		required string cookie = 1;
 	}
 	optional Unregister unregister_message = 3;
 
@@ -66,7 +64,7 @@ message ClientMessage {
 
 	message CreateNetwork {
 		required string cookie = 1;
-		required string network_ name = 2;
+		required string network_name = 2;
 		enum AccessRights {
 			PUBLIC = 1;
 			PRIVATE = 2;
@@ -100,51 +98,39 @@ message ClientMessage {
 	}
 	optional InviteUser invite_user_message = 11;
 
-	message ListInvitations {
-		required string cookie = 1;
-	}
-	optional ListInvitations list_invitations_message = 12;
-
-	message AnswerInvitation {
-		required string cookie = 1;
-		required bool answer = 2;
-		optional string public_key = 3;  // PEM encoded public key to sign for this network
-	}
-	optional AnswerInvitation answer_invitation_message = 13;
-
 	message RemoveUser {
 		required string cookie = 1;
 		required string username = 2;
 		required string network_name = 3;
 	}
-	optional RemoveUser remove_user_message = 14;
+	optional RemoveUser remove_user_message = 12;
 
 	message UserInfo {
 		required string cookie = 1;
 		required string username = 2;
 		required string network_name = 3;
 	}
-	optional UserInfo user_info_message = 15;
+	optional UserInfo user_info_message = 13;
 
 	message UpdateServer {
 		required string cookie = 1;
 		required string network_name = 2;
 		required int32 port_number = 3;
 	}
-	optional UpdateServer update_server_message = 16;
+	optional UpdateServer update_server_message = 14;
 
 	message StopServer {
 		required string cookie = 1;
 		required string network_name = 2;
 	}
-	optional StopServer stop_server_message = 17;
+	optional StopServer stop_server_message = 15;
 	
 	message SignKey {
 		required string cookie = 1;
 		required string public_key = 2;   // PEM encoded public key
 		optional string network_name = 3; // if provided Node associates new public key with network
 	}
-	optional SignKey sign_key_message = 18;
+	optional SignKey sign_key_message = 16;
 }
 
 // ------------------------------------------------------------------------------
@@ -172,13 +158,13 @@ message NodeMessage {
 	optional Register register_response = 2;
 	
    	message Login {
-		requried string cookie = 1;
+		required string cookie = 1;
 		optional string node_certificate = 2; // if node wants to add new self-signed certificate
 	}
 	optional Login login_response = 3;
 
 	message ListNetworks {
-    		message Network {
+		message Network {
 			required string name = 1;
 			required string creator_name = 2;
 			optional string creator_email = 3;
@@ -204,15 +190,6 @@ message NodeMessage {
 		repeated ListServers list_servers = 1;
 	}
 	optional ListServers list_servers_response = 7;
-
-	message ListInvitations {
-    	message Invitation {
-			required string network_name;
-			required string date;
-		}
-		repeated Invitation invitations = 1;
-	}
-	optional ListInvitations list_invitations_response = 10;
 
 	message UserInfo {
     	required string user_public_key = 1;
