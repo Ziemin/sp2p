@@ -3,6 +3,7 @@
 
 #include <boost/noncopyable.hpp>
 #include <memory>
+#include "toserverconnection.hpp"
 
 namespace sp2p {
 	namespace sercli {
@@ -10,16 +11,15 @@ namespace sp2p {
         /**
 		 * Class representing server on some node.
 		 */
-		class Server : boost::noncopyable, public std::enable_shared_from_this<Server> {
+		class Server {
 
 			public:
-			private:
+				Server();
+        		tsc_ptr getConnection();
 
 		};
-
-		typedef std::shared_ptr<Server> server_ptr;
 
 	} /* namespace sercli */
 } /* namespace sp2p */
 
-#endif /* CLIENT_H */
+#endif /* SERVER_H */

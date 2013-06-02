@@ -37,12 +37,6 @@ namespace sp2p {
 				 * Synchronous version
 				 */
 				void addNode(Node& node);
-				/**
-				 * Adds node to base. Registers client if necessary.
-				 * Asynchronous version
-				 */
-				template<typename AddHandler>
-					void addNode(Node& node, AddHandler handler);
 
 				/**
 				 * Returns desired nodes - self explanatory
@@ -57,37 +51,11 @@ namespace sp2p {
 				/**
 				 * Returns desired networks - self explanatory
 				 */
-				Network& getNetwork(/* identyfikator - np .nazwa */) const;
+				Network& getNetwork(NetworkDescription network_desc) const;
+				Network& getNetwork(std::string network_name) const;
 				std::vector<network_ptr> getAllNetworks() const;
 
-				void removeNetworkObject(std::string node_name);
-				void removeNetworkObject(network_ptr network);
-
-				network_ptr addNetworkObject(std::string network_name);
-
-				/** 
-				 * Registers new network on given node
-				 * Synchronous
-				 */
-				void registerNetwork(Node& node, NetworkDescription, Network& network_object);
-				/** 
-				 * Registers new network on given node
-				 * Asynchronous
-				 */
-				template <typename CreateHandler>
-					void registerNetwork(Node& node, NetworkDescription, Network& network_object, CreateHandler handler);
-
-				/** 
-				 * Registers new network on given vector of nodes
-				 * Synchronous
-				 */
-				void registerNetwork(std::vector<node_ptr>, NetworkDescription, Network& network_object);
-				/** 
-				 * Registers new network on given vector of nodes
-				 * Asynchronous
-				 */
-				template <typename CreateHandler>
-					void registerNetwork(std::vector<node_ptr>, NetworkDescription, Network& network_object, CreateHandler handler);
+				Network& createNetwork(NetworkDescription network_desc);
 
 				/**
 				 * Saves manager state 
@@ -99,7 +67,7 @@ namespace sp2p {
 				boost::asio::io_service &io_s;
 
 				std::map<NodeDescription, node_ptr> nodes_map;
-				std::map<std::string, network_ptr> networks_map;
+				std::map<NetworkDescription, network_ptr> networks_map;
 		};
 
 	} /* namespace sercli */

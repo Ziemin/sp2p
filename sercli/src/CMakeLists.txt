@@ -12,9 +12,10 @@ include_directories( ${Boost_INCLUDE_DIRS} ${BOTAN_INCLUDE_DIR})
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${sp2p_SOURCE_DIR}/sercli/build)
 add_executable(sercli main.cpp)
 
-#add_library(sercliLib STATIC
-	##libs
-#)
+add_library(sercliLib STATIC
+	user.cpp
+	node.cpp
+)
 
 add_definitions(-BOOST_ASIO_ENABLE_HANDLER_TRACKING)
 

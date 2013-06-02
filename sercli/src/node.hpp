@@ -3,16 +3,20 @@
 
 #include <memory>
 #include <boost/noncopyable.hpp>
+#include <atomic>
 #include "user.hpp"
+#include "network.hpp"
+#include "nodeconnection.hpp"
 
 namespace sp2p {
 	namespace sercli {
 
 		struct NodeDescription {
 	
+			bool operator<(const NodeDescription& other) const;
 		};
 
-		class Node : boost::noncopyable {
+		class Node : boost::noncopyable { 
 			
 			public:
 				/**
@@ -23,6 +27,9 @@ namespace sp2p {
 				void logIn();
 				void logOut();
 
+				/**
+				 * Changes password if user is registered and new username==old username
+				 */
 				void setUser(MyUser user);
 				/*
 				 * Returns true if client is currently logged at node
@@ -31,13 +38,18 @@ namespace sp2p {
 				/** 
 				 * Returns true if client is registered at this node
 				 */
-				bool isRegisterd() const;
+				bool isRegistered() const;
+
+				void registerNetwork(NetworkDescription network_desc);
+				void unregisterNetwork(NetworkDescription network_desc);
 
 				NodeDescription getDescription();
 
 			private:
 				NodeDescription node_desc;
-                bool isRegistered;
+				MyUser my_user;
+				bool is_registered;
+                node_con_ptr node_connection;
 
 		};
 

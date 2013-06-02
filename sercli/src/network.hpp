@@ -4,9 +4,8 @@
 #include <string>
 #include <map>
 #include <tuple>
-#include "node.hpp"
 #include "server.hpp"
-#include "client.hpp"
+#include "myserver.hpp"
 #include "user.hpp"
 #include "data.hpp"
 
@@ -25,13 +24,27 @@ namespace sp2p {
 			network::AccessRights access_rights;
 			network::Visibility  visability;
 			network::ParticipationRights participation_rights;
+			std::string protocol_name;
+			std::string network_name;
 
 			User creator;
+
+			bool operator<(const NetworkDescription& other) const;
 		};
 
+
+		class DataManager;
+		struct NodeDescription;
+		class Node;
+		typedef std::shared_ptr<Node> node_ptr;
+
+		#include "node.hpp"
+		/*
+		 * Class managing network existing on some nodes. It is assumed, that
+		 * such network is accessible to user on all of the nodes
+		 */
 		class Network : boost::noncopyable {
 
-			friend class Client;
 			friend class Server;
 			friend class Manager;
 
@@ -40,36 +53,32 @@ namespace sp2p {
 				 * Associates node with certain network
 				 * @param network_desc data identyfying network created on node
 				 */
-				void associateNode(const Node& node, NetworkDescription network_desc);
+				void associateNode(const Node& node);
 
 				/**
 				 * Removes node from network
 				 * @param network_id data identyfying network created on node
 				 */
 				void detachNode(NodeDescription node_desc);
-				void detachNode(std::string node_name);
 
 				bool isServer() const;
 				bool isClient() const;
 				bool isActive() const;
 
-				std::string getName() const;
+				NetworkDescription getDescription() const;
 
-				Client getClient(); 
-                Server getServer();
+                my_server_ptr becomeServer();
+				std::vector<Server> getAvailableServers();
 
 			private:
 
-				Network(std::string name, DataManager data_manager);
-
-				std::string network_name;
-				std::map<NetworkDescription, node_ptr> nodes_map;
-
+				Network(DataManager data_manager);
+				
+				NetworkDescription network_desc;
+				std::map<NodeDescription, node_ptr> node_set;
 		};
 
 		typedef std::shared_ptr<Network> network_ptr;
-
-		//class ServerNetwork : public Network
 
 	} /* namespace sercli */
 
