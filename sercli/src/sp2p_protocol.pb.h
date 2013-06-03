@@ -27,6 +27,8 @@
 #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
 
+namespace protocol {
+
 // Internal implementation detail -- do not call these.
 void  protobuf_AddDesc_sp2p_5fprotocol_2eproto();
 void protobuf_AssignDesc_sp2p_5fprotocol_2eproto();
@@ -267,7 +269,7 @@ class ClientMessage_Register : public ::google::protobuf::Message {
   inline ::std::string* release_public_key();
   inline void set_allocated_public_key(::std::string* public_key);
 
-  // @@protoc_insertion_point(class_scope:ClientMessage.Register)
+  // @@protoc_insertion_point(class_scope:protocol.ClientMessage.Register)
  private:
   inline void set_has_username();
   inline void clear_has_username();
@@ -360,7 +362,7 @@ class ClientMessage_Unregister : public ::google::protobuf::Message {
   inline ::std::string* release_cookie();
   inline void set_allocated_cookie(::std::string* cookie);
 
-  // @@protoc_insertion_point(class_scope:ClientMessage.Unregister)
+  // @@protoc_insertion_point(class_scope:protocol.ClientMessage.Unregister)
  private:
   inline void set_has_cookie();
   inline void clear_has_cookie();
@@ -459,7 +461,7 @@ class ClientMessage_Login : public ::google::protobuf::Message {
   inline ::std::string* release_password();
   inline void set_allocated_password(::std::string* password);
 
-  // @@protoc_insertion_point(class_scope:ClientMessage.Login)
+  // @@protoc_insertion_point(class_scope:protocol.ClientMessage.Login)
  private:
   inline void set_has_username();
   inline void clear_has_username();
@@ -549,7 +551,7 @@ class ClientMessage_Logout : public ::google::protobuf::Message {
   inline ::std::string* release_cookie();
   inline void set_allocated_cookie(::std::string* cookie);
 
-  // @@protoc_insertion_point(class_scope:ClientMessage.Logout)
+  // @@protoc_insertion_point(class_scope:protocol.ClientMessage.Logout)
  private:
   inline void set_has_cookie();
   inline void clear_has_cookie();
@@ -636,7 +638,7 @@ class ClientMessage_ListNetworks : public ::google::protobuf::Message {
   inline ::std::string* release_cookie();
   inline void set_allocated_cookie(::std::string* cookie);
 
-  // @@protoc_insertion_point(class_scope:ClientMessage.ListNetworks)
+  // @@protoc_insertion_point(class_scope:protocol.ClientMessage.ListNetworks)
  private:
   inline void set_has_cookie();
   inline void clear_has_cookie();
@@ -723,7 +725,7 @@ class ClientMessage_ListMyNetworks : public ::google::protobuf::Message {
   inline ::std::string* release_cookie();
   inline void set_allocated_cookie(::std::string* cookie);
 
-  // @@protoc_insertion_point(class_scope:ClientMessage.ListMyNetworks)
+  // @@protoc_insertion_point(class_scope:protocol.ClientMessage.ListMyNetworks)
  private:
   inline void set_has_cookie();
   inline void clear_has_cookie();
@@ -822,7 +824,7 @@ class ClientMessage_ListServers : public ::google::protobuf::Message {
   inline ::std::string* release_network_name();
   inline void set_allocated_network_name(::std::string* network_name);
 
-  // @@protoc_insertion_point(class_scope:ClientMessage.ListServers)
+  // @@protoc_insertion_point(class_scope:protocol.ClientMessage.ListServers)
  private:
   inline void set_has_cookie();
   inline void clear_has_cookie();
@@ -996,26 +998,26 @@ class ClientMessage_CreateNetwork : public ::google::protobuf::Message {
   inline ::std::string* release_network_name();
   inline void set_allocated_network_name(::std::string* network_name);
 
-  // required .ClientMessage.CreateNetwork.AccessRights access_rights = 3;
+  // required .protocol.ClientMessage.CreateNetwork.AccessRights access_rights = 3;
   inline bool has_access_rights() const;
   inline void clear_access_rights();
   static const int kAccessRightsFieldNumber = 3;
-  inline ::ClientMessage_CreateNetwork_AccessRights access_rights() const;
-  inline void set_access_rights(::ClientMessage_CreateNetwork_AccessRights value);
+  inline ::protocol::ClientMessage_CreateNetwork_AccessRights access_rights() const;
+  inline void set_access_rights(::protocol::ClientMessage_CreateNetwork_AccessRights value);
 
-  // required .ClientMessage.CreateNetwork.Visiblity visibility = 4;
+  // required .protocol.ClientMessage.CreateNetwork.Visiblity visibility = 4;
   inline bool has_visibility() const;
   inline void clear_visibility();
   static const int kVisibilityFieldNumber = 4;
-  inline ::ClientMessage_CreateNetwork_Visiblity visibility() const;
-  inline void set_visibility(::ClientMessage_CreateNetwork_Visiblity value);
+  inline ::protocol::ClientMessage_CreateNetwork_Visiblity visibility() const;
+  inline void set_visibility(::protocol::ClientMessage_CreateNetwork_Visiblity value);
 
-  // required .ClientMessage.CreateNetwork.ParticipationRights participation_rights = 5;
+  // required .protocol.ClientMessage.CreateNetwork.ParticipationRights participation_rights = 5;
   inline bool has_participation_rights() const;
   inline void clear_participation_rights();
   static const int kParticipationRightsFieldNumber = 5;
-  inline ::ClientMessage_CreateNetwork_ParticipationRights participation_rights() const;
-  inline void set_participation_rights(::ClientMessage_CreateNetwork_ParticipationRights value);
+  inline ::protocol::ClientMessage_CreateNetwork_ParticipationRights participation_rights() const;
+  inline void set_participation_rights(::protocol::ClientMessage_CreateNetwork_ParticipationRights value);
 
   // optional string creator_email = 6;
   inline bool has_creator_email() const;
@@ -1041,7 +1043,7 @@ class ClientMessage_CreateNetwork : public ::google::protobuf::Message {
   inline ::std::string* release_protocol_name();
   inline void set_allocated_protocol_name(::std::string* protocol_name);
 
-  // @@protoc_insertion_point(class_scope:ClientMessage.CreateNetwork)
+  // @@protoc_insertion_point(class_scope:protocol.ClientMessage.CreateNetwork)
  private:
   inline void set_has_cookie();
   inline void clear_has_cookie();
@@ -1158,7 +1160,7 @@ class ClientMessage_DeleteNetwork : public ::google::protobuf::Message {
   inline ::std::string* release_name();
   inline void set_allocated_name(::std::string* name);
 
-  // @@protoc_insertion_point(class_scope:ClientMessage.DeleteNetwork)
+  // @@protoc_insertion_point(class_scope:protocol.ClientMessage.DeleteNetwork)
  private:
   inline void set_has_cookie();
   inline void clear_has_cookie();
@@ -1272,7 +1274,7 @@ class ClientMessage_InviteUser : public ::google::protobuf::Message {
   inline ::std::string* release_network_name();
   inline void set_allocated_network_name(::std::string* network_name);
 
-  // @@protoc_insertion_point(class_scope:ClientMessage.InviteUser)
+  // @@protoc_insertion_point(class_scope:protocol.ClientMessage.InviteUser)
  private:
   inline void set_has_cookie();
   inline void clear_has_cookie();
@@ -1389,7 +1391,7 @@ class ClientMessage_RemoveUser : public ::google::protobuf::Message {
   inline ::std::string* release_network_name();
   inline void set_allocated_network_name(::std::string* network_name);
 
-  // @@protoc_insertion_point(class_scope:ClientMessage.RemoveUser)
+  // @@protoc_insertion_point(class_scope:protocol.ClientMessage.RemoveUser)
  private:
   inline void set_has_cookie();
   inline void clear_has_cookie();
@@ -1506,7 +1508,7 @@ class ClientMessage_UserInfo : public ::google::protobuf::Message {
   inline ::std::string* release_network_name();
   inline void set_allocated_network_name(::std::string* network_name);
 
-  // @@protoc_insertion_point(class_scope:ClientMessage.UserInfo)
+  // @@protoc_insertion_point(class_scope:protocol.ClientMessage.UserInfo)
  private:
   inline void set_has_cookie();
   inline void clear_has_cookie();
@@ -1618,7 +1620,7 @@ class ClientMessage_UpdateServer : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 port_number() const;
   inline void set_port_number(::google::protobuf::int32 value);
 
-  // @@protoc_insertion_point(class_scope:ClientMessage.UpdateServer)
+  // @@protoc_insertion_point(class_scope:protocol.ClientMessage.UpdateServer)
  private:
   inline void set_has_cookie();
   inline void clear_has_cookie();
@@ -1723,7 +1725,7 @@ class ClientMessage_StopServer : public ::google::protobuf::Message {
   inline ::std::string* release_network_name();
   inline void set_allocated_network_name(::std::string* network_name);
 
-  // @@protoc_insertion_point(class_scope:ClientMessage.StopServer)
+  // @@protoc_insertion_point(class_scope:protocol.ClientMessage.StopServer)
  private:
   inline void set_has_cookie();
   inline void clear_has_cookie();
@@ -1837,7 +1839,7 @@ class ClientMessage_SignKey : public ::google::protobuf::Message {
   inline ::std::string* release_network_name();
   inline void set_allocated_network_name(::std::string* network_name);
 
-  // @@protoc_insertion_point(class_scope:ClientMessage.SignKey)
+  // @@protoc_insertion_point(class_scope:protocol.ClientMessage.SignKey)
  private:
   inline void set_has_cookie();
   inline void clear_has_cookie();
@@ -1971,149 +1973,149 @@ class ClientMessage : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // required .ClientMessage.RequestType request = 1;
+  // required .protocol.ClientMessage.RequestType request = 1;
   inline bool has_request() const;
   inline void clear_request();
   static const int kRequestFieldNumber = 1;
-  inline ::ClientMessage_RequestType request() const;
-  inline void set_request(::ClientMessage_RequestType value);
+  inline ::protocol::ClientMessage_RequestType request() const;
+  inline void set_request(::protocol::ClientMessage_RequestType value);
 
-  // optional .ClientMessage.Register register_message = 2;
+  // optional .protocol.ClientMessage.Register register_message = 2;
   inline bool has_register_message() const;
   inline void clear_register_message();
   static const int kRegisterMessageFieldNumber = 2;
-  inline const ::ClientMessage_Register& register_message() const;
-  inline ::ClientMessage_Register* mutable_register_message();
-  inline ::ClientMessage_Register* release_register_message();
-  inline void set_allocated_register_message(::ClientMessage_Register* register_message);
+  inline const ::protocol::ClientMessage_Register& register_message() const;
+  inline ::protocol::ClientMessage_Register* mutable_register_message();
+  inline ::protocol::ClientMessage_Register* release_register_message();
+  inline void set_allocated_register_message(::protocol::ClientMessage_Register* register_message);
 
-  // optional .ClientMessage.Unregister unregister_message = 3;
+  // optional .protocol.ClientMessage.Unregister unregister_message = 3;
   inline bool has_unregister_message() const;
   inline void clear_unregister_message();
   static const int kUnregisterMessageFieldNumber = 3;
-  inline const ::ClientMessage_Unregister& unregister_message() const;
-  inline ::ClientMessage_Unregister* mutable_unregister_message();
-  inline ::ClientMessage_Unregister* release_unregister_message();
-  inline void set_allocated_unregister_message(::ClientMessage_Unregister* unregister_message);
+  inline const ::protocol::ClientMessage_Unregister& unregister_message() const;
+  inline ::protocol::ClientMessage_Unregister* mutable_unregister_message();
+  inline ::protocol::ClientMessage_Unregister* release_unregister_message();
+  inline void set_allocated_unregister_message(::protocol::ClientMessage_Unregister* unregister_message);
 
-  // optional .ClientMessage.Login login_message = 4;
+  // optional .protocol.ClientMessage.Login login_message = 4;
   inline bool has_login_message() const;
   inline void clear_login_message();
   static const int kLoginMessageFieldNumber = 4;
-  inline const ::ClientMessage_Login& login_message() const;
-  inline ::ClientMessage_Login* mutable_login_message();
-  inline ::ClientMessage_Login* release_login_message();
-  inline void set_allocated_login_message(::ClientMessage_Login* login_message);
+  inline const ::protocol::ClientMessage_Login& login_message() const;
+  inline ::protocol::ClientMessage_Login* mutable_login_message();
+  inline ::protocol::ClientMessage_Login* release_login_message();
+  inline void set_allocated_login_message(::protocol::ClientMessage_Login* login_message);
 
-  // optional .ClientMessage.Logout logout_message = 5;
+  // optional .protocol.ClientMessage.Logout logout_message = 5;
   inline bool has_logout_message() const;
   inline void clear_logout_message();
   static const int kLogoutMessageFieldNumber = 5;
-  inline const ::ClientMessage_Logout& logout_message() const;
-  inline ::ClientMessage_Logout* mutable_logout_message();
-  inline ::ClientMessage_Logout* release_logout_message();
-  inline void set_allocated_logout_message(::ClientMessage_Logout* logout_message);
+  inline const ::protocol::ClientMessage_Logout& logout_message() const;
+  inline ::protocol::ClientMessage_Logout* mutable_logout_message();
+  inline ::protocol::ClientMessage_Logout* release_logout_message();
+  inline void set_allocated_logout_message(::protocol::ClientMessage_Logout* logout_message);
 
-  // optional .ClientMessage.ListNetworks list_networks_message = 6;
+  // optional .protocol.ClientMessage.ListNetworks list_networks_message = 6;
   inline bool has_list_networks_message() const;
   inline void clear_list_networks_message();
   static const int kListNetworksMessageFieldNumber = 6;
-  inline const ::ClientMessage_ListNetworks& list_networks_message() const;
-  inline ::ClientMessage_ListNetworks* mutable_list_networks_message();
-  inline ::ClientMessage_ListNetworks* release_list_networks_message();
-  inline void set_allocated_list_networks_message(::ClientMessage_ListNetworks* list_networks_message);
+  inline const ::protocol::ClientMessage_ListNetworks& list_networks_message() const;
+  inline ::protocol::ClientMessage_ListNetworks* mutable_list_networks_message();
+  inline ::protocol::ClientMessage_ListNetworks* release_list_networks_message();
+  inline void set_allocated_list_networks_message(::protocol::ClientMessage_ListNetworks* list_networks_message);
 
-  // optional .ClientMessage.ListMyNetworks list_my_networks_message = 7;
+  // optional .protocol.ClientMessage.ListMyNetworks list_my_networks_message = 7;
   inline bool has_list_my_networks_message() const;
   inline void clear_list_my_networks_message();
   static const int kListMyNetworksMessageFieldNumber = 7;
-  inline const ::ClientMessage_ListMyNetworks& list_my_networks_message() const;
-  inline ::ClientMessage_ListMyNetworks* mutable_list_my_networks_message();
-  inline ::ClientMessage_ListMyNetworks* release_list_my_networks_message();
-  inline void set_allocated_list_my_networks_message(::ClientMessage_ListMyNetworks* list_my_networks_message);
+  inline const ::protocol::ClientMessage_ListMyNetworks& list_my_networks_message() const;
+  inline ::protocol::ClientMessage_ListMyNetworks* mutable_list_my_networks_message();
+  inline ::protocol::ClientMessage_ListMyNetworks* release_list_my_networks_message();
+  inline void set_allocated_list_my_networks_message(::protocol::ClientMessage_ListMyNetworks* list_my_networks_message);
 
-  // optional .ClientMessage.ListServers list_servers_message = 8;
+  // optional .protocol.ClientMessage.ListServers list_servers_message = 8;
   inline bool has_list_servers_message() const;
   inline void clear_list_servers_message();
   static const int kListServersMessageFieldNumber = 8;
-  inline const ::ClientMessage_ListServers& list_servers_message() const;
-  inline ::ClientMessage_ListServers* mutable_list_servers_message();
-  inline ::ClientMessage_ListServers* release_list_servers_message();
-  inline void set_allocated_list_servers_message(::ClientMessage_ListServers* list_servers_message);
+  inline const ::protocol::ClientMessage_ListServers& list_servers_message() const;
+  inline ::protocol::ClientMessage_ListServers* mutable_list_servers_message();
+  inline ::protocol::ClientMessage_ListServers* release_list_servers_message();
+  inline void set_allocated_list_servers_message(::protocol::ClientMessage_ListServers* list_servers_message);
 
-  // optional .ClientMessage.CreateNetwork create_network_message = 9;
+  // optional .protocol.ClientMessage.CreateNetwork create_network_message = 9;
   inline bool has_create_network_message() const;
   inline void clear_create_network_message();
   static const int kCreateNetworkMessageFieldNumber = 9;
-  inline const ::ClientMessage_CreateNetwork& create_network_message() const;
-  inline ::ClientMessage_CreateNetwork* mutable_create_network_message();
-  inline ::ClientMessage_CreateNetwork* release_create_network_message();
-  inline void set_allocated_create_network_message(::ClientMessage_CreateNetwork* create_network_message);
+  inline const ::protocol::ClientMessage_CreateNetwork& create_network_message() const;
+  inline ::protocol::ClientMessage_CreateNetwork* mutable_create_network_message();
+  inline ::protocol::ClientMessage_CreateNetwork* release_create_network_message();
+  inline void set_allocated_create_network_message(::protocol::ClientMessage_CreateNetwork* create_network_message);
 
-  // optional .ClientMessage.DeleteNetwork delete_network_message = 10;
+  // optional .protocol.ClientMessage.DeleteNetwork delete_network_message = 10;
   inline bool has_delete_network_message() const;
   inline void clear_delete_network_message();
   static const int kDeleteNetworkMessageFieldNumber = 10;
-  inline const ::ClientMessage_DeleteNetwork& delete_network_message() const;
-  inline ::ClientMessage_DeleteNetwork* mutable_delete_network_message();
-  inline ::ClientMessage_DeleteNetwork* release_delete_network_message();
-  inline void set_allocated_delete_network_message(::ClientMessage_DeleteNetwork* delete_network_message);
+  inline const ::protocol::ClientMessage_DeleteNetwork& delete_network_message() const;
+  inline ::protocol::ClientMessage_DeleteNetwork* mutable_delete_network_message();
+  inline ::protocol::ClientMessage_DeleteNetwork* release_delete_network_message();
+  inline void set_allocated_delete_network_message(::protocol::ClientMessage_DeleteNetwork* delete_network_message);
 
-  // optional .ClientMessage.InviteUser invite_user_message = 11;
+  // optional .protocol.ClientMessage.InviteUser invite_user_message = 11;
   inline bool has_invite_user_message() const;
   inline void clear_invite_user_message();
   static const int kInviteUserMessageFieldNumber = 11;
-  inline const ::ClientMessage_InviteUser& invite_user_message() const;
-  inline ::ClientMessage_InviteUser* mutable_invite_user_message();
-  inline ::ClientMessage_InviteUser* release_invite_user_message();
-  inline void set_allocated_invite_user_message(::ClientMessage_InviteUser* invite_user_message);
+  inline const ::protocol::ClientMessage_InviteUser& invite_user_message() const;
+  inline ::protocol::ClientMessage_InviteUser* mutable_invite_user_message();
+  inline ::protocol::ClientMessage_InviteUser* release_invite_user_message();
+  inline void set_allocated_invite_user_message(::protocol::ClientMessage_InviteUser* invite_user_message);
 
-  // optional .ClientMessage.RemoveUser remove_user_message = 12;
+  // optional .protocol.ClientMessage.RemoveUser remove_user_message = 12;
   inline bool has_remove_user_message() const;
   inline void clear_remove_user_message();
   static const int kRemoveUserMessageFieldNumber = 12;
-  inline const ::ClientMessage_RemoveUser& remove_user_message() const;
-  inline ::ClientMessage_RemoveUser* mutable_remove_user_message();
-  inline ::ClientMessage_RemoveUser* release_remove_user_message();
-  inline void set_allocated_remove_user_message(::ClientMessage_RemoveUser* remove_user_message);
+  inline const ::protocol::ClientMessage_RemoveUser& remove_user_message() const;
+  inline ::protocol::ClientMessage_RemoveUser* mutable_remove_user_message();
+  inline ::protocol::ClientMessage_RemoveUser* release_remove_user_message();
+  inline void set_allocated_remove_user_message(::protocol::ClientMessage_RemoveUser* remove_user_message);
 
-  // optional .ClientMessage.UserInfo user_info_message = 13;
+  // optional .protocol.ClientMessage.UserInfo user_info_message = 13;
   inline bool has_user_info_message() const;
   inline void clear_user_info_message();
   static const int kUserInfoMessageFieldNumber = 13;
-  inline const ::ClientMessage_UserInfo& user_info_message() const;
-  inline ::ClientMessage_UserInfo* mutable_user_info_message();
-  inline ::ClientMessage_UserInfo* release_user_info_message();
-  inline void set_allocated_user_info_message(::ClientMessage_UserInfo* user_info_message);
+  inline const ::protocol::ClientMessage_UserInfo& user_info_message() const;
+  inline ::protocol::ClientMessage_UserInfo* mutable_user_info_message();
+  inline ::protocol::ClientMessage_UserInfo* release_user_info_message();
+  inline void set_allocated_user_info_message(::protocol::ClientMessage_UserInfo* user_info_message);
 
-  // optional .ClientMessage.UpdateServer update_server_message = 14;
+  // optional .protocol.ClientMessage.UpdateServer update_server_message = 14;
   inline bool has_update_server_message() const;
   inline void clear_update_server_message();
   static const int kUpdateServerMessageFieldNumber = 14;
-  inline const ::ClientMessage_UpdateServer& update_server_message() const;
-  inline ::ClientMessage_UpdateServer* mutable_update_server_message();
-  inline ::ClientMessage_UpdateServer* release_update_server_message();
-  inline void set_allocated_update_server_message(::ClientMessage_UpdateServer* update_server_message);
+  inline const ::protocol::ClientMessage_UpdateServer& update_server_message() const;
+  inline ::protocol::ClientMessage_UpdateServer* mutable_update_server_message();
+  inline ::protocol::ClientMessage_UpdateServer* release_update_server_message();
+  inline void set_allocated_update_server_message(::protocol::ClientMessage_UpdateServer* update_server_message);
 
-  // optional .ClientMessage.StopServer stop_server_message = 15;
+  // optional .protocol.ClientMessage.StopServer stop_server_message = 15;
   inline bool has_stop_server_message() const;
   inline void clear_stop_server_message();
   static const int kStopServerMessageFieldNumber = 15;
-  inline const ::ClientMessage_StopServer& stop_server_message() const;
-  inline ::ClientMessage_StopServer* mutable_stop_server_message();
-  inline ::ClientMessage_StopServer* release_stop_server_message();
-  inline void set_allocated_stop_server_message(::ClientMessage_StopServer* stop_server_message);
+  inline const ::protocol::ClientMessage_StopServer& stop_server_message() const;
+  inline ::protocol::ClientMessage_StopServer* mutable_stop_server_message();
+  inline ::protocol::ClientMessage_StopServer* release_stop_server_message();
+  inline void set_allocated_stop_server_message(::protocol::ClientMessage_StopServer* stop_server_message);
 
-  // optional .ClientMessage.SignKey sign_key_message = 16;
+  // optional .protocol.ClientMessage.SignKey sign_key_message = 16;
   inline bool has_sign_key_message() const;
   inline void clear_sign_key_message();
   static const int kSignKeyMessageFieldNumber = 16;
-  inline const ::ClientMessage_SignKey& sign_key_message() const;
-  inline ::ClientMessage_SignKey* mutable_sign_key_message();
-  inline ::ClientMessage_SignKey* release_sign_key_message();
-  inline void set_allocated_sign_key_message(::ClientMessage_SignKey* sign_key_message);
+  inline const ::protocol::ClientMessage_SignKey& sign_key_message() const;
+  inline ::protocol::ClientMessage_SignKey* mutable_sign_key_message();
+  inline ::protocol::ClientMessage_SignKey* release_sign_key_message();
+  inline void set_allocated_sign_key_message(::protocol::ClientMessage_SignKey* sign_key_message);
 
-  // @@protoc_insertion_point(class_scope:ClientMessage)
+  // @@protoc_insertion_point(class_scope:protocol.ClientMessage)
  private:
   inline void set_has_request();
   inline void clear_has_request();
@@ -2150,21 +2152,21 @@ class ClientMessage : public ::google::protobuf::Message {
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
-  ::ClientMessage_Register* register_message_;
-  ::ClientMessage_Unregister* unregister_message_;
-  ::ClientMessage_Login* login_message_;
-  ::ClientMessage_Logout* logout_message_;
-  ::ClientMessage_ListNetworks* list_networks_message_;
-  ::ClientMessage_ListMyNetworks* list_my_networks_message_;
-  ::ClientMessage_ListServers* list_servers_message_;
-  ::ClientMessage_CreateNetwork* create_network_message_;
-  ::ClientMessage_DeleteNetwork* delete_network_message_;
-  ::ClientMessage_InviteUser* invite_user_message_;
-  ::ClientMessage_RemoveUser* remove_user_message_;
-  ::ClientMessage_UserInfo* user_info_message_;
-  ::ClientMessage_UpdateServer* update_server_message_;
-  ::ClientMessage_StopServer* stop_server_message_;
-  ::ClientMessage_SignKey* sign_key_message_;
+  ::protocol::ClientMessage_Register* register_message_;
+  ::protocol::ClientMessage_Unregister* unregister_message_;
+  ::protocol::ClientMessage_Login* login_message_;
+  ::protocol::ClientMessage_Logout* logout_message_;
+  ::protocol::ClientMessage_ListNetworks* list_networks_message_;
+  ::protocol::ClientMessage_ListMyNetworks* list_my_networks_message_;
+  ::protocol::ClientMessage_ListServers* list_servers_message_;
+  ::protocol::ClientMessage_CreateNetwork* create_network_message_;
+  ::protocol::ClientMessage_DeleteNetwork* delete_network_message_;
+  ::protocol::ClientMessage_InviteUser* invite_user_message_;
+  ::protocol::ClientMessage_RemoveUser* remove_user_message_;
+  ::protocol::ClientMessage_UserInfo* user_info_message_;
+  ::protocol::ClientMessage_UpdateServer* update_server_message_;
+  ::protocol::ClientMessage_StopServer* stop_server_message_;
+  ::protocol::ClientMessage_SignKey* sign_key_message_;
   int request_;
 
   mutable int _cached_size_;
@@ -2257,7 +2259,7 @@ class NodeMessage_Register : public ::google::protobuf::Message {
   inline ::std::string* release_node_certificate();
   inline void set_allocated_node_certificate(::std::string* node_certificate);
 
-  // @@protoc_insertion_point(class_scope:NodeMessage.Register)
+  // @@protoc_insertion_point(class_scope:protocol.NodeMessage.Register)
  private:
   inline void set_has_user_certificate();
   inline void clear_has_user_certificate();
@@ -2359,7 +2361,7 @@ class NodeMessage_Login : public ::google::protobuf::Message {
   inline ::std::string* release_node_certificate();
   inline void set_allocated_node_certificate(::std::string* node_certificate);
 
-  // @@protoc_insertion_point(class_scope:NodeMessage.Login)
+  // @@protoc_insertion_point(class_scope:protocol.NodeMessage.Login)
  private:
   inline void set_has_cookie();
   inline void clear_has_cookie();
@@ -2473,19 +2475,19 @@ class NodeMessage_ListNetworks_Network : public ::google::protobuf::Message {
   inline ::std::string* release_creator_email();
   inline void set_allocated_creator_email(::std::string* creator_email);
 
-  // required .ClientMessage.CreateNetwork.AccessRights access_rights = 4;
+  // required .protocol.ClientMessage.CreateNetwork.AccessRights access_rights = 4;
   inline bool has_access_rights() const;
   inline void clear_access_rights();
   static const int kAccessRightsFieldNumber = 4;
-  inline ::ClientMessage_CreateNetwork_AccessRights access_rights() const;
-  inline void set_access_rights(::ClientMessage_CreateNetwork_AccessRights value);
+  inline ::protocol::ClientMessage_CreateNetwork_AccessRights access_rights() const;
+  inline void set_access_rights(::protocol::ClientMessage_CreateNetwork_AccessRights value);
 
-  // required .ClientMessage.CreateNetwork.ParticipationRights participation_rights = 5;
+  // required .protocol.ClientMessage.CreateNetwork.ParticipationRights participation_rights = 5;
   inline bool has_participation_rights() const;
   inline void clear_participation_rights();
   static const int kParticipationRightsFieldNumber = 5;
-  inline ::ClientMessage_CreateNetwork_ParticipationRights participation_rights() const;
-  inline void set_participation_rights(::ClientMessage_CreateNetwork_ParticipationRights value);
+  inline ::protocol::ClientMessage_CreateNetwork_ParticipationRights participation_rights() const;
+  inline void set_participation_rights(::protocol::ClientMessage_CreateNetwork_ParticipationRights value);
 
   // optional string protocol_name = 6;
   inline bool has_protocol_name() const;
@@ -2499,7 +2501,7 @@ class NodeMessage_ListNetworks_Network : public ::google::protobuf::Message {
   inline ::std::string* release_protocol_name();
   inline void set_allocated_protocol_name(::std::string* protocol_name);
 
-  // @@protoc_insertion_point(class_scope:NodeMessage.ListNetworks.Network)
+  // @@protoc_insertion_point(class_scope:protocol.NodeMessage.ListNetworks.Network)
  private:
   inline void set_has_name();
   inline void clear_has_name();
@@ -2591,24 +2593,24 @@ class NodeMessage_ListNetworks : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // repeated .NodeMessage.ListNetworks.Network network_list = 1;
+  // repeated .protocol.NodeMessage.ListNetworks.Network network_list = 1;
   inline int network_list_size() const;
   inline void clear_network_list();
   static const int kNetworkListFieldNumber = 1;
-  inline const ::NodeMessage_ListNetworks_Network& network_list(int index) const;
-  inline ::NodeMessage_ListNetworks_Network* mutable_network_list(int index);
-  inline ::NodeMessage_ListNetworks_Network* add_network_list();
-  inline const ::google::protobuf::RepeatedPtrField< ::NodeMessage_ListNetworks_Network >&
+  inline const ::protocol::NodeMessage_ListNetworks_Network& network_list(int index) const;
+  inline ::protocol::NodeMessage_ListNetworks_Network* mutable_network_list(int index);
+  inline ::protocol::NodeMessage_ListNetworks_Network* add_network_list();
+  inline const ::google::protobuf::RepeatedPtrField< ::protocol::NodeMessage_ListNetworks_Network >&
       network_list() const;
-  inline ::google::protobuf::RepeatedPtrField< ::NodeMessage_ListNetworks_Network >*
+  inline ::google::protobuf::RepeatedPtrField< ::protocol::NodeMessage_ListNetworks_Network >*
       mutable_network_list();
 
-  // @@protoc_insertion_point(class_scope:NodeMessage.ListNetworks)
+  // @@protoc_insertion_point(class_scope:protocol.NodeMessage.ListNetworks)
  private:
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
-  ::google::protobuf::RepeatedPtrField< ::NodeMessage_ListNetworks_Network > network_list_;
+  ::google::protobuf::RepeatedPtrField< ::protocol::NodeMessage_ListNetworks_Network > network_list_;
 
   mutable int _cached_size_;
   ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
@@ -2676,24 +2678,24 @@ class NodeMessage_ListMyNetworks : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // repeated .NodeMessage.ListNetworks.Network network_list = 1;
+  // repeated .protocol.NodeMessage.ListNetworks.Network network_list = 1;
   inline int network_list_size() const;
   inline void clear_network_list();
   static const int kNetworkListFieldNumber = 1;
-  inline const ::NodeMessage_ListNetworks_Network& network_list(int index) const;
-  inline ::NodeMessage_ListNetworks_Network* mutable_network_list(int index);
-  inline ::NodeMessage_ListNetworks_Network* add_network_list();
-  inline const ::google::protobuf::RepeatedPtrField< ::NodeMessage_ListNetworks_Network >&
+  inline const ::protocol::NodeMessage_ListNetworks_Network& network_list(int index) const;
+  inline ::protocol::NodeMessage_ListNetworks_Network* mutable_network_list(int index);
+  inline ::protocol::NodeMessage_ListNetworks_Network* add_network_list();
+  inline const ::google::protobuf::RepeatedPtrField< ::protocol::NodeMessage_ListNetworks_Network >&
       network_list() const;
-  inline ::google::protobuf::RepeatedPtrField< ::NodeMessage_ListNetworks_Network >*
+  inline ::google::protobuf::RepeatedPtrField< ::protocol::NodeMessage_ListNetworks_Network >*
       mutable_network_list();
 
-  // @@protoc_insertion_point(class_scope:NodeMessage.ListMyNetworks)
+  // @@protoc_insertion_point(class_scope:protocol.NodeMessage.ListMyNetworks)
  private:
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
-  ::google::protobuf::RepeatedPtrField< ::NodeMessage_ListNetworks_Network > network_list_;
+  ::google::protobuf::RepeatedPtrField< ::protocol::NodeMessage_ListNetworks_Network > network_list_;
 
   mutable int _cached_size_;
   ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
@@ -2792,7 +2794,7 @@ class NodeMessage_ListServers_Server : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 port_number() const;
   inline void set_port_number(::google::protobuf::int32 value);
 
-  // @@protoc_insertion_point(class_scope:NodeMessage.ListServers.Server)
+  // @@protoc_insertion_point(class_scope:protocol.NodeMessage.ListServers.Server)
  private:
   inline void set_has_username();
   inline void clear_has_username();
@@ -2875,24 +2877,24 @@ class NodeMessage_ListServers : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // repeated .NodeMessage.ListServers list_servers = 1;
+  // repeated .protocol.NodeMessage.ListServers list_servers = 1;
   inline int list_servers_size() const;
   inline void clear_list_servers();
   static const int kListServersFieldNumber = 1;
-  inline const ::NodeMessage_ListServers& list_servers(int index) const;
-  inline ::NodeMessage_ListServers* mutable_list_servers(int index);
-  inline ::NodeMessage_ListServers* add_list_servers();
-  inline const ::google::protobuf::RepeatedPtrField< ::NodeMessage_ListServers >&
+  inline const ::protocol::NodeMessage_ListServers& list_servers(int index) const;
+  inline ::protocol::NodeMessage_ListServers* mutable_list_servers(int index);
+  inline ::protocol::NodeMessage_ListServers* add_list_servers();
+  inline const ::google::protobuf::RepeatedPtrField< ::protocol::NodeMessage_ListServers >&
       list_servers() const;
-  inline ::google::protobuf::RepeatedPtrField< ::NodeMessage_ListServers >*
+  inline ::google::protobuf::RepeatedPtrField< ::protocol::NodeMessage_ListServers >*
       mutable_list_servers();
 
-  // @@protoc_insertion_point(class_scope:NodeMessage.ListServers)
+  // @@protoc_insertion_point(class_scope:protocol.NodeMessage.ListServers)
  private:
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
-  ::google::protobuf::RepeatedPtrField< ::NodeMessage_ListServers > list_servers_;
+  ::google::protobuf::RepeatedPtrField< ::protocol::NodeMessage_ListServers > list_servers_;
 
   mutable int _cached_size_;
   ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
@@ -2972,7 +2974,7 @@ class NodeMessage_UserInfo : public ::google::protobuf::Message {
   inline ::std::string* release_user_public_key();
   inline void set_allocated_user_public_key(::std::string* user_public_key);
 
-  // @@protoc_insertion_point(class_scope:NodeMessage.UserInfo)
+  // @@protoc_insertion_point(class_scope:protocol.NodeMessage.UserInfo)
  private:
   inline void set_has_user_public_key();
   inline void clear_has_user_public_key();
@@ -3054,7 +3056,7 @@ class NodeMessage_UpdateServer : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 seconds_to_update() const;
   inline void set_seconds_to_update(::google::protobuf::int32 value);
 
-  // @@protoc_insertion_point(class_scope:NodeMessage.UpdateServer)
+  // @@protoc_insertion_point(class_scope:protocol.NodeMessage.UpdateServer)
  private:
   inline void set_has_seconds_to_update();
   inline void clear_has_seconds_to_update();
@@ -3141,7 +3143,7 @@ class NodeMessage_SignKey : public ::google::protobuf::Message {
   inline ::std::string* release_user_certificate();
   inline void set_allocated_user_certificate(::std::string* user_certificate);
 
-  // @@protoc_insertion_point(class_scope:NodeMessage.SignKey)
+  // @@protoc_insertion_point(class_scope:protocol.NodeMessage.SignKey)
  private:
   inline void set_has_user_certificate();
   inline void clear_has_user_certificate();
@@ -3256,86 +3258,86 @@ class NodeMessage : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // required .NodeMessage.ResponseType response_type = 1;
+  // required .protocol.NodeMessage.ResponseType response_type = 1;
   inline bool has_response_type() const;
   inline void clear_response_type();
   static const int kResponseTypeFieldNumber = 1;
-  inline ::NodeMessage_ResponseType response_type() const;
-  inline void set_response_type(::NodeMessage_ResponseType value);
+  inline ::protocol::NodeMessage_ResponseType response_type() const;
+  inline void set_response_type(::protocol::NodeMessage_ResponseType value);
 
-  // optional .NodeMessage.Register register_response = 2;
+  // optional .protocol.NodeMessage.Register register_response = 2;
   inline bool has_register_response() const;
   inline void clear_register_response();
   static const int kRegisterResponseFieldNumber = 2;
-  inline const ::NodeMessage_Register& register_response() const;
-  inline ::NodeMessage_Register* mutable_register_response();
-  inline ::NodeMessage_Register* release_register_response();
-  inline void set_allocated_register_response(::NodeMessage_Register* register_response);
+  inline const ::protocol::NodeMessage_Register& register_response() const;
+  inline ::protocol::NodeMessage_Register* mutable_register_response();
+  inline ::protocol::NodeMessage_Register* release_register_response();
+  inline void set_allocated_register_response(::protocol::NodeMessage_Register* register_response);
 
-  // optional .NodeMessage.Login login_response = 3;
+  // optional .protocol.NodeMessage.Login login_response = 3;
   inline bool has_login_response() const;
   inline void clear_login_response();
   static const int kLoginResponseFieldNumber = 3;
-  inline const ::NodeMessage_Login& login_response() const;
-  inline ::NodeMessage_Login* mutable_login_response();
-  inline ::NodeMessage_Login* release_login_response();
-  inline void set_allocated_login_response(::NodeMessage_Login* login_response);
+  inline const ::protocol::NodeMessage_Login& login_response() const;
+  inline ::protocol::NodeMessage_Login* mutable_login_response();
+  inline ::protocol::NodeMessage_Login* release_login_response();
+  inline void set_allocated_login_response(::protocol::NodeMessage_Login* login_response);
 
-  // optional .NodeMessage.ListNetworks list_networks_response = 5;
+  // optional .protocol.NodeMessage.ListNetworks list_networks_response = 5;
   inline bool has_list_networks_response() const;
   inline void clear_list_networks_response();
   static const int kListNetworksResponseFieldNumber = 5;
-  inline const ::NodeMessage_ListNetworks& list_networks_response() const;
-  inline ::NodeMessage_ListNetworks* mutable_list_networks_response();
-  inline ::NodeMessage_ListNetworks* release_list_networks_response();
-  inline void set_allocated_list_networks_response(::NodeMessage_ListNetworks* list_networks_response);
+  inline const ::protocol::NodeMessage_ListNetworks& list_networks_response() const;
+  inline ::protocol::NodeMessage_ListNetworks* mutable_list_networks_response();
+  inline ::protocol::NodeMessage_ListNetworks* release_list_networks_response();
+  inline void set_allocated_list_networks_response(::protocol::NodeMessage_ListNetworks* list_networks_response);
 
-  // optional .NodeMessage.ListMyNetworks list_my_networks_response = 6;
+  // optional .protocol.NodeMessage.ListMyNetworks list_my_networks_response = 6;
   inline bool has_list_my_networks_response() const;
   inline void clear_list_my_networks_response();
   static const int kListMyNetworksResponseFieldNumber = 6;
-  inline const ::NodeMessage_ListMyNetworks& list_my_networks_response() const;
-  inline ::NodeMessage_ListMyNetworks* mutable_list_my_networks_response();
-  inline ::NodeMessage_ListMyNetworks* release_list_my_networks_response();
-  inline void set_allocated_list_my_networks_response(::NodeMessage_ListMyNetworks* list_my_networks_response);
+  inline const ::protocol::NodeMessage_ListMyNetworks& list_my_networks_response() const;
+  inline ::protocol::NodeMessage_ListMyNetworks* mutable_list_my_networks_response();
+  inline ::protocol::NodeMessage_ListMyNetworks* release_list_my_networks_response();
+  inline void set_allocated_list_my_networks_response(::protocol::NodeMessage_ListMyNetworks* list_my_networks_response);
 
-  // optional .NodeMessage.ListServers list_servers_response = 7;
+  // optional .protocol.NodeMessage.ListServers list_servers_response = 7;
   inline bool has_list_servers_response() const;
   inline void clear_list_servers_response();
   static const int kListServersResponseFieldNumber = 7;
-  inline const ::NodeMessage_ListServers& list_servers_response() const;
-  inline ::NodeMessage_ListServers* mutable_list_servers_response();
-  inline ::NodeMessage_ListServers* release_list_servers_response();
-  inline void set_allocated_list_servers_response(::NodeMessage_ListServers* list_servers_response);
+  inline const ::protocol::NodeMessage_ListServers& list_servers_response() const;
+  inline ::protocol::NodeMessage_ListServers* mutable_list_servers_response();
+  inline ::protocol::NodeMessage_ListServers* release_list_servers_response();
+  inline void set_allocated_list_servers_response(::protocol::NodeMessage_ListServers* list_servers_response);
 
-  // optional .NodeMessage.UserInfo user_info_response = 13;
+  // optional .protocol.NodeMessage.UserInfo user_info_response = 13;
   inline bool has_user_info_response() const;
   inline void clear_user_info_response();
   static const int kUserInfoResponseFieldNumber = 13;
-  inline const ::NodeMessage_UserInfo& user_info_response() const;
-  inline ::NodeMessage_UserInfo* mutable_user_info_response();
-  inline ::NodeMessage_UserInfo* release_user_info_response();
-  inline void set_allocated_user_info_response(::NodeMessage_UserInfo* user_info_response);
+  inline const ::protocol::NodeMessage_UserInfo& user_info_response() const;
+  inline ::protocol::NodeMessage_UserInfo* mutable_user_info_response();
+  inline ::protocol::NodeMessage_UserInfo* release_user_info_response();
+  inline void set_allocated_user_info_response(::protocol::NodeMessage_UserInfo* user_info_response);
 
-  // optional .NodeMessage.UpdateServer update_server_response = 14;
+  // optional .protocol.NodeMessage.UpdateServer update_server_response = 14;
   inline bool has_update_server_response() const;
   inline void clear_update_server_response();
   static const int kUpdateServerResponseFieldNumber = 14;
-  inline const ::NodeMessage_UpdateServer& update_server_response() const;
-  inline ::NodeMessage_UpdateServer* mutable_update_server_response();
-  inline ::NodeMessage_UpdateServer* release_update_server_response();
-  inline void set_allocated_update_server_response(::NodeMessage_UpdateServer* update_server_response);
+  inline const ::protocol::NodeMessage_UpdateServer& update_server_response() const;
+  inline ::protocol::NodeMessage_UpdateServer* mutable_update_server_response();
+  inline ::protocol::NodeMessage_UpdateServer* release_update_server_response();
+  inline void set_allocated_update_server_response(::protocol::NodeMessage_UpdateServer* update_server_response);
 
-  // optional .NodeMessage.SignKey sign_key_response = 16;
+  // optional .protocol.NodeMessage.SignKey sign_key_response = 16;
   inline bool has_sign_key_response() const;
   inline void clear_sign_key_response();
   static const int kSignKeyResponseFieldNumber = 16;
-  inline const ::NodeMessage_SignKey& sign_key_response() const;
-  inline ::NodeMessage_SignKey* mutable_sign_key_response();
-  inline ::NodeMessage_SignKey* release_sign_key_response();
-  inline void set_allocated_sign_key_response(::NodeMessage_SignKey* sign_key_response);
+  inline const ::protocol::NodeMessage_SignKey& sign_key_response() const;
+  inline ::protocol::NodeMessage_SignKey* mutable_sign_key_response();
+  inline ::protocol::NodeMessage_SignKey* release_sign_key_response();
+  inline void set_allocated_sign_key_response(::protocol::NodeMessage_SignKey* sign_key_response);
 
-  // @@protoc_insertion_point(class_scope:NodeMessage)
+  // @@protoc_insertion_point(class_scope:protocol.NodeMessage)
  private:
   inline void set_has_response_type();
   inline void clear_has_response_type();
@@ -3358,14 +3360,14 @@ class NodeMessage : public ::google::protobuf::Message {
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
-  ::NodeMessage_Register* register_response_;
-  ::NodeMessage_Login* login_response_;
-  ::NodeMessage_ListNetworks* list_networks_response_;
-  ::NodeMessage_ListMyNetworks* list_my_networks_response_;
-  ::NodeMessage_ListServers* list_servers_response_;
-  ::NodeMessage_UserInfo* user_info_response_;
-  ::NodeMessage_UpdateServer* update_server_response_;
-  ::NodeMessage_SignKey* sign_key_response_;
+  ::protocol::NodeMessage_Register* register_response_;
+  ::protocol::NodeMessage_Login* login_response_;
+  ::protocol::NodeMessage_ListNetworks* list_networks_response_;
+  ::protocol::NodeMessage_ListMyNetworks* list_my_networks_response_;
+  ::protocol::NodeMessage_ListServers* list_servers_response_;
+  ::protocol::NodeMessage_UserInfo* user_info_response_;
+  ::protocol::NodeMessage_UpdateServer* update_server_response_;
+  ::protocol::NodeMessage_SignKey* sign_key_response_;
   int response_type_;
 
   mutable int _cached_size_;
@@ -4323,7 +4325,7 @@ inline void ClientMessage_CreateNetwork::set_allocated_network_name(::std::strin
   }
 }
 
-// required .ClientMessage.CreateNetwork.AccessRights access_rights = 3;
+// required .protocol.ClientMessage.CreateNetwork.AccessRights access_rights = 3;
 inline bool ClientMessage_CreateNetwork::has_access_rights() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
@@ -4337,16 +4339,16 @@ inline void ClientMessage_CreateNetwork::clear_access_rights() {
   access_rights_ = 1;
   clear_has_access_rights();
 }
-inline ::ClientMessage_CreateNetwork_AccessRights ClientMessage_CreateNetwork::access_rights() const {
-  return static_cast< ::ClientMessage_CreateNetwork_AccessRights >(access_rights_);
+inline ::protocol::ClientMessage_CreateNetwork_AccessRights ClientMessage_CreateNetwork::access_rights() const {
+  return static_cast< ::protocol::ClientMessage_CreateNetwork_AccessRights >(access_rights_);
 }
-inline void ClientMessage_CreateNetwork::set_access_rights(::ClientMessage_CreateNetwork_AccessRights value) {
-  assert(::ClientMessage_CreateNetwork_AccessRights_IsValid(value));
+inline void ClientMessage_CreateNetwork::set_access_rights(::protocol::ClientMessage_CreateNetwork_AccessRights value) {
+  assert(::protocol::ClientMessage_CreateNetwork_AccessRights_IsValid(value));
   set_has_access_rights();
   access_rights_ = value;
 }
 
-// required .ClientMessage.CreateNetwork.Visiblity visibility = 4;
+// required .protocol.ClientMessage.CreateNetwork.Visiblity visibility = 4;
 inline bool ClientMessage_CreateNetwork::has_visibility() const {
   return (_has_bits_[0] & 0x00000008u) != 0;
 }
@@ -4360,16 +4362,16 @@ inline void ClientMessage_CreateNetwork::clear_visibility() {
   visibility_ = 3;
   clear_has_visibility();
 }
-inline ::ClientMessage_CreateNetwork_Visiblity ClientMessage_CreateNetwork::visibility() const {
-  return static_cast< ::ClientMessage_CreateNetwork_Visiblity >(visibility_);
+inline ::protocol::ClientMessage_CreateNetwork_Visiblity ClientMessage_CreateNetwork::visibility() const {
+  return static_cast< ::protocol::ClientMessage_CreateNetwork_Visiblity >(visibility_);
 }
-inline void ClientMessage_CreateNetwork::set_visibility(::ClientMessage_CreateNetwork_Visiblity value) {
-  assert(::ClientMessage_CreateNetwork_Visiblity_IsValid(value));
+inline void ClientMessage_CreateNetwork::set_visibility(::protocol::ClientMessage_CreateNetwork_Visiblity value) {
+  assert(::protocol::ClientMessage_CreateNetwork_Visiblity_IsValid(value));
   set_has_visibility();
   visibility_ = value;
 }
 
-// required .ClientMessage.CreateNetwork.ParticipationRights participation_rights = 5;
+// required .protocol.ClientMessage.CreateNetwork.ParticipationRights participation_rights = 5;
 inline bool ClientMessage_CreateNetwork::has_participation_rights() const {
   return (_has_bits_[0] & 0x00000010u) != 0;
 }
@@ -4383,11 +4385,11 @@ inline void ClientMessage_CreateNetwork::clear_participation_rights() {
   participation_rights_ = 5;
   clear_has_participation_rights();
 }
-inline ::ClientMessage_CreateNetwork_ParticipationRights ClientMessage_CreateNetwork::participation_rights() const {
-  return static_cast< ::ClientMessage_CreateNetwork_ParticipationRights >(participation_rights_);
+inline ::protocol::ClientMessage_CreateNetwork_ParticipationRights ClientMessage_CreateNetwork::participation_rights() const {
+  return static_cast< ::protocol::ClientMessage_CreateNetwork_ParticipationRights >(participation_rights_);
 }
-inline void ClientMessage_CreateNetwork::set_participation_rights(::ClientMessage_CreateNetwork_ParticipationRights value) {
-  assert(::ClientMessage_CreateNetwork_ParticipationRights_IsValid(value));
+inline void ClientMessage_CreateNetwork::set_participation_rights(::protocol::ClientMessage_CreateNetwork_ParticipationRights value) {
+  assert(::protocol::ClientMessage_CreateNetwork_ParticipationRights_IsValid(value));
   set_has_participation_rights();
   participation_rights_ = value;
 }
@@ -5846,7 +5848,7 @@ inline void ClientMessage_SignKey::set_allocated_network_name(::std::string* net
 
 // ClientMessage
 
-// required .ClientMessage.RequestType request = 1;
+// required .protocol.ClientMessage.RequestType request = 1;
 inline bool ClientMessage::has_request() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -5860,16 +5862,16 @@ inline void ClientMessage::clear_request() {
   request_ = 0;
   clear_has_request();
 }
-inline ::ClientMessage_RequestType ClientMessage::request() const {
-  return static_cast< ::ClientMessage_RequestType >(request_);
+inline ::protocol::ClientMessage_RequestType ClientMessage::request() const {
+  return static_cast< ::protocol::ClientMessage_RequestType >(request_);
 }
-inline void ClientMessage::set_request(::ClientMessage_RequestType value) {
-  assert(::ClientMessage_RequestType_IsValid(value));
+inline void ClientMessage::set_request(::protocol::ClientMessage_RequestType value) {
+  assert(::protocol::ClientMessage_RequestType_IsValid(value));
   set_has_request();
   request_ = value;
 }
 
-// optional .ClientMessage.Register register_message = 2;
+// optional .protocol.ClientMessage.Register register_message = 2;
 inline bool ClientMessage::has_register_message() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
@@ -5880,24 +5882,24 @@ inline void ClientMessage::clear_has_register_message() {
   _has_bits_[0] &= ~0x00000002u;
 }
 inline void ClientMessage::clear_register_message() {
-  if (register_message_ != NULL) register_message_->::ClientMessage_Register::Clear();
+  if (register_message_ != NULL) register_message_->::protocol::ClientMessage_Register::Clear();
   clear_has_register_message();
 }
-inline const ::ClientMessage_Register& ClientMessage::register_message() const {
+inline const ::protocol::ClientMessage_Register& ClientMessage::register_message() const {
   return register_message_ != NULL ? *register_message_ : *default_instance_->register_message_;
 }
-inline ::ClientMessage_Register* ClientMessage::mutable_register_message() {
+inline ::protocol::ClientMessage_Register* ClientMessage::mutable_register_message() {
   set_has_register_message();
-  if (register_message_ == NULL) register_message_ = new ::ClientMessage_Register;
+  if (register_message_ == NULL) register_message_ = new ::protocol::ClientMessage_Register;
   return register_message_;
 }
-inline ::ClientMessage_Register* ClientMessage::release_register_message() {
+inline ::protocol::ClientMessage_Register* ClientMessage::release_register_message() {
   clear_has_register_message();
-  ::ClientMessage_Register* temp = register_message_;
+  ::protocol::ClientMessage_Register* temp = register_message_;
   register_message_ = NULL;
   return temp;
 }
-inline void ClientMessage::set_allocated_register_message(::ClientMessage_Register* register_message) {
+inline void ClientMessage::set_allocated_register_message(::protocol::ClientMessage_Register* register_message) {
   delete register_message_;
   register_message_ = register_message;
   if (register_message) {
@@ -5907,7 +5909,7 @@ inline void ClientMessage::set_allocated_register_message(::ClientMessage_Regist
   }
 }
 
-// optional .ClientMessage.Unregister unregister_message = 3;
+// optional .protocol.ClientMessage.Unregister unregister_message = 3;
 inline bool ClientMessage::has_unregister_message() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
@@ -5918,24 +5920,24 @@ inline void ClientMessage::clear_has_unregister_message() {
   _has_bits_[0] &= ~0x00000004u;
 }
 inline void ClientMessage::clear_unregister_message() {
-  if (unregister_message_ != NULL) unregister_message_->::ClientMessage_Unregister::Clear();
+  if (unregister_message_ != NULL) unregister_message_->::protocol::ClientMessage_Unregister::Clear();
   clear_has_unregister_message();
 }
-inline const ::ClientMessage_Unregister& ClientMessage::unregister_message() const {
+inline const ::protocol::ClientMessage_Unregister& ClientMessage::unregister_message() const {
   return unregister_message_ != NULL ? *unregister_message_ : *default_instance_->unregister_message_;
 }
-inline ::ClientMessage_Unregister* ClientMessage::mutable_unregister_message() {
+inline ::protocol::ClientMessage_Unregister* ClientMessage::mutable_unregister_message() {
   set_has_unregister_message();
-  if (unregister_message_ == NULL) unregister_message_ = new ::ClientMessage_Unregister;
+  if (unregister_message_ == NULL) unregister_message_ = new ::protocol::ClientMessage_Unregister;
   return unregister_message_;
 }
-inline ::ClientMessage_Unregister* ClientMessage::release_unregister_message() {
+inline ::protocol::ClientMessage_Unregister* ClientMessage::release_unregister_message() {
   clear_has_unregister_message();
-  ::ClientMessage_Unregister* temp = unregister_message_;
+  ::protocol::ClientMessage_Unregister* temp = unregister_message_;
   unregister_message_ = NULL;
   return temp;
 }
-inline void ClientMessage::set_allocated_unregister_message(::ClientMessage_Unregister* unregister_message) {
+inline void ClientMessage::set_allocated_unregister_message(::protocol::ClientMessage_Unregister* unregister_message) {
   delete unregister_message_;
   unregister_message_ = unregister_message;
   if (unregister_message) {
@@ -5945,7 +5947,7 @@ inline void ClientMessage::set_allocated_unregister_message(::ClientMessage_Unre
   }
 }
 
-// optional .ClientMessage.Login login_message = 4;
+// optional .protocol.ClientMessage.Login login_message = 4;
 inline bool ClientMessage::has_login_message() const {
   return (_has_bits_[0] & 0x00000008u) != 0;
 }
@@ -5956,24 +5958,24 @@ inline void ClientMessage::clear_has_login_message() {
   _has_bits_[0] &= ~0x00000008u;
 }
 inline void ClientMessage::clear_login_message() {
-  if (login_message_ != NULL) login_message_->::ClientMessage_Login::Clear();
+  if (login_message_ != NULL) login_message_->::protocol::ClientMessage_Login::Clear();
   clear_has_login_message();
 }
-inline const ::ClientMessage_Login& ClientMessage::login_message() const {
+inline const ::protocol::ClientMessage_Login& ClientMessage::login_message() const {
   return login_message_ != NULL ? *login_message_ : *default_instance_->login_message_;
 }
-inline ::ClientMessage_Login* ClientMessage::mutable_login_message() {
+inline ::protocol::ClientMessage_Login* ClientMessage::mutable_login_message() {
   set_has_login_message();
-  if (login_message_ == NULL) login_message_ = new ::ClientMessage_Login;
+  if (login_message_ == NULL) login_message_ = new ::protocol::ClientMessage_Login;
   return login_message_;
 }
-inline ::ClientMessage_Login* ClientMessage::release_login_message() {
+inline ::protocol::ClientMessage_Login* ClientMessage::release_login_message() {
   clear_has_login_message();
-  ::ClientMessage_Login* temp = login_message_;
+  ::protocol::ClientMessage_Login* temp = login_message_;
   login_message_ = NULL;
   return temp;
 }
-inline void ClientMessage::set_allocated_login_message(::ClientMessage_Login* login_message) {
+inline void ClientMessage::set_allocated_login_message(::protocol::ClientMessage_Login* login_message) {
   delete login_message_;
   login_message_ = login_message;
   if (login_message) {
@@ -5983,7 +5985,7 @@ inline void ClientMessage::set_allocated_login_message(::ClientMessage_Login* lo
   }
 }
 
-// optional .ClientMessage.Logout logout_message = 5;
+// optional .protocol.ClientMessage.Logout logout_message = 5;
 inline bool ClientMessage::has_logout_message() const {
   return (_has_bits_[0] & 0x00000010u) != 0;
 }
@@ -5994,24 +5996,24 @@ inline void ClientMessage::clear_has_logout_message() {
   _has_bits_[0] &= ~0x00000010u;
 }
 inline void ClientMessage::clear_logout_message() {
-  if (logout_message_ != NULL) logout_message_->::ClientMessage_Logout::Clear();
+  if (logout_message_ != NULL) logout_message_->::protocol::ClientMessage_Logout::Clear();
   clear_has_logout_message();
 }
-inline const ::ClientMessage_Logout& ClientMessage::logout_message() const {
+inline const ::protocol::ClientMessage_Logout& ClientMessage::logout_message() const {
   return logout_message_ != NULL ? *logout_message_ : *default_instance_->logout_message_;
 }
-inline ::ClientMessage_Logout* ClientMessage::mutable_logout_message() {
+inline ::protocol::ClientMessage_Logout* ClientMessage::mutable_logout_message() {
   set_has_logout_message();
-  if (logout_message_ == NULL) logout_message_ = new ::ClientMessage_Logout;
+  if (logout_message_ == NULL) logout_message_ = new ::protocol::ClientMessage_Logout;
   return logout_message_;
 }
-inline ::ClientMessage_Logout* ClientMessage::release_logout_message() {
+inline ::protocol::ClientMessage_Logout* ClientMessage::release_logout_message() {
   clear_has_logout_message();
-  ::ClientMessage_Logout* temp = logout_message_;
+  ::protocol::ClientMessage_Logout* temp = logout_message_;
   logout_message_ = NULL;
   return temp;
 }
-inline void ClientMessage::set_allocated_logout_message(::ClientMessage_Logout* logout_message) {
+inline void ClientMessage::set_allocated_logout_message(::protocol::ClientMessage_Logout* logout_message) {
   delete logout_message_;
   logout_message_ = logout_message;
   if (logout_message) {
@@ -6021,7 +6023,7 @@ inline void ClientMessage::set_allocated_logout_message(::ClientMessage_Logout* 
   }
 }
 
-// optional .ClientMessage.ListNetworks list_networks_message = 6;
+// optional .protocol.ClientMessage.ListNetworks list_networks_message = 6;
 inline bool ClientMessage::has_list_networks_message() const {
   return (_has_bits_[0] & 0x00000020u) != 0;
 }
@@ -6032,24 +6034,24 @@ inline void ClientMessage::clear_has_list_networks_message() {
   _has_bits_[0] &= ~0x00000020u;
 }
 inline void ClientMessage::clear_list_networks_message() {
-  if (list_networks_message_ != NULL) list_networks_message_->::ClientMessage_ListNetworks::Clear();
+  if (list_networks_message_ != NULL) list_networks_message_->::protocol::ClientMessage_ListNetworks::Clear();
   clear_has_list_networks_message();
 }
-inline const ::ClientMessage_ListNetworks& ClientMessage::list_networks_message() const {
+inline const ::protocol::ClientMessage_ListNetworks& ClientMessage::list_networks_message() const {
   return list_networks_message_ != NULL ? *list_networks_message_ : *default_instance_->list_networks_message_;
 }
-inline ::ClientMessage_ListNetworks* ClientMessage::mutable_list_networks_message() {
+inline ::protocol::ClientMessage_ListNetworks* ClientMessage::mutable_list_networks_message() {
   set_has_list_networks_message();
-  if (list_networks_message_ == NULL) list_networks_message_ = new ::ClientMessage_ListNetworks;
+  if (list_networks_message_ == NULL) list_networks_message_ = new ::protocol::ClientMessage_ListNetworks;
   return list_networks_message_;
 }
-inline ::ClientMessage_ListNetworks* ClientMessage::release_list_networks_message() {
+inline ::protocol::ClientMessage_ListNetworks* ClientMessage::release_list_networks_message() {
   clear_has_list_networks_message();
-  ::ClientMessage_ListNetworks* temp = list_networks_message_;
+  ::protocol::ClientMessage_ListNetworks* temp = list_networks_message_;
   list_networks_message_ = NULL;
   return temp;
 }
-inline void ClientMessage::set_allocated_list_networks_message(::ClientMessage_ListNetworks* list_networks_message) {
+inline void ClientMessage::set_allocated_list_networks_message(::protocol::ClientMessage_ListNetworks* list_networks_message) {
   delete list_networks_message_;
   list_networks_message_ = list_networks_message;
   if (list_networks_message) {
@@ -6059,7 +6061,7 @@ inline void ClientMessage::set_allocated_list_networks_message(::ClientMessage_L
   }
 }
 
-// optional .ClientMessage.ListMyNetworks list_my_networks_message = 7;
+// optional .protocol.ClientMessage.ListMyNetworks list_my_networks_message = 7;
 inline bool ClientMessage::has_list_my_networks_message() const {
   return (_has_bits_[0] & 0x00000040u) != 0;
 }
@@ -6070,24 +6072,24 @@ inline void ClientMessage::clear_has_list_my_networks_message() {
   _has_bits_[0] &= ~0x00000040u;
 }
 inline void ClientMessage::clear_list_my_networks_message() {
-  if (list_my_networks_message_ != NULL) list_my_networks_message_->::ClientMessage_ListMyNetworks::Clear();
+  if (list_my_networks_message_ != NULL) list_my_networks_message_->::protocol::ClientMessage_ListMyNetworks::Clear();
   clear_has_list_my_networks_message();
 }
-inline const ::ClientMessage_ListMyNetworks& ClientMessage::list_my_networks_message() const {
+inline const ::protocol::ClientMessage_ListMyNetworks& ClientMessage::list_my_networks_message() const {
   return list_my_networks_message_ != NULL ? *list_my_networks_message_ : *default_instance_->list_my_networks_message_;
 }
-inline ::ClientMessage_ListMyNetworks* ClientMessage::mutable_list_my_networks_message() {
+inline ::protocol::ClientMessage_ListMyNetworks* ClientMessage::mutable_list_my_networks_message() {
   set_has_list_my_networks_message();
-  if (list_my_networks_message_ == NULL) list_my_networks_message_ = new ::ClientMessage_ListMyNetworks;
+  if (list_my_networks_message_ == NULL) list_my_networks_message_ = new ::protocol::ClientMessage_ListMyNetworks;
   return list_my_networks_message_;
 }
-inline ::ClientMessage_ListMyNetworks* ClientMessage::release_list_my_networks_message() {
+inline ::protocol::ClientMessage_ListMyNetworks* ClientMessage::release_list_my_networks_message() {
   clear_has_list_my_networks_message();
-  ::ClientMessage_ListMyNetworks* temp = list_my_networks_message_;
+  ::protocol::ClientMessage_ListMyNetworks* temp = list_my_networks_message_;
   list_my_networks_message_ = NULL;
   return temp;
 }
-inline void ClientMessage::set_allocated_list_my_networks_message(::ClientMessage_ListMyNetworks* list_my_networks_message) {
+inline void ClientMessage::set_allocated_list_my_networks_message(::protocol::ClientMessage_ListMyNetworks* list_my_networks_message) {
   delete list_my_networks_message_;
   list_my_networks_message_ = list_my_networks_message;
   if (list_my_networks_message) {
@@ -6097,7 +6099,7 @@ inline void ClientMessage::set_allocated_list_my_networks_message(::ClientMessag
   }
 }
 
-// optional .ClientMessage.ListServers list_servers_message = 8;
+// optional .protocol.ClientMessage.ListServers list_servers_message = 8;
 inline bool ClientMessage::has_list_servers_message() const {
   return (_has_bits_[0] & 0x00000080u) != 0;
 }
@@ -6108,24 +6110,24 @@ inline void ClientMessage::clear_has_list_servers_message() {
   _has_bits_[0] &= ~0x00000080u;
 }
 inline void ClientMessage::clear_list_servers_message() {
-  if (list_servers_message_ != NULL) list_servers_message_->::ClientMessage_ListServers::Clear();
+  if (list_servers_message_ != NULL) list_servers_message_->::protocol::ClientMessage_ListServers::Clear();
   clear_has_list_servers_message();
 }
-inline const ::ClientMessage_ListServers& ClientMessage::list_servers_message() const {
+inline const ::protocol::ClientMessage_ListServers& ClientMessage::list_servers_message() const {
   return list_servers_message_ != NULL ? *list_servers_message_ : *default_instance_->list_servers_message_;
 }
-inline ::ClientMessage_ListServers* ClientMessage::mutable_list_servers_message() {
+inline ::protocol::ClientMessage_ListServers* ClientMessage::mutable_list_servers_message() {
   set_has_list_servers_message();
-  if (list_servers_message_ == NULL) list_servers_message_ = new ::ClientMessage_ListServers;
+  if (list_servers_message_ == NULL) list_servers_message_ = new ::protocol::ClientMessage_ListServers;
   return list_servers_message_;
 }
-inline ::ClientMessage_ListServers* ClientMessage::release_list_servers_message() {
+inline ::protocol::ClientMessage_ListServers* ClientMessage::release_list_servers_message() {
   clear_has_list_servers_message();
-  ::ClientMessage_ListServers* temp = list_servers_message_;
+  ::protocol::ClientMessage_ListServers* temp = list_servers_message_;
   list_servers_message_ = NULL;
   return temp;
 }
-inline void ClientMessage::set_allocated_list_servers_message(::ClientMessage_ListServers* list_servers_message) {
+inline void ClientMessage::set_allocated_list_servers_message(::protocol::ClientMessage_ListServers* list_servers_message) {
   delete list_servers_message_;
   list_servers_message_ = list_servers_message;
   if (list_servers_message) {
@@ -6135,7 +6137,7 @@ inline void ClientMessage::set_allocated_list_servers_message(::ClientMessage_Li
   }
 }
 
-// optional .ClientMessage.CreateNetwork create_network_message = 9;
+// optional .protocol.ClientMessage.CreateNetwork create_network_message = 9;
 inline bool ClientMessage::has_create_network_message() const {
   return (_has_bits_[0] & 0x00000100u) != 0;
 }
@@ -6146,24 +6148,24 @@ inline void ClientMessage::clear_has_create_network_message() {
   _has_bits_[0] &= ~0x00000100u;
 }
 inline void ClientMessage::clear_create_network_message() {
-  if (create_network_message_ != NULL) create_network_message_->::ClientMessage_CreateNetwork::Clear();
+  if (create_network_message_ != NULL) create_network_message_->::protocol::ClientMessage_CreateNetwork::Clear();
   clear_has_create_network_message();
 }
-inline const ::ClientMessage_CreateNetwork& ClientMessage::create_network_message() const {
+inline const ::protocol::ClientMessage_CreateNetwork& ClientMessage::create_network_message() const {
   return create_network_message_ != NULL ? *create_network_message_ : *default_instance_->create_network_message_;
 }
-inline ::ClientMessage_CreateNetwork* ClientMessage::mutable_create_network_message() {
+inline ::protocol::ClientMessage_CreateNetwork* ClientMessage::mutable_create_network_message() {
   set_has_create_network_message();
-  if (create_network_message_ == NULL) create_network_message_ = new ::ClientMessage_CreateNetwork;
+  if (create_network_message_ == NULL) create_network_message_ = new ::protocol::ClientMessage_CreateNetwork;
   return create_network_message_;
 }
-inline ::ClientMessage_CreateNetwork* ClientMessage::release_create_network_message() {
+inline ::protocol::ClientMessage_CreateNetwork* ClientMessage::release_create_network_message() {
   clear_has_create_network_message();
-  ::ClientMessage_CreateNetwork* temp = create_network_message_;
+  ::protocol::ClientMessage_CreateNetwork* temp = create_network_message_;
   create_network_message_ = NULL;
   return temp;
 }
-inline void ClientMessage::set_allocated_create_network_message(::ClientMessage_CreateNetwork* create_network_message) {
+inline void ClientMessage::set_allocated_create_network_message(::protocol::ClientMessage_CreateNetwork* create_network_message) {
   delete create_network_message_;
   create_network_message_ = create_network_message;
   if (create_network_message) {
@@ -6173,7 +6175,7 @@ inline void ClientMessage::set_allocated_create_network_message(::ClientMessage_
   }
 }
 
-// optional .ClientMessage.DeleteNetwork delete_network_message = 10;
+// optional .protocol.ClientMessage.DeleteNetwork delete_network_message = 10;
 inline bool ClientMessage::has_delete_network_message() const {
   return (_has_bits_[0] & 0x00000200u) != 0;
 }
@@ -6184,24 +6186,24 @@ inline void ClientMessage::clear_has_delete_network_message() {
   _has_bits_[0] &= ~0x00000200u;
 }
 inline void ClientMessage::clear_delete_network_message() {
-  if (delete_network_message_ != NULL) delete_network_message_->::ClientMessage_DeleteNetwork::Clear();
+  if (delete_network_message_ != NULL) delete_network_message_->::protocol::ClientMessage_DeleteNetwork::Clear();
   clear_has_delete_network_message();
 }
-inline const ::ClientMessage_DeleteNetwork& ClientMessage::delete_network_message() const {
+inline const ::protocol::ClientMessage_DeleteNetwork& ClientMessage::delete_network_message() const {
   return delete_network_message_ != NULL ? *delete_network_message_ : *default_instance_->delete_network_message_;
 }
-inline ::ClientMessage_DeleteNetwork* ClientMessage::mutable_delete_network_message() {
+inline ::protocol::ClientMessage_DeleteNetwork* ClientMessage::mutable_delete_network_message() {
   set_has_delete_network_message();
-  if (delete_network_message_ == NULL) delete_network_message_ = new ::ClientMessage_DeleteNetwork;
+  if (delete_network_message_ == NULL) delete_network_message_ = new ::protocol::ClientMessage_DeleteNetwork;
   return delete_network_message_;
 }
-inline ::ClientMessage_DeleteNetwork* ClientMessage::release_delete_network_message() {
+inline ::protocol::ClientMessage_DeleteNetwork* ClientMessage::release_delete_network_message() {
   clear_has_delete_network_message();
-  ::ClientMessage_DeleteNetwork* temp = delete_network_message_;
+  ::protocol::ClientMessage_DeleteNetwork* temp = delete_network_message_;
   delete_network_message_ = NULL;
   return temp;
 }
-inline void ClientMessage::set_allocated_delete_network_message(::ClientMessage_DeleteNetwork* delete_network_message) {
+inline void ClientMessage::set_allocated_delete_network_message(::protocol::ClientMessage_DeleteNetwork* delete_network_message) {
   delete delete_network_message_;
   delete_network_message_ = delete_network_message;
   if (delete_network_message) {
@@ -6211,7 +6213,7 @@ inline void ClientMessage::set_allocated_delete_network_message(::ClientMessage_
   }
 }
 
-// optional .ClientMessage.InviteUser invite_user_message = 11;
+// optional .protocol.ClientMessage.InviteUser invite_user_message = 11;
 inline bool ClientMessage::has_invite_user_message() const {
   return (_has_bits_[0] & 0x00000400u) != 0;
 }
@@ -6222,24 +6224,24 @@ inline void ClientMessage::clear_has_invite_user_message() {
   _has_bits_[0] &= ~0x00000400u;
 }
 inline void ClientMessage::clear_invite_user_message() {
-  if (invite_user_message_ != NULL) invite_user_message_->::ClientMessage_InviteUser::Clear();
+  if (invite_user_message_ != NULL) invite_user_message_->::protocol::ClientMessage_InviteUser::Clear();
   clear_has_invite_user_message();
 }
-inline const ::ClientMessage_InviteUser& ClientMessage::invite_user_message() const {
+inline const ::protocol::ClientMessage_InviteUser& ClientMessage::invite_user_message() const {
   return invite_user_message_ != NULL ? *invite_user_message_ : *default_instance_->invite_user_message_;
 }
-inline ::ClientMessage_InviteUser* ClientMessage::mutable_invite_user_message() {
+inline ::protocol::ClientMessage_InviteUser* ClientMessage::mutable_invite_user_message() {
   set_has_invite_user_message();
-  if (invite_user_message_ == NULL) invite_user_message_ = new ::ClientMessage_InviteUser;
+  if (invite_user_message_ == NULL) invite_user_message_ = new ::protocol::ClientMessage_InviteUser;
   return invite_user_message_;
 }
-inline ::ClientMessage_InviteUser* ClientMessage::release_invite_user_message() {
+inline ::protocol::ClientMessage_InviteUser* ClientMessage::release_invite_user_message() {
   clear_has_invite_user_message();
-  ::ClientMessage_InviteUser* temp = invite_user_message_;
+  ::protocol::ClientMessage_InviteUser* temp = invite_user_message_;
   invite_user_message_ = NULL;
   return temp;
 }
-inline void ClientMessage::set_allocated_invite_user_message(::ClientMessage_InviteUser* invite_user_message) {
+inline void ClientMessage::set_allocated_invite_user_message(::protocol::ClientMessage_InviteUser* invite_user_message) {
   delete invite_user_message_;
   invite_user_message_ = invite_user_message;
   if (invite_user_message) {
@@ -6249,7 +6251,7 @@ inline void ClientMessage::set_allocated_invite_user_message(::ClientMessage_Inv
   }
 }
 
-// optional .ClientMessage.RemoveUser remove_user_message = 12;
+// optional .protocol.ClientMessage.RemoveUser remove_user_message = 12;
 inline bool ClientMessage::has_remove_user_message() const {
   return (_has_bits_[0] & 0x00000800u) != 0;
 }
@@ -6260,24 +6262,24 @@ inline void ClientMessage::clear_has_remove_user_message() {
   _has_bits_[0] &= ~0x00000800u;
 }
 inline void ClientMessage::clear_remove_user_message() {
-  if (remove_user_message_ != NULL) remove_user_message_->::ClientMessage_RemoveUser::Clear();
+  if (remove_user_message_ != NULL) remove_user_message_->::protocol::ClientMessage_RemoveUser::Clear();
   clear_has_remove_user_message();
 }
-inline const ::ClientMessage_RemoveUser& ClientMessage::remove_user_message() const {
+inline const ::protocol::ClientMessage_RemoveUser& ClientMessage::remove_user_message() const {
   return remove_user_message_ != NULL ? *remove_user_message_ : *default_instance_->remove_user_message_;
 }
-inline ::ClientMessage_RemoveUser* ClientMessage::mutable_remove_user_message() {
+inline ::protocol::ClientMessage_RemoveUser* ClientMessage::mutable_remove_user_message() {
   set_has_remove_user_message();
-  if (remove_user_message_ == NULL) remove_user_message_ = new ::ClientMessage_RemoveUser;
+  if (remove_user_message_ == NULL) remove_user_message_ = new ::protocol::ClientMessage_RemoveUser;
   return remove_user_message_;
 }
-inline ::ClientMessage_RemoveUser* ClientMessage::release_remove_user_message() {
+inline ::protocol::ClientMessage_RemoveUser* ClientMessage::release_remove_user_message() {
   clear_has_remove_user_message();
-  ::ClientMessage_RemoveUser* temp = remove_user_message_;
+  ::protocol::ClientMessage_RemoveUser* temp = remove_user_message_;
   remove_user_message_ = NULL;
   return temp;
 }
-inline void ClientMessage::set_allocated_remove_user_message(::ClientMessage_RemoveUser* remove_user_message) {
+inline void ClientMessage::set_allocated_remove_user_message(::protocol::ClientMessage_RemoveUser* remove_user_message) {
   delete remove_user_message_;
   remove_user_message_ = remove_user_message;
   if (remove_user_message) {
@@ -6287,7 +6289,7 @@ inline void ClientMessage::set_allocated_remove_user_message(::ClientMessage_Rem
   }
 }
 
-// optional .ClientMessage.UserInfo user_info_message = 13;
+// optional .protocol.ClientMessage.UserInfo user_info_message = 13;
 inline bool ClientMessage::has_user_info_message() const {
   return (_has_bits_[0] & 0x00001000u) != 0;
 }
@@ -6298,24 +6300,24 @@ inline void ClientMessage::clear_has_user_info_message() {
   _has_bits_[0] &= ~0x00001000u;
 }
 inline void ClientMessage::clear_user_info_message() {
-  if (user_info_message_ != NULL) user_info_message_->::ClientMessage_UserInfo::Clear();
+  if (user_info_message_ != NULL) user_info_message_->::protocol::ClientMessage_UserInfo::Clear();
   clear_has_user_info_message();
 }
-inline const ::ClientMessage_UserInfo& ClientMessage::user_info_message() const {
+inline const ::protocol::ClientMessage_UserInfo& ClientMessage::user_info_message() const {
   return user_info_message_ != NULL ? *user_info_message_ : *default_instance_->user_info_message_;
 }
-inline ::ClientMessage_UserInfo* ClientMessage::mutable_user_info_message() {
+inline ::protocol::ClientMessage_UserInfo* ClientMessage::mutable_user_info_message() {
   set_has_user_info_message();
-  if (user_info_message_ == NULL) user_info_message_ = new ::ClientMessage_UserInfo;
+  if (user_info_message_ == NULL) user_info_message_ = new ::protocol::ClientMessage_UserInfo;
   return user_info_message_;
 }
-inline ::ClientMessage_UserInfo* ClientMessage::release_user_info_message() {
+inline ::protocol::ClientMessage_UserInfo* ClientMessage::release_user_info_message() {
   clear_has_user_info_message();
-  ::ClientMessage_UserInfo* temp = user_info_message_;
+  ::protocol::ClientMessage_UserInfo* temp = user_info_message_;
   user_info_message_ = NULL;
   return temp;
 }
-inline void ClientMessage::set_allocated_user_info_message(::ClientMessage_UserInfo* user_info_message) {
+inline void ClientMessage::set_allocated_user_info_message(::protocol::ClientMessage_UserInfo* user_info_message) {
   delete user_info_message_;
   user_info_message_ = user_info_message;
   if (user_info_message) {
@@ -6325,7 +6327,7 @@ inline void ClientMessage::set_allocated_user_info_message(::ClientMessage_UserI
   }
 }
 
-// optional .ClientMessage.UpdateServer update_server_message = 14;
+// optional .protocol.ClientMessage.UpdateServer update_server_message = 14;
 inline bool ClientMessage::has_update_server_message() const {
   return (_has_bits_[0] & 0x00002000u) != 0;
 }
@@ -6336,24 +6338,24 @@ inline void ClientMessage::clear_has_update_server_message() {
   _has_bits_[0] &= ~0x00002000u;
 }
 inline void ClientMessage::clear_update_server_message() {
-  if (update_server_message_ != NULL) update_server_message_->::ClientMessage_UpdateServer::Clear();
+  if (update_server_message_ != NULL) update_server_message_->::protocol::ClientMessage_UpdateServer::Clear();
   clear_has_update_server_message();
 }
-inline const ::ClientMessage_UpdateServer& ClientMessage::update_server_message() const {
+inline const ::protocol::ClientMessage_UpdateServer& ClientMessage::update_server_message() const {
   return update_server_message_ != NULL ? *update_server_message_ : *default_instance_->update_server_message_;
 }
-inline ::ClientMessage_UpdateServer* ClientMessage::mutable_update_server_message() {
+inline ::protocol::ClientMessage_UpdateServer* ClientMessage::mutable_update_server_message() {
   set_has_update_server_message();
-  if (update_server_message_ == NULL) update_server_message_ = new ::ClientMessage_UpdateServer;
+  if (update_server_message_ == NULL) update_server_message_ = new ::protocol::ClientMessage_UpdateServer;
   return update_server_message_;
 }
-inline ::ClientMessage_UpdateServer* ClientMessage::release_update_server_message() {
+inline ::protocol::ClientMessage_UpdateServer* ClientMessage::release_update_server_message() {
   clear_has_update_server_message();
-  ::ClientMessage_UpdateServer* temp = update_server_message_;
+  ::protocol::ClientMessage_UpdateServer* temp = update_server_message_;
   update_server_message_ = NULL;
   return temp;
 }
-inline void ClientMessage::set_allocated_update_server_message(::ClientMessage_UpdateServer* update_server_message) {
+inline void ClientMessage::set_allocated_update_server_message(::protocol::ClientMessage_UpdateServer* update_server_message) {
   delete update_server_message_;
   update_server_message_ = update_server_message;
   if (update_server_message) {
@@ -6363,7 +6365,7 @@ inline void ClientMessage::set_allocated_update_server_message(::ClientMessage_U
   }
 }
 
-// optional .ClientMessage.StopServer stop_server_message = 15;
+// optional .protocol.ClientMessage.StopServer stop_server_message = 15;
 inline bool ClientMessage::has_stop_server_message() const {
   return (_has_bits_[0] & 0x00004000u) != 0;
 }
@@ -6374,24 +6376,24 @@ inline void ClientMessage::clear_has_stop_server_message() {
   _has_bits_[0] &= ~0x00004000u;
 }
 inline void ClientMessage::clear_stop_server_message() {
-  if (stop_server_message_ != NULL) stop_server_message_->::ClientMessage_StopServer::Clear();
+  if (stop_server_message_ != NULL) stop_server_message_->::protocol::ClientMessage_StopServer::Clear();
   clear_has_stop_server_message();
 }
-inline const ::ClientMessage_StopServer& ClientMessage::stop_server_message() const {
+inline const ::protocol::ClientMessage_StopServer& ClientMessage::stop_server_message() const {
   return stop_server_message_ != NULL ? *stop_server_message_ : *default_instance_->stop_server_message_;
 }
-inline ::ClientMessage_StopServer* ClientMessage::mutable_stop_server_message() {
+inline ::protocol::ClientMessage_StopServer* ClientMessage::mutable_stop_server_message() {
   set_has_stop_server_message();
-  if (stop_server_message_ == NULL) stop_server_message_ = new ::ClientMessage_StopServer;
+  if (stop_server_message_ == NULL) stop_server_message_ = new ::protocol::ClientMessage_StopServer;
   return stop_server_message_;
 }
-inline ::ClientMessage_StopServer* ClientMessage::release_stop_server_message() {
+inline ::protocol::ClientMessage_StopServer* ClientMessage::release_stop_server_message() {
   clear_has_stop_server_message();
-  ::ClientMessage_StopServer* temp = stop_server_message_;
+  ::protocol::ClientMessage_StopServer* temp = stop_server_message_;
   stop_server_message_ = NULL;
   return temp;
 }
-inline void ClientMessage::set_allocated_stop_server_message(::ClientMessage_StopServer* stop_server_message) {
+inline void ClientMessage::set_allocated_stop_server_message(::protocol::ClientMessage_StopServer* stop_server_message) {
   delete stop_server_message_;
   stop_server_message_ = stop_server_message;
   if (stop_server_message) {
@@ -6401,7 +6403,7 @@ inline void ClientMessage::set_allocated_stop_server_message(::ClientMessage_Sto
   }
 }
 
-// optional .ClientMessage.SignKey sign_key_message = 16;
+// optional .protocol.ClientMessage.SignKey sign_key_message = 16;
 inline bool ClientMessage::has_sign_key_message() const {
   return (_has_bits_[0] & 0x00008000u) != 0;
 }
@@ -6412,24 +6414,24 @@ inline void ClientMessage::clear_has_sign_key_message() {
   _has_bits_[0] &= ~0x00008000u;
 }
 inline void ClientMessage::clear_sign_key_message() {
-  if (sign_key_message_ != NULL) sign_key_message_->::ClientMessage_SignKey::Clear();
+  if (sign_key_message_ != NULL) sign_key_message_->::protocol::ClientMessage_SignKey::Clear();
   clear_has_sign_key_message();
 }
-inline const ::ClientMessage_SignKey& ClientMessage::sign_key_message() const {
+inline const ::protocol::ClientMessage_SignKey& ClientMessage::sign_key_message() const {
   return sign_key_message_ != NULL ? *sign_key_message_ : *default_instance_->sign_key_message_;
 }
-inline ::ClientMessage_SignKey* ClientMessage::mutable_sign_key_message() {
+inline ::protocol::ClientMessage_SignKey* ClientMessage::mutable_sign_key_message() {
   set_has_sign_key_message();
-  if (sign_key_message_ == NULL) sign_key_message_ = new ::ClientMessage_SignKey;
+  if (sign_key_message_ == NULL) sign_key_message_ = new ::protocol::ClientMessage_SignKey;
   return sign_key_message_;
 }
-inline ::ClientMessage_SignKey* ClientMessage::release_sign_key_message() {
+inline ::protocol::ClientMessage_SignKey* ClientMessage::release_sign_key_message() {
   clear_has_sign_key_message();
-  ::ClientMessage_SignKey* temp = sign_key_message_;
+  ::protocol::ClientMessage_SignKey* temp = sign_key_message_;
   sign_key_message_ = NULL;
   return temp;
 }
-inline void ClientMessage::set_allocated_sign_key_message(::ClientMessage_SignKey* sign_key_message) {
+inline void ClientMessage::set_allocated_sign_key_message(::protocol::ClientMessage_SignKey* sign_key_message) {
   delete sign_key_message_;
   sign_key_message_ = sign_key_message;
   if (sign_key_message) {
@@ -6941,7 +6943,7 @@ inline void NodeMessage_ListNetworks_Network::set_allocated_creator_email(::std:
   }
 }
 
-// required .ClientMessage.CreateNetwork.AccessRights access_rights = 4;
+// required .protocol.ClientMessage.CreateNetwork.AccessRights access_rights = 4;
 inline bool NodeMessage_ListNetworks_Network::has_access_rights() const {
   return (_has_bits_[0] & 0x00000008u) != 0;
 }
@@ -6955,16 +6957,16 @@ inline void NodeMessage_ListNetworks_Network::clear_access_rights() {
   access_rights_ = 1;
   clear_has_access_rights();
 }
-inline ::ClientMessage_CreateNetwork_AccessRights NodeMessage_ListNetworks_Network::access_rights() const {
-  return static_cast< ::ClientMessage_CreateNetwork_AccessRights >(access_rights_);
+inline ::protocol::ClientMessage_CreateNetwork_AccessRights NodeMessage_ListNetworks_Network::access_rights() const {
+  return static_cast< ::protocol::ClientMessage_CreateNetwork_AccessRights >(access_rights_);
 }
-inline void NodeMessage_ListNetworks_Network::set_access_rights(::ClientMessage_CreateNetwork_AccessRights value) {
-  assert(::ClientMessage_CreateNetwork_AccessRights_IsValid(value));
+inline void NodeMessage_ListNetworks_Network::set_access_rights(::protocol::ClientMessage_CreateNetwork_AccessRights value) {
+  assert(::protocol::ClientMessage_CreateNetwork_AccessRights_IsValid(value));
   set_has_access_rights();
   access_rights_ = value;
 }
 
-// required .ClientMessage.CreateNetwork.ParticipationRights participation_rights = 5;
+// required .protocol.ClientMessage.CreateNetwork.ParticipationRights participation_rights = 5;
 inline bool NodeMessage_ListNetworks_Network::has_participation_rights() const {
   return (_has_bits_[0] & 0x00000010u) != 0;
 }
@@ -6978,11 +6980,11 @@ inline void NodeMessage_ListNetworks_Network::clear_participation_rights() {
   participation_rights_ = 5;
   clear_has_participation_rights();
 }
-inline ::ClientMessage_CreateNetwork_ParticipationRights NodeMessage_ListNetworks_Network::participation_rights() const {
-  return static_cast< ::ClientMessage_CreateNetwork_ParticipationRights >(participation_rights_);
+inline ::protocol::ClientMessage_CreateNetwork_ParticipationRights NodeMessage_ListNetworks_Network::participation_rights() const {
+  return static_cast< ::protocol::ClientMessage_CreateNetwork_ParticipationRights >(participation_rights_);
 }
-inline void NodeMessage_ListNetworks_Network::set_participation_rights(::ClientMessage_CreateNetwork_ParticipationRights value) {
-  assert(::ClientMessage_CreateNetwork_ParticipationRights_IsValid(value));
+inline void NodeMessage_ListNetworks_Network::set_participation_rights(::protocol::ClientMessage_CreateNetwork_ParticipationRights value) {
+  assert(::protocol::ClientMessage_CreateNetwork_ParticipationRights_IsValid(value));
   set_has_participation_rights();
   participation_rights_ = value;
 }
@@ -7061,27 +7063,27 @@ inline void NodeMessage_ListNetworks_Network::set_allocated_protocol_name(::std:
 
 // NodeMessage_ListNetworks
 
-// repeated .NodeMessage.ListNetworks.Network network_list = 1;
+// repeated .protocol.NodeMessage.ListNetworks.Network network_list = 1;
 inline int NodeMessage_ListNetworks::network_list_size() const {
   return network_list_.size();
 }
 inline void NodeMessage_ListNetworks::clear_network_list() {
   network_list_.Clear();
 }
-inline const ::NodeMessage_ListNetworks_Network& NodeMessage_ListNetworks::network_list(int index) const {
+inline const ::protocol::NodeMessage_ListNetworks_Network& NodeMessage_ListNetworks::network_list(int index) const {
   return network_list_.Get(index);
 }
-inline ::NodeMessage_ListNetworks_Network* NodeMessage_ListNetworks::mutable_network_list(int index) {
+inline ::protocol::NodeMessage_ListNetworks_Network* NodeMessage_ListNetworks::mutable_network_list(int index) {
   return network_list_.Mutable(index);
 }
-inline ::NodeMessage_ListNetworks_Network* NodeMessage_ListNetworks::add_network_list() {
+inline ::protocol::NodeMessage_ListNetworks_Network* NodeMessage_ListNetworks::add_network_list() {
   return network_list_.Add();
 }
-inline const ::google::protobuf::RepeatedPtrField< ::NodeMessage_ListNetworks_Network >&
+inline const ::google::protobuf::RepeatedPtrField< ::protocol::NodeMessage_ListNetworks_Network >&
 NodeMessage_ListNetworks::network_list() const {
   return network_list_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::NodeMessage_ListNetworks_Network >*
+inline ::google::protobuf::RepeatedPtrField< ::protocol::NodeMessage_ListNetworks_Network >*
 NodeMessage_ListNetworks::mutable_network_list() {
   return &network_list_;
 }
@@ -7090,27 +7092,27 @@ NodeMessage_ListNetworks::mutable_network_list() {
 
 // NodeMessage_ListMyNetworks
 
-// repeated .NodeMessage.ListNetworks.Network network_list = 1;
+// repeated .protocol.NodeMessage.ListNetworks.Network network_list = 1;
 inline int NodeMessage_ListMyNetworks::network_list_size() const {
   return network_list_.size();
 }
 inline void NodeMessage_ListMyNetworks::clear_network_list() {
   network_list_.Clear();
 }
-inline const ::NodeMessage_ListNetworks_Network& NodeMessage_ListMyNetworks::network_list(int index) const {
+inline const ::protocol::NodeMessage_ListNetworks_Network& NodeMessage_ListMyNetworks::network_list(int index) const {
   return network_list_.Get(index);
 }
-inline ::NodeMessage_ListNetworks_Network* NodeMessage_ListMyNetworks::mutable_network_list(int index) {
+inline ::protocol::NodeMessage_ListNetworks_Network* NodeMessage_ListMyNetworks::mutable_network_list(int index) {
   return network_list_.Mutable(index);
 }
-inline ::NodeMessage_ListNetworks_Network* NodeMessage_ListMyNetworks::add_network_list() {
+inline ::protocol::NodeMessage_ListNetworks_Network* NodeMessage_ListMyNetworks::add_network_list() {
   return network_list_.Add();
 }
-inline const ::google::protobuf::RepeatedPtrField< ::NodeMessage_ListNetworks_Network >&
+inline const ::google::protobuf::RepeatedPtrField< ::protocol::NodeMessage_ListNetworks_Network >&
 NodeMessage_ListMyNetworks::network_list() const {
   return network_list_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::NodeMessage_ListNetworks_Network >*
+inline ::google::protobuf::RepeatedPtrField< ::protocol::NodeMessage_ListNetworks_Network >*
 NodeMessage_ListMyNetworks::mutable_network_list() {
   return &network_list_;
 }
@@ -7285,27 +7287,27 @@ inline void NodeMessage_ListServers_Server::set_port_number(::google::protobuf::
 
 // NodeMessage_ListServers
 
-// repeated .NodeMessage.ListServers list_servers = 1;
+// repeated .protocol.NodeMessage.ListServers list_servers = 1;
 inline int NodeMessage_ListServers::list_servers_size() const {
   return list_servers_.size();
 }
 inline void NodeMessage_ListServers::clear_list_servers() {
   list_servers_.Clear();
 }
-inline const ::NodeMessage_ListServers& NodeMessage_ListServers::list_servers(int index) const {
+inline const ::protocol::NodeMessage_ListServers& NodeMessage_ListServers::list_servers(int index) const {
   return list_servers_.Get(index);
 }
-inline ::NodeMessage_ListServers* NodeMessage_ListServers::mutable_list_servers(int index) {
+inline ::protocol::NodeMessage_ListServers* NodeMessage_ListServers::mutable_list_servers(int index) {
   return list_servers_.Mutable(index);
 }
-inline ::NodeMessage_ListServers* NodeMessage_ListServers::add_list_servers() {
+inline ::protocol::NodeMessage_ListServers* NodeMessage_ListServers::add_list_servers() {
   return list_servers_.Add();
 }
-inline const ::google::protobuf::RepeatedPtrField< ::NodeMessage_ListServers >&
+inline const ::google::protobuf::RepeatedPtrField< ::protocol::NodeMessage_ListServers >&
 NodeMessage_ListServers::list_servers() const {
   return list_servers_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::NodeMessage_ListServers >*
+inline ::google::protobuf::RepeatedPtrField< ::protocol::NodeMessage_ListServers >*
 NodeMessage_ListServers::mutable_list_servers() {
   return &list_servers_;
 }
@@ -7488,7 +7490,7 @@ inline void NodeMessage_SignKey::set_allocated_user_certificate(::std::string* u
 
 // NodeMessage
 
-// required .NodeMessage.ResponseType response_type = 1;
+// required .protocol.NodeMessage.ResponseType response_type = 1;
 inline bool NodeMessage::has_response_type() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -7502,16 +7504,16 @@ inline void NodeMessage::clear_response_type() {
   response_type_ = 200;
   clear_has_response_type();
 }
-inline ::NodeMessage_ResponseType NodeMessage::response_type() const {
-  return static_cast< ::NodeMessage_ResponseType >(response_type_);
+inline ::protocol::NodeMessage_ResponseType NodeMessage::response_type() const {
+  return static_cast< ::protocol::NodeMessage_ResponseType >(response_type_);
 }
-inline void NodeMessage::set_response_type(::NodeMessage_ResponseType value) {
-  assert(::NodeMessage_ResponseType_IsValid(value));
+inline void NodeMessage::set_response_type(::protocol::NodeMessage_ResponseType value) {
+  assert(::protocol::NodeMessage_ResponseType_IsValid(value));
   set_has_response_type();
   response_type_ = value;
 }
 
-// optional .NodeMessage.Register register_response = 2;
+// optional .protocol.NodeMessage.Register register_response = 2;
 inline bool NodeMessage::has_register_response() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
@@ -7522,24 +7524,24 @@ inline void NodeMessage::clear_has_register_response() {
   _has_bits_[0] &= ~0x00000002u;
 }
 inline void NodeMessage::clear_register_response() {
-  if (register_response_ != NULL) register_response_->::NodeMessage_Register::Clear();
+  if (register_response_ != NULL) register_response_->::protocol::NodeMessage_Register::Clear();
   clear_has_register_response();
 }
-inline const ::NodeMessage_Register& NodeMessage::register_response() const {
+inline const ::protocol::NodeMessage_Register& NodeMessage::register_response() const {
   return register_response_ != NULL ? *register_response_ : *default_instance_->register_response_;
 }
-inline ::NodeMessage_Register* NodeMessage::mutable_register_response() {
+inline ::protocol::NodeMessage_Register* NodeMessage::mutable_register_response() {
   set_has_register_response();
-  if (register_response_ == NULL) register_response_ = new ::NodeMessage_Register;
+  if (register_response_ == NULL) register_response_ = new ::protocol::NodeMessage_Register;
   return register_response_;
 }
-inline ::NodeMessage_Register* NodeMessage::release_register_response() {
+inline ::protocol::NodeMessage_Register* NodeMessage::release_register_response() {
   clear_has_register_response();
-  ::NodeMessage_Register* temp = register_response_;
+  ::protocol::NodeMessage_Register* temp = register_response_;
   register_response_ = NULL;
   return temp;
 }
-inline void NodeMessage::set_allocated_register_response(::NodeMessage_Register* register_response) {
+inline void NodeMessage::set_allocated_register_response(::protocol::NodeMessage_Register* register_response) {
   delete register_response_;
   register_response_ = register_response;
   if (register_response) {
@@ -7549,7 +7551,7 @@ inline void NodeMessage::set_allocated_register_response(::NodeMessage_Register*
   }
 }
 
-// optional .NodeMessage.Login login_response = 3;
+// optional .protocol.NodeMessage.Login login_response = 3;
 inline bool NodeMessage::has_login_response() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
@@ -7560,24 +7562,24 @@ inline void NodeMessage::clear_has_login_response() {
   _has_bits_[0] &= ~0x00000004u;
 }
 inline void NodeMessage::clear_login_response() {
-  if (login_response_ != NULL) login_response_->::NodeMessage_Login::Clear();
+  if (login_response_ != NULL) login_response_->::protocol::NodeMessage_Login::Clear();
   clear_has_login_response();
 }
-inline const ::NodeMessage_Login& NodeMessage::login_response() const {
+inline const ::protocol::NodeMessage_Login& NodeMessage::login_response() const {
   return login_response_ != NULL ? *login_response_ : *default_instance_->login_response_;
 }
-inline ::NodeMessage_Login* NodeMessage::mutable_login_response() {
+inline ::protocol::NodeMessage_Login* NodeMessage::mutable_login_response() {
   set_has_login_response();
-  if (login_response_ == NULL) login_response_ = new ::NodeMessage_Login;
+  if (login_response_ == NULL) login_response_ = new ::protocol::NodeMessage_Login;
   return login_response_;
 }
-inline ::NodeMessage_Login* NodeMessage::release_login_response() {
+inline ::protocol::NodeMessage_Login* NodeMessage::release_login_response() {
   clear_has_login_response();
-  ::NodeMessage_Login* temp = login_response_;
+  ::protocol::NodeMessage_Login* temp = login_response_;
   login_response_ = NULL;
   return temp;
 }
-inline void NodeMessage::set_allocated_login_response(::NodeMessage_Login* login_response) {
+inline void NodeMessage::set_allocated_login_response(::protocol::NodeMessage_Login* login_response) {
   delete login_response_;
   login_response_ = login_response;
   if (login_response) {
@@ -7587,7 +7589,7 @@ inline void NodeMessage::set_allocated_login_response(::NodeMessage_Login* login
   }
 }
 
-// optional .NodeMessage.ListNetworks list_networks_response = 5;
+// optional .protocol.NodeMessage.ListNetworks list_networks_response = 5;
 inline bool NodeMessage::has_list_networks_response() const {
   return (_has_bits_[0] & 0x00000008u) != 0;
 }
@@ -7598,24 +7600,24 @@ inline void NodeMessage::clear_has_list_networks_response() {
   _has_bits_[0] &= ~0x00000008u;
 }
 inline void NodeMessage::clear_list_networks_response() {
-  if (list_networks_response_ != NULL) list_networks_response_->::NodeMessage_ListNetworks::Clear();
+  if (list_networks_response_ != NULL) list_networks_response_->::protocol::NodeMessage_ListNetworks::Clear();
   clear_has_list_networks_response();
 }
-inline const ::NodeMessage_ListNetworks& NodeMessage::list_networks_response() const {
+inline const ::protocol::NodeMessage_ListNetworks& NodeMessage::list_networks_response() const {
   return list_networks_response_ != NULL ? *list_networks_response_ : *default_instance_->list_networks_response_;
 }
-inline ::NodeMessage_ListNetworks* NodeMessage::mutable_list_networks_response() {
+inline ::protocol::NodeMessage_ListNetworks* NodeMessage::mutable_list_networks_response() {
   set_has_list_networks_response();
-  if (list_networks_response_ == NULL) list_networks_response_ = new ::NodeMessage_ListNetworks;
+  if (list_networks_response_ == NULL) list_networks_response_ = new ::protocol::NodeMessage_ListNetworks;
   return list_networks_response_;
 }
-inline ::NodeMessage_ListNetworks* NodeMessage::release_list_networks_response() {
+inline ::protocol::NodeMessage_ListNetworks* NodeMessage::release_list_networks_response() {
   clear_has_list_networks_response();
-  ::NodeMessage_ListNetworks* temp = list_networks_response_;
+  ::protocol::NodeMessage_ListNetworks* temp = list_networks_response_;
   list_networks_response_ = NULL;
   return temp;
 }
-inline void NodeMessage::set_allocated_list_networks_response(::NodeMessage_ListNetworks* list_networks_response) {
+inline void NodeMessage::set_allocated_list_networks_response(::protocol::NodeMessage_ListNetworks* list_networks_response) {
   delete list_networks_response_;
   list_networks_response_ = list_networks_response;
   if (list_networks_response) {
@@ -7625,7 +7627,7 @@ inline void NodeMessage::set_allocated_list_networks_response(::NodeMessage_List
   }
 }
 
-// optional .NodeMessage.ListMyNetworks list_my_networks_response = 6;
+// optional .protocol.NodeMessage.ListMyNetworks list_my_networks_response = 6;
 inline bool NodeMessage::has_list_my_networks_response() const {
   return (_has_bits_[0] & 0x00000010u) != 0;
 }
@@ -7636,24 +7638,24 @@ inline void NodeMessage::clear_has_list_my_networks_response() {
   _has_bits_[0] &= ~0x00000010u;
 }
 inline void NodeMessage::clear_list_my_networks_response() {
-  if (list_my_networks_response_ != NULL) list_my_networks_response_->::NodeMessage_ListMyNetworks::Clear();
+  if (list_my_networks_response_ != NULL) list_my_networks_response_->::protocol::NodeMessage_ListMyNetworks::Clear();
   clear_has_list_my_networks_response();
 }
-inline const ::NodeMessage_ListMyNetworks& NodeMessage::list_my_networks_response() const {
+inline const ::protocol::NodeMessage_ListMyNetworks& NodeMessage::list_my_networks_response() const {
   return list_my_networks_response_ != NULL ? *list_my_networks_response_ : *default_instance_->list_my_networks_response_;
 }
-inline ::NodeMessage_ListMyNetworks* NodeMessage::mutable_list_my_networks_response() {
+inline ::protocol::NodeMessage_ListMyNetworks* NodeMessage::mutable_list_my_networks_response() {
   set_has_list_my_networks_response();
-  if (list_my_networks_response_ == NULL) list_my_networks_response_ = new ::NodeMessage_ListMyNetworks;
+  if (list_my_networks_response_ == NULL) list_my_networks_response_ = new ::protocol::NodeMessage_ListMyNetworks;
   return list_my_networks_response_;
 }
-inline ::NodeMessage_ListMyNetworks* NodeMessage::release_list_my_networks_response() {
+inline ::protocol::NodeMessage_ListMyNetworks* NodeMessage::release_list_my_networks_response() {
   clear_has_list_my_networks_response();
-  ::NodeMessage_ListMyNetworks* temp = list_my_networks_response_;
+  ::protocol::NodeMessage_ListMyNetworks* temp = list_my_networks_response_;
   list_my_networks_response_ = NULL;
   return temp;
 }
-inline void NodeMessage::set_allocated_list_my_networks_response(::NodeMessage_ListMyNetworks* list_my_networks_response) {
+inline void NodeMessage::set_allocated_list_my_networks_response(::protocol::NodeMessage_ListMyNetworks* list_my_networks_response) {
   delete list_my_networks_response_;
   list_my_networks_response_ = list_my_networks_response;
   if (list_my_networks_response) {
@@ -7663,7 +7665,7 @@ inline void NodeMessage::set_allocated_list_my_networks_response(::NodeMessage_L
   }
 }
 
-// optional .NodeMessage.ListServers list_servers_response = 7;
+// optional .protocol.NodeMessage.ListServers list_servers_response = 7;
 inline bool NodeMessage::has_list_servers_response() const {
   return (_has_bits_[0] & 0x00000020u) != 0;
 }
@@ -7674,24 +7676,24 @@ inline void NodeMessage::clear_has_list_servers_response() {
   _has_bits_[0] &= ~0x00000020u;
 }
 inline void NodeMessage::clear_list_servers_response() {
-  if (list_servers_response_ != NULL) list_servers_response_->::NodeMessage_ListServers::Clear();
+  if (list_servers_response_ != NULL) list_servers_response_->::protocol::NodeMessage_ListServers::Clear();
   clear_has_list_servers_response();
 }
-inline const ::NodeMessage_ListServers& NodeMessage::list_servers_response() const {
+inline const ::protocol::NodeMessage_ListServers& NodeMessage::list_servers_response() const {
   return list_servers_response_ != NULL ? *list_servers_response_ : *default_instance_->list_servers_response_;
 }
-inline ::NodeMessage_ListServers* NodeMessage::mutable_list_servers_response() {
+inline ::protocol::NodeMessage_ListServers* NodeMessage::mutable_list_servers_response() {
   set_has_list_servers_response();
-  if (list_servers_response_ == NULL) list_servers_response_ = new ::NodeMessage_ListServers;
+  if (list_servers_response_ == NULL) list_servers_response_ = new ::protocol::NodeMessage_ListServers;
   return list_servers_response_;
 }
-inline ::NodeMessage_ListServers* NodeMessage::release_list_servers_response() {
+inline ::protocol::NodeMessage_ListServers* NodeMessage::release_list_servers_response() {
   clear_has_list_servers_response();
-  ::NodeMessage_ListServers* temp = list_servers_response_;
+  ::protocol::NodeMessage_ListServers* temp = list_servers_response_;
   list_servers_response_ = NULL;
   return temp;
 }
-inline void NodeMessage::set_allocated_list_servers_response(::NodeMessage_ListServers* list_servers_response) {
+inline void NodeMessage::set_allocated_list_servers_response(::protocol::NodeMessage_ListServers* list_servers_response) {
   delete list_servers_response_;
   list_servers_response_ = list_servers_response;
   if (list_servers_response) {
@@ -7701,7 +7703,7 @@ inline void NodeMessage::set_allocated_list_servers_response(::NodeMessage_ListS
   }
 }
 
-// optional .NodeMessage.UserInfo user_info_response = 13;
+// optional .protocol.NodeMessage.UserInfo user_info_response = 13;
 inline bool NodeMessage::has_user_info_response() const {
   return (_has_bits_[0] & 0x00000040u) != 0;
 }
@@ -7712,24 +7714,24 @@ inline void NodeMessage::clear_has_user_info_response() {
   _has_bits_[0] &= ~0x00000040u;
 }
 inline void NodeMessage::clear_user_info_response() {
-  if (user_info_response_ != NULL) user_info_response_->::NodeMessage_UserInfo::Clear();
+  if (user_info_response_ != NULL) user_info_response_->::protocol::NodeMessage_UserInfo::Clear();
   clear_has_user_info_response();
 }
-inline const ::NodeMessage_UserInfo& NodeMessage::user_info_response() const {
+inline const ::protocol::NodeMessage_UserInfo& NodeMessage::user_info_response() const {
   return user_info_response_ != NULL ? *user_info_response_ : *default_instance_->user_info_response_;
 }
-inline ::NodeMessage_UserInfo* NodeMessage::mutable_user_info_response() {
+inline ::protocol::NodeMessage_UserInfo* NodeMessage::mutable_user_info_response() {
   set_has_user_info_response();
-  if (user_info_response_ == NULL) user_info_response_ = new ::NodeMessage_UserInfo;
+  if (user_info_response_ == NULL) user_info_response_ = new ::protocol::NodeMessage_UserInfo;
   return user_info_response_;
 }
-inline ::NodeMessage_UserInfo* NodeMessage::release_user_info_response() {
+inline ::protocol::NodeMessage_UserInfo* NodeMessage::release_user_info_response() {
   clear_has_user_info_response();
-  ::NodeMessage_UserInfo* temp = user_info_response_;
+  ::protocol::NodeMessage_UserInfo* temp = user_info_response_;
   user_info_response_ = NULL;
   return temp;
 }
-inline void NodeMessage::set_allocated_user_info_response(::NodeMessage_UserInfo* user_info_response) {
+inline void NodeMessage::set_allocated_user_info_response(::protocol::NodeMessage_UserInfo* user_info_response) {
   delete user_info_response_;
   user_info_response_ = user_info_response;
   if (user_info_response) {
@@ -7739,7 +7741,7 @@ inline void NodeMessage::set_allocated_user_info_response(::NodeMessage_UserInfo
   }
 }
 
-// optional .NodeMessage.UpdateServer update_server_response = 14;
+// optional .protocol.NodeMessage.UpdateServer update_server_response = 14;
 inline bool NodeMessage::has_update_server_response() const {
   return (_has_bits_[0] & 0x00000080u) != 0;
 }
@@ -7750,24 +7752,24 @@ inline void NodeMessage::clear_has_update_server_response() {
   _has_bits_[0] &= ~0x00000080u;
 }
 inline void NodeMessage::clear_update_server_response() {
-  if (update_server_response_ != NULL) update_server_response_->::NodeMessage_UpdateServer::Clear();
+  if (update_server_response_ != NULL) update_server_response_->::protocol::NodeMessage_UpdateServer::Clear();
   clear_has_update_server_response();
 }
-inline const ::NodeMessage_UpdateServer& NodeMessage::update_server_response() const {
+inline const ::protocol::NodeMessage_UpdateServer& NodeMessage::update_server_response() const {
   return update_server_response_ != NULL ? *update_server_response_ : *default_instance_->update_server_response_;
 }
-inline ::NodeMessage_UpdateServer* NodeMessage::mutable_update_server_response() {
+inline ::protocol::NodeMessage_UpdateServer* NodeMessage::mutable_update_server_response() {
   set_has_update_server_response();
-  if (update_server_response_ == NULL) update_server_response_ = new ::NodeMessage_UpdateServer;
+  if (update_server_response_ == NULL) update_server_response_ = new ::protocol::NodeMessage_UpdateServer;
   return update_server_response_;
 }
-inline ::NodeMessage_UpdateServer* NodeMessage::release_update_server_response() {
+inline ::protocol::NodeMessage_UpdateServer* NodeMessage::release_update_server_response() {
   clear_has_update_server_response();
-  ::NodeMessage_UpdateServer* temp = update_server_response_;
+  ::protocol::NodeMessage_UpdateServer* temp = update_server_response_;
   update_server_response_ = NULL;
   return temp;
 }
-inline void NodeMessage::set_allocated_update_server_response(::NodeMessage_UpdateServer* update_server_response) {
+inline void NodeMessage::set_allocated_update_server_response(::protocol::NodeMessage_UpdateServer* update_server_response) {
   delete update_server_response_;
   update_server_response_ = update_server_response;
   if (update_server_response) {
@@ -7777,7 +7779,7 @@ inline void NodeMessage::set_allocated_update_server_response(::NodeMessage_Upda
   }
 }
 
-// optional .NodeMessage.SignKey sign_key_response = 16;
+// optional .protocol.NodeMessage.SignKey sign_key_response = 16;
 inline bool NodeMessage::has_sign_key_response() const {
   return (_has_bits_[0] & 0x00000100u) != 0;
 }
@@ -7788,24 +7790,24 @@ inline void NodeMessage::clear_has_sign_key_response() {
   _has_bits_[0] &= ~0x00000100u;
 }
 inline void NodeMessage::clear_sign_key_response() {
-  if (sign_key_response_ != NULL) sign_key_response_->::NodeMessage_SignKey::Clear();
+  if (sign_key_response_ != NULL) sign_key_response_->::protocol::NodeMessage_SignKey::Clear();
   clear_has_sign_key_response();
 }
-inline const ::NodeMessage_SignKey& NodeMessage::sign_key_response() const {
+inline const ::protocol::NodeMessage_SignKey& NodeMessage::sign_key_response() const {
   return sign_key_response_ != NULL ? *sign_key_response_ : *default_instance_->sign_key_response_;
 }
-inline ::NodeMessage_SignKey* NodeMessage::mutable_sign_key_response() {
+inline ::protocol::NodeMessage_SignKey* NodeMessage::mutable_sign_key_response() {
   set_has_sign_key_response();
-  if (sign_key_response_ == NULL) sign_key_response_ = new ::NodeMessage_SignKey;
+  if (sign_key_response_ == NULL) sign_key_response_ = new ::protocol::NodeMessage_SignKey;
   return sign_key_response_;
 }
-inline ::NodeMessage_SignKey* NodeMessage::release_sign_key_response() {
+inline ::protocol::NodeMessage_SignKey* NodeMessage::release_sign_key_response() {
   clear_has_sign_key_response();
-  ::NodeMessage_SignKey* temp = sign_key_response_;
+  ::protocol::NodeMessage_SignKey* temp = sign_key_response_;
   sign_key_response_ = NULL;
   return temp;
 }
-inline void NodeMessage::set_allocated_sign_key_response(::NodeMessage_SignKey* sign_key_response) {
+inline void NodeMessage::set_allocated_sign_key_response(::protocol::NodeMessage_SignKey* sign_key_response) {
   delete sign_key_response_;
   sign_key_response_ = sign_key_response;
   if (sign_key_response) {
@@ -7818,29 +7820,31 @@ inline void NodeMessage::set_allocated_sign_key_response(::NodeMessage_SignKey* 
 
 // @@protoc_insertion_point(namespace_scope)
 
+}  // namespace protocol
+
 #ifndef SWIG
 namespace google {
 namespace protobuf {
 
 template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::ClientMessage_CreateNetwork_AccessRights>() {
-  return ::ClientMessage_CreateNetwork_AccessRights_descriptor();
+inline const EnumDescriptor* GetEnumDescriptor< ::protocol::ClientMessage_CreateNetwork_AccessRights>() {
+  return ::protocol::ClientMessage_CreateNetwork_AccessRights_descriptor();
 }
 template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::ClientMessage_CreateNetwork_Visiblity>() {
-  return ::ClientMessage_CreateNetwork_Visiblity_descriptor();
+inline const EnumDescriptor* GetEnumDescriptor< ::protocol::ClientMessage_CreateNetwork_Visiblity>() {
+  return ::protocol::ClientMessage_CreateNetwork_Visiblity_descriptor();
 }
 template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::ClientMessage_CreateNetwork_ParticipationRights>() {
-  return ::ClientMessage_CreateNetwork_ParticipationRights_descriptor();
+inline const EnumDescriptor* GetEnumDescriptor< ::protocol::ClientMessage_CreateNetwork_ParticipationRights>() {
+  return ::protocol::ClientMessage_CreateNetwork_ParticipationRights_descriptor();
 }
 template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::ClientMessage_RequestType>() {
-  return ::ClientMessage_RequestType_descriptor();
+inline const EnumDescriptor* GetEnumDescriptor< ::protocol::ClientMessage_RequestType>() {
+  return ::protocol::ClientMessage_RequestType_descriptor();
 }
 template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::NodeMessage_ResponseType>() {
-  return ::NodeMessage_ResponseType_descriptor();
+inline const EnumDescriptor* GetEnumDescriptor< ::protocol::NodeMessage_ResponseType>() {
+  return ::protocol::NodeMessage_ResponseType_descriptor();
 }
 
 }  // namespace google

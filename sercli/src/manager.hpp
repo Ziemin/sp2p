@@ -3,6 +3,7 @@
 
 #include <boost/asio.hpp>
 #include <boost/noncopyable.hpp>
+#include <botan/botan.h>
 #include <vector>
 #include <map>
 #include <string>
@@ -65,7 +66,6 @@ namespace sp2p {
 			private:
 				DataManager &data_manager;
 				boost::asio::io_service &io_s;
-
 				std::map<NodeDescription, node_ptr> nodes_map;
 				std::map<NetworkDescription, network_ptr> networks_map;
 		};

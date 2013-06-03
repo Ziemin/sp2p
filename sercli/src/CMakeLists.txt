@@ -15,6 +15,7 @@ add_executable(sercli main.cpp)
 add_library(sercliLib STATIC
 	user.cpp
 	node.cpp
+	sp2p_protocol.pb.cc
 )
 
 add_definitions(-BOOST_ASIO_ENABLE_HANDLER_TRACKING)

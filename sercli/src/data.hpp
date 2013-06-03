@@ -2,7 +2,8 @@
 #define DATA_H
 
 #include <boost/asio.hpp>
-
+#include "node.hpp"
+#include "network.hpp"
 
 namespace sp2p {
 	namespace sercli {
@@ -10,8 +11,6 @@ namespace sp2p {
 		class Node;
 		class Network;
 
-		#include "node.hpp"
-		#include "network.hpp"
 		/**
 		 * Abstract class representing data manager, whose duty is to save state
 		 * of networks and nodes

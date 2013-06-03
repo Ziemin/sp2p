@@ -16,6 +16,8 @@
 #include <google/protobuf/wire_format.h>
 // @@protoc_insertion_point(includes)
 
+namespace protocol {
+
 namespace {
 
 const ::google::protobuf::Descriptor* ClientMessage_descriptor_ = NULL;
@@ -712,102 +714,109 @@ void protobuf_AddDesc_sp2p_5fprotocol_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\023sp2p_protocol.proto\"\254\022\n\rClientMessage\022"
-    "+\n\007request\030\001 \002(\0162\032.ClientMessage.Request"
-    "Type\0221\n\020register_message\030\002 \001(\0132\027.ClientM"
-    "essage.Register\0225\n\022unregister_message\030\003 "
-    "\001(\0132\031.ClientMessage.Unregister\022+\n\rlogin_"
-    "message\030\004 \001(\0132\024.ClientMessage.Login\022-\n\016l"
-    "ogout_message\030\005 \001(\0132\025.ClientMessage.Logo"
-    "ut\022:\n\025list_networks_message\030\006 \001(\0132\033.Clie"
-    "ntMessage.ListNetworks\022\?\n\030list_my_networ"
-    "ks_message\030\007 \001(\0132\035.ClientMessage.ListMyN"
-    "etworks\0228\n\024list_servers_message\030\010 \001(\0132\032."
-    "ClientMessage.ListServers\022<\n\026create_netw"
-    "ork_message\030\t \001(\0132\034.ClientMessage.Create"
-    "Network\022<\n\026delete_network_message\030\n \001(\0132"
-    "\034.ClientMessage.DeleteNetwork\0226\n\023invite_"
-    "user_message\030\013 \001(\0132\031.ClientMessage.Invit"
-    "eUser\0226\n\023remove_user_message\030\014 \001(\0132\031.Cli"
-    "entMessage.RemoveUser\0222\n\021user_info_messa"
-    "ge\030\r \001(\0132\027.ClientMessage.UserInfo\022:\n\025upd"
-    "ate_server_message\030\016 \001(\0132\033.ClientMessage"
-    ".UpdateServer\0226\n\023stop_server_message\030\017 \001"
-    "(\0132\031.ClientMessage.StopServer\0220\n\020sign_ke"
-    "y_message\030\020 \001(\0132\026.ClientMessage.SignKey\032"
-    "B\n\010Register\022\020\n\010username\030\001 \002(\t\022\020\n\010passwor"
-    "d\030\002 \002(\t\022\022\n\npublic_key\030\003 \002(\t\032\034\n\nUnregiste"
-    "r\022\016\n\006cookie\030\001 \002(\t\032+\n\005Login\022\020\n\010username\030\001"
-    " \002(\t\022\020\n\010password\030\002 \002(\t\032\030\n\006Logout\022\016\n\006cook"
-    "ie\030\001 \002(\t\032\036\n\014ListNetworks\022\016\n\006cookie\030\001 \002(\t"
-    "\032 \n\016ListMyNetworks\022\016\n\006cookie\030\001 \002(\t\0323\n\013Li"
-    "stServers\022\016\n\006cookie\030\001 \002(\t\022\024\n\014network_nam"
-    "e\030\002 \002(\t\032\274\003\n\rCreateNetwork\022\016\n\006cookie\030\001 \002("
-    "\t\022\024\n\014network_name\030\002 \002(\t\022@\n\raccess_rights"
-    "\030\003 \002(\0162).ClientMessage.CreateNetwork.Acc"
-    "essRights\022:\n\nvisibility\030\004 \002(\0162&.ClientMe"
-    "ssage.CreateNetwork.Visiblity\022N\n\024partici"
-    "pation_rights\030\005 \002(\01620.ClientMessage.Crea"
-    "teNetwork.ParticipationRights\022\025\n\rcreator"
-    "_email\030\006 \001(\t\022\025\n\rprotocol_name\030\007 \001(\t\"\'\n\014A"
-    "ccessRights\022\n\n\006PUBLIC\020\001\022\013\n\007PRIVATE\020\002\"%\n\t"
-    "Visiblity\022\n\n\006LISTED\020\003\022\014\n\010UNLISTED\020\004\"9\n\023P"
-    "articipationRights\022\017\n\013CLIENT_ONLY\020\005\022\021\n\rC"
-    "LIENT_SERVER\020\006\032-\n\rDeleteNetwork\022\016\n\006cooki"
-    "e\030\001 \002(\t\022\014\n\004name\030\002 \002(\t\032D\n\nInviteUser\022\016\n\006c"
-    "ookie\030\001 \002(\t\022\020\n\010username\030\002 \002(\t\022\024\n\014network"
-    "_name\030\003 \002(\t\032D\n\nRemoveUser\022\016\n\006cookie\030\001 \002("
-    "\t\022\020\n\010username\030\002 \002(\t\022\024\n\014network_name\030\003 \002("
-    "\t\032B\n\010UserInfo\022\016\n\006cookie\030\001 \002(\t\022\020\n\010usernam"
-    "e\030\002 \002(\t\022\024\n\014network_name\030\003 \002(\t\032I\n\014UpdateS"
-    "erver\022\016\n\006cookie\030\001 \002(\t\022\024\n\014network_name\030\002 "
-    "\002(\t\022\023\n\013port_number\030\003 \002(\005\0322\n\nStopServer\022\016"
-    "\n\006cookie\030\001 \002(\t\022\024\n\014network_name\030\002 \002(\t\032C\n\007"
-    "SignKey\022\016\n\006cookie\030\001 \002(\t\022\022\n\npublic_key\030\002 "
-    "\002(\t\022\024\n\014network_name\030\003 \001(\t\"\210\002\n\013RequestTyp"
-    "e\022\014\n\010REGISTER\020\000\022\016\n\nUNREGISTER\020\001\022\t\n\005LOGIN"
-    "\020\002\022\n\n\006LOGOUT\020\003\022\021\n\rLIST_NETWORKS\020\004\022\024\n\020LIS"
-    "T_MY_NETWORKS\020\005\022\020\n\014LIST_SERVERS\020\006\022\022\n\016CRE"
-    "ATE_NETWORK\020\007\022\022\n\016DELETE_NETWORK\020\010\022\017\n\013INV"
-    "ITE_USER\020\t\022\017\n\013REMOVE_USER\020\n\022\r\n\tUSER_INFO"
-    "\020\013\022\021\n\rUPDATE_SERVER\020\014\022\017\n\013STOP_SERVER\020\r\022\014"
-    "\n\010SIGN_KEY\020\016\"\235\013\n\013NodeMessage\0220\n\rresponse"
-    "_type\030\001 \002(\0162\031.NodeMessage.ResponseType\0220"
-    "\n\021register_response\030\002 \001(\0132\025.NodeMessage."
-    "Register\022*\n\016login_response\030\003 \001(\0132\022.NodeM"
-    "essage.Login\0229\n\026list_networks_response\030\005"
-    " \001(\0132\031.NodeMessage.ListNetworks\022>\n\031list_"
-    "my_networks_response\030\006 \001(\0132\033.NodeMessage"
-    ".ListMyNetworks\0227\n\025list_servers_response"
-    "\030\007 \001(\0132\030.NodeMessage.ListServers\0221\n\022user"
-    "_info_response\030\r \001(\0132\025.NodeMessage.UserI"
-    "nfo\0229\n\026update_server_response\030\016 \001(\0132\031.No"
-    "deMessage.UpdateServer\022/\n\021sign_key_respo"
-    "nse\030\020 \001(\0132\024.NodeMessage.SignKey\032>\n\010Regis"
-    "ter\022\030\n\020user_certificate\030\001 \002(\t\022\030\n\020node_ce"
-    "rtificate\030\002 \002(\t\0321\n\005Login\022\016\n\006cookie\030\001 \002(\t"
-    "\022\030\n\020node_certificate\030\002 \001(\t\032\267\002\n\014ListNetwo"
-    "rks\0227\n\014network_list\030\001 \003(\0132!.NodeMessage."
-    "ListNetworks.Network\032\355\001\n\007Network\022\014\n\004name"
-    "\030\001 \002(\t\022\024\n\014creator_name\030\002 \002(\t\022\025\n\rcreator_"
-    "email\030\003 \001(\t\022@\n\raccess_rights\030\004 \002(\0162).Cli"
-    "entMessage.CreateNetwork.AccessRights\022N\n"
-    "\024participation_rights\030\005 \002(\01620.ClientMess"
-    "age.CreateNetwork.ParticipationRights\022\025\n"
-    "\rprotocol_name\030\006 \001(\t\032I\n\016ListMyNetworks\0227"
-    "\n\014network_list\030\001 \003(\0132!.NodeMessage.ListN"
-    "etworks.Network\032\202\001\n\013ListServers\022.\n\014list_"
-    "servers\030\001 \003(\0132\030.NodeMessage.ListServers\032"
-    "C\n\006Server\022\020\n\010username\030\001 \002(\t\022\022\n\nip_addres"
-    "s\030\002 \002(\t\022\023\n\013port_number\030\003 \002(\005\032#\n\010UserInfo"
-    "\022\027\n\017user_public_key\030\001 \002(\t\032)\n\014UpdateServe"
-    "r\022\031\n\021seconds_to_update\030\001 \002(\005\032#\n\007SignKey\022"
-    "\030\n\020user_certificate\030\001 \002(\t\"\270\001\n\014ResponseTy"
-    "pe\022\007\n\002OK\020\310\001\022\032\n\025INTERNAL_SERVER_ERROR\020\220\003\022"
-    "\020\n\013BAD_REQUEST\020\364\003\022\022\n\rNO_PRIVILAGES\020\365\003\022\017\n"
-    "\nNOT_LOGGED\020\366\003\022\024\n\017BAD_CREDENTIALS\020\367\003\022\021\n\014"
-    "NO_SUCH_USER\020\370\003\022\024\n\017NO_SUCH_NETWORK\020\371\003\022\r\n"
-    "\010BAD_DATA\020\372\003", 3812);
+    "\n\023sp2p_protocol.proto\022\010protocol\"\327\023\n\rClie"
+    "ntMessage\0224\n\007request\030\001 \002(\0162#.protocol.Cl"
+    "ientMessage.RequestType\022:\n\020register_mess"
+    "age\030\002 \001(\0132 .protocol.ClientMessage.Regis"
+    "ter\022>\n\022unregister_message\030\003 \001(\0132\".protoc"
+    "ol.ClientMessage.Unregister\0224\n\rlogin_mes"
+    "sage\030\004 \001(\0132\035.protocol.ClientMessage.Logi"
+    "n\0226\n\016logout_message\030\005 \001(\0132\036.protocol.Cli"
+    "entMessage.Logout\022C\n\025list_networks_messa"
+    "ge\030\006 \001(\0132$.protocol.ClientMessage.ListNe"
+    "tworks\022H\n\030list_my_networks_message\030\007 \001(\013"
+    "2&.protocol.ClientMessage.ListMyNetworks"
+    "\022A\n\024list_servers_message\030\010 \001(\0132#.protoco"
+    "l.ClientMessage.ListServers\022E\n\026create_ne"
+    "twork_message\030\t \001(\0132%.protocol.ClientMes"
+    "sage.CreateNetwork\022E\n\026delete_network_mes"
+    "sage\030\n \001(\0132%.protocol.ClientMessage.Dele"
+    "teNetwork\022\?\n\023invite_user_message\030\013 \001(\0132\""
+    ".protocol.ClientMessage.InviteUser\022\?\n\023re"
+    "move_user_message\030\014 \001(\0132\".protocol.Clien"
+    "tMessage.RemoveUser\022;\n\021user_info_message"
+    "\030\r \001(\0132 .protocol.ClientMessage.UserInfo"
+    "\022C\n\025update_server_message\030\016 \001(\0132$.protoc"
+    "ol.ClientMessage.UpdateServer\022\?\n\023stop_se"
+    "rver_message\030\017 \001(\0132\".protocol.ClientMess"
+    "age.StopServer\0229\n\020sign_key_message\030\020 \001(\013"
+    "2\037.protocol.ClientMessage.SignKey\032B\n\010Reg"
+    "ister\022\020\n\010username\030\001 \002(\t\022\020\n\010password\030\002 \002("
+    "\t\022\022\n\npublic_key\030\003 \002(\t\032\034\n\nUnregister\022\016\n\006c"
+    "ookie\030\001 \002(\t\032+\n\005Login\022\020\n\010username\030\001 \002(\t\022\020"
+    "\n\010password\030\002 \002(\t\032\030\n\006Logout\022\016\n\006cookie\030\001 \002"
+    "(\t\032\036\n\014ListNetworks\022\016\n\006cookie\030\001 \002(\t\032 \n\016Li"
+    "stMyNetworks\022\016\n\006cookie\030\001 \002(\t\0323\n\013ListServ"
+    "ers\022\016\n\006cookie\030\001 \002(\t\022\024\n\014network_name\030\002 \002("
+    "\t\032\327\003\n\rCreateNetwork\022\016\n\006cookie\030\001 \002(\t\022\024\n\014n"
+    "etwork_name\030\002 \002(\t\022I\n\raccess_rights\030\003 \002(\016"
+    "22.protocol.ClientMessage.CreateNetwork."
+    "AccessRights\022C\n\nvisibility\030\004 \002(\0162/.proto"
+    "col.ClientMessage.CreateNetwork.Visiblit"
+    "y\022W\n\024participation_rights\030\005 \002(\01629.protoc"
+    "ol.ClientMessage.CreateNetwork.Participa"
+    "tionRights\022\025\n\rcreator_email\030\006 \001(\t\022\025\n\rpro"
+    "tocol_name\030\007 \001(\t\"\'\n\014AccessRights\022\n\n\006PUBL"
+    "IC\020\001\022\013\n\007PRIVATE\020\002\"%\n\tVisiblity\022\n\n\006LISTED"
+    "\020\003\022\014\n\010UNLISTED\020\004\"9\n\023ParticipationRights\022"
+    "\017\n\013CLIENT_ONLY\020\005\022\021\n\rCLIENT_SERVER\020\006\032-\n\rD"
+    "eleteNetwork\022\016\n\006cookie\030\001 \002(\t\022\014\n\004name\030\002 \002"
+    "(\t\032D\n\nInviteUser\022\016\n\006cookie\030\001 \002(\t\022\020\n\010user"
+    "name\030\002 \002(\t\022\024\n\014network_name\030\003 \002(\t\032D\n\nRemo"
+    "veUser\022\016\n\006cookie\030\001 \002(\t\022\020\n\010username\030\002 \002(\t"
+    "\022\024\n\014network_name\030\003 \002(\t\032B\n\010UserInfo\022\016\n\006co"
+    "okie\030\001 \002(\t\022\020\n\010username\030\002 \002(\t\022\024\n\014network_"
+    "name\030\003 \002(\t\032I\n\014UpdateServer\022\016\n\006cookie\030\001 \002"
+    "(\t\022\024\n\014network_name\030\002 \002(\t\022\023\n\013port_number\030"
+    "\003 \002(\005\0322\n\nStopServer\022\016\n\006cookie\030\001 \002(\t\022\024\n\014n"
+    "etwork_name\030\002 \002(\t\032C\n\007SignKey\022\016\n\006cookie\030\001"
+    " \002(\t\022\022\n\npublic_key\030\002 \002(\t\022\024\n\014network_name"
+    "\030\003 \001(\t\"\210\002\n\013RequestType\022\014\n\010REGISTER\020\000\022\016\n\n"
+    "UNREGISTER\020\001\022\t\n\005LOGIN\020\002\022\n\n\006LOGOUT\020\003\022\021\n\rL"
+    "IST_NETWORKS\020\004\022\024\n\020LIST_MY_NETWORKS\020\005\022\020\n\014"
+    "LIST_SERVERS\020\006\022\022\n\016CREATE_NETWORK\020\007\022\022\n\016DE"
+    "LETE_NETWORK\020\010\022\017\n\013INVITE_USER\020\t\022\017\n\013REMOV"
+    "E_USER\020\n\022\r\n\tUSER_INFO\020\013\022\021\n\rUPDATE_SERVER"
+    "\020\014\022\017\n\013STOP_SERVER\020\r\022\014\n\010SIGN_KEY\020\016\"\233\014\n\013No"
+    "deMessage\0229\n\rresponse_type\030\001 \002(\0162\".proto"
+    "col.NodeMessage.ResponseType\0229\n\021register"
+    "_response\030\002 \001(\0132\036.protocol.NodeMessage.R"
+    "egister\0223\n\016login_response\030\003 \001(\0132\033.protoc"
+    "ol.NodeMessage.Login\022B\n\026list_networks_re"
+    "sponse\030\005 \001(\0132\".protocol.NodeMessage.List"
+    "Networks\022G\n\031list_my_networks_response\030\006 "
+    "\001(\0132$.protocol.NodeMessage.ListMyNetwork"
+    "s\022@\n\025list_servers_response\030\007 \001(\0132!.proto"
+    "col.NodeMessage.ListServers\022:\n\022user_info"
+    "_response\030\r \001(\0132\036.protocol.NodeMessage.U"
+    "serInfo\022B\n\026update_server_response\030\016 \001(\0132"
+    "\".protocol.NodeMessage.UpdateServer\0228\n\021s"
+    "ign_key_response\030\020 \001(\0132\035.protocol.NodeMe"
+    "ssage.SignKey\032>\n\010Register\022\030\n\020user_certif"
+    "icate\030\001 \002(\t\022\030\n\020node_certificate\030\002 \002(\t\0321\n"
+    "\005Login\022\016\n\006cookie\030\001 \002(\t\022\030\n\020node_certifica"
+    "te\030\002 \001(\t\032\322\002\n\014ListNetworks\022@\n\014network_lis"
+    "t\030\001 \003(\0132*.protocol.NodeMessage.ListNetwo"
+    "rks.Network\032\377\001\n\007Network\022\014\n\004name\030\001 \002(\t\022\024\n"
+    "\014creator_name\030\002 \002(\t\022\025\n\rcreator_email\030\003 \001"
+    "(\t\022I\n\raccess_rights\030\004 \002(\01622.protocol.Cli"
+    "entMessage.CreateNetwork.AccessRights\022W\n"
+    "\024participation_rights\030\005 \002(\01629.protocol.C"
+    "lientMessage.CreateNetwork.Participation"
+    "Rights\022\025\n\rprotocol_name\030\006 \001(\t\032R\n\016ListMyN"
+    "etworks\022@\n\014network_list\030\001 \003(\0132*.protocol"
+    ".NodeMessage.ListNetworks.Network\032\213\001\n\013Li"
+    "stServers\0227\n\014list_servers\030\001 \003(\0132!.protoc"
+    "ol.NodeMessage.ListServers\032C\n\006Server\022\020\n\010"
+    "username\030\001 \002(\t\022\022\n\nip_address\030\002 \002(\t\022\023\n\013po"
+    "rt_number\030\003 \002(\005\032#\n\010UserInfo\022\027\n\017user_publ"
+    "ic_key\030\001 \002(\t\032)\n\014UpdateServer\022\031\n\021seconds_"
+    "to_update\030\001 \002(\005\032#\n\007SignKey\022\030\n\020user_certi"
+    "ficate\030\001 \002(\t\"\270\001\n\014ResponseType\022\007\n\002OK\020\310\001\022\032"
+    "\n\025INTERNAL_SERVER_ERROR\020\220\003\022\020\n\013BAD_REQUES"
+    "T\020\364\003\022\022\n\rNO_PRIVILAGES\020\365\003\022\017\n\nNOT_LOGGED\020\366"
+    "\003\022\024\n\017BAD_CREDENTIALS\020\367\003\022\021\n\014NO_SUCH_USER\020"
+    "\370\003\022\024\n\017NO_SUCH_NETWORK\020\371\003\022\r\n\010BAD_DATA\020\372\003", 4119);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "sp2p_protocol.proto", &protobuf_RegisterTypes);
   ClientMessage::default_instance_ = new ClientMessage();
@@ -2943,7 +2952,7 @@ bool ClientMessage_CreateNetwork::MergePartialFromCodedStream(
         break;
       }
 
-      // required .ClientMessage.CreateNetwork.AccessRights access_rights = 3;
+      // required .protocol.ClientMessage.CreateNetwork.AccessRights access_rights = 3;
       case 3: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
@@ -2952,8 +2961,8 @@ bool ClientMessage_CreateNetwork::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (::ClientMessage_CreateNetwork_AccessRights_IsValid(value)) {
-            set_access_rights(static_cast< ::ClientMessage_CreateNetwork_AccessRights >(value));
+          if (::protocol::ClientMessage_CreateNetwork_AccessRights_IsValid(value)) {
+            set_access_rights(static_cast< ::protocol::ClientMessage_CreateNetwork_AccessRights >(value));
           } else {
             mutable_unknown_fields()->AddVarint(3, value);
           }
@@ -2964,7 +2973,7 @@ bool ClientMessage_CreateNetwork::MergePartialFromCodedStream(
         break;
       }
 
-      // required .ClientMessage.CreateNetwork.Visiblity visibility = 4;
+      // required .protocol.ClientMessage.CreateNetwork.Visiblity visibility = 4;
       case 4: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
@@ -2973,8 +2982,8 @@ bool ClientMessage_CreateNetwork::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (::ClientMessage_CreateNetwork_Visiblity_IsValid(value)) {
-            set_visibility(static_cast< ::ClientMessage_CreateNetwork_Visiblity >(value));
+          if (::protocol::ClientMessage_CreateNetwork_Visiblity_IsValid(value)) {
+            set_visibility(static_cast< ::protocol::ClientMessage_CreateNetwork_Visiblity >(value));
           } else {
             mutable_unknown_fields()->AddVarint(4, value);
           }
@@ -2985,7 +2994,7 @@ bool ClientMessage_CreateNetwork::MergePartialFromCodedStream(
         break;
       }
 
-      // required .ClientMessage.CreateNetwork.ParticipationRights participation_rights = 5;
+      // required .protocol.ClientMessage.CreateNetwork.ParticipationRights participation_rights = 5;
       case 5: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
@@ -2994,8 +3003,8 @@ bool ClientMessage_CreateNetwork::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (::ClientMessage_CreateNetwork_ParticipationRights_IsValid(value)) {
-            set_participation_rights(static_cast< ::ClientMessage_CreateNetwork_ParticipationRights >(value));
+          if (::protocol::ClientMessage_CreateNetwork_ParticipationRights_IsValid(value)) {
+            set_participation_rights(static_cast< ::protocol::ClientMessage_CreateNetwork_ParticipationRights >(value));
           } else {
             mutable_unknown_fields()->AddVarint(5, value);
           }
@@ -3076,19 +3085,19 @@ void ClientMessage_CreateNetwork::SerializeWithCachedSizes(
       2, this->network_name(), output);
   }
 
-  // required .ClientMessage.CreateNetwork.AccessRights access_rights = 3;
+  // required .protocol.ClientMessage.CreateNetwork.AccessRights access_rights = 3;
   if (has_access_rights()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       3, this->access_rights(), output);
   }
 
-  // required .ClientMessage.CreateNetwork.Visiblity visibility = 4;
+  // required .protocol.ClientMessage.CreateNetwork.Visiblity visibility = 4;
   if (has_visibility()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       4, this->visibility(), output);
   }
 
-  // required .ClientMessage.CreateNetwork.ParticipationRights participation_rights = 5;
+  // required .protocol.ClientMessage.CreateNetwork.ParticipationRights participation_rights = 5;
   if (has_participation_rights()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       5, this->participation_rights(), output);
@@ -3140,19 +3149,19 @@ void ClientMessage_CreateNetwork::SerializeWithCachedSizes(
         2, this->network_name(), target);
   }
 
-  // required .ClientMessage.CreateNetwork.AccessRights access_rights = 3;
+  // required .protocol.ClientMessage.CreateNetwork.AccessRights access_rights = 3;
   if (has_access_rights()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       3, this->access_rights(), target);
   }
 
-  // required .ClientMessage.CreateNetwork.Visiblity visibility = 4;
+  // required .protocol.ClientMessage.CreateNetwork.Visiblity visibility = 4;
   if (has_visibility()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       4, this->visibility(), target);
   }
 
-  // required .ClientMessage.CreateNetwork.ParticipationRights participation_rights = 5;
+  // required .protocol.ClientMessage.CreateNetwork.ParticipationRights participation_rights = 5;
   if (has_participation_rights()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       5, this->participation_rights(), target);
@@ -3203,19 +3212,19 @@ int ClientMessage_CreateNetwork::ByteSize() const {
           this->network_name());
     }
 
-    // required .ClientMessage.CreateNetwork.AccessRights access_rights = 3;
+    // required .protocol.ClientMessage.CreateNetwork.AccessRights access_rights = 3;
     if (has_access_rights()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->access_rights());
     }
 
-    // required .ClientMessage.CreateNetwork.Visiblity visibility = 4;
+    // required .protocol.ClientMessage.CreateNetwork.Visiblity visibility = 4;
     if (has_visibility()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->visibility());
     }
 
-    // required .ClientMessage.CreateNetwork.ParticipationRights participation_rights = 5;
+    // required .protocol.ClientMessage.CreateNetwork.ParticipationRights participation_rights = 5;
     if (has_participation_rights()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->participation_rights());
@@ -5605,21 +5614,21 @@ ClientMessage::ClientMessage()
 }
 
 void ClientMessage::InitAsDefaultInstance() {
-  register_message_ = const_cast< ::ClientMessage_Register*>(&::ClientMessage_Register::default_instance());
-  unregister_message_ = const_cast< ::ClientMessage_Unregister*>(&::ClientMessage_Unregister::default_instance());
-  login_message_ = const_cast< ::ClientMessage_Login*>(&::ClientMessage_Login::default_instance());
-  logout_message_ = const_cast< ::ClientMessage_Logout*>(&::ClientMessage_Logout::default_instance());
-  list_networks_message_ = const_cast< ::ClientMessage_ListNetworks*>(&::ClientMessage_ListNetworks::default_instance());
-  list_my_networks_message_ = const_cast< ::ClientMessage_ListMyNetworks*>(&::ClientMessage_ListMyNetworks::default_instance());
-  list_servers_message_ = const_cast< ::ClientMessage_ListServers*>(&::ClientMessage_ListServers::default_instance());
-  create_network_message_ = const_cast< ::ClientMessage_CreateNetwork*>(&::ClientMessage_CreateNetwork::default_instance());
-  delete_network_message_ = const_cast< ::ClientMessage_DeleteNetwork*>(&::ClientMessage_DeleteNetwork::default_instance());
-  invite_user_message_ = const_cast< ::ClientMessage_InviteUser*>(&::ClientMessage_InviteUser::default_instance());
-  remove_user_message_ = const_cast< ::ClientMessage_RemoveUser*>(&::ClientMessage_RemoveUser::default_instance());
-  user_info_message_ = const_cast< ::ClientMessage_UserInfo*>(&::ClientMessage_UserInfo::default_instance());
-  update_server_message_ = const_cast< ::ClientMessage_UpdateServer*>(&::ClientMessage_UpdateServer::default_instance());
-  stop_server_message_ = const_cast< ::ClientMessage_StopServer*>(&::ClientMessage_StopServer::default_instance());
-  sign_key_message_ = const_cast< ::ClientMessage_SignKey*>(&::ClientMessage_SignKey::default_instance());
+  register_message_ = const_cast< ::protocol::ClientMessage_Register*>(&::protocol::ClientMessage_Register::default_instance());
+  unregister_message_ = const_cast< ::protocol::ClientMessage_Unregister*>(&::protocol::ClientMessage_Unregister::default_instance());
+  login_message_ = const_cast< ::protocol::ClientMessage_Login*>(&::protocol::ClientMessage_Login::default_instance());
+  logout_message_ = const_cast< ::protocol::ClientMessage_Logout*>(&::protocol::ClientMessage_Logout::default_instance());
+  list_networks_message_ = const_cast< ::protocol::ClientMessage_ListNetworks*>(&::protocol::ClientMessage_ListNetworks::default_instance());
+  list_my_networks_message_ = const_cast< ::protocol::ClientMessage_ListMyNetworks*>(&::protocol::ClientMessage_ListMyNetworks::default_instance());
+  list_servers_message_ = const_cast< ::protocol::ClientMessage_ListServers*>(&::protocol::ClientMessage_ListServers::default_instance());
+  create_network_message_ = const_cast< ::protocol::ClientMessage_CreateNetwork*>(&::protocol::ClientMessage_CreateNetwork::default_instance());
+  delete_network_message_ = const_cast< ::protocol::ClientMessage_DeleteNetwork*>(&::protocol::ClientMessage_DeleteNetwork::default_instance());
+  invite_user_message_ = const_cast< ::protocol::ClientMessage_InviteUser*>(&::protocol::ClientMessage_InviteUser::default_instance());
+  remove_user_message_ = const_cast< ::protocol::ClientMessage_RemoveUser*>(&::protocol::ClientMessage_RemoveUser::default_instance());
+  user_info_message_ = const_cast< ::protocol::ClientMessage_UserInfo*>(&::protocol::ClientMessage_UserInfo::default_instance());
+  update_server_message_ = const_cast< ::protocol::ClientMessage_UpdateServer*>(&::protocol::ClientMessage_UpdateServer::default_instance());
+  stop_server_message_ = const_cast< ::protocol::ClientMessage_StopServer*>(&::protocol::ClientMessage_StopServer::default_instance());
+  sign_key_message_ = const_cast< ::protocol::ClientMessage_SignKey*>(&::protocol::ClientMessage_SignKey::default_instance());
 }
 
 ClientMessage::ClientMessage(const ClientMessage& from)
@@ -5698,51 +5707,51 @@ void ClientMessage::Clear() {
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     request_ = 0;
     if (has_register_message()) {
-      if (register_message_ != NULL) register_message_->::ClientMessage_Register::Clear();
+      if (register_message_ != NULL) register_message_->::protocol::ClientMessage_Register::Clear();
     }
     if (has_unregister_message()) {
-      if (unregister_message_ != NULL) unregister_message_->::ClientMessage_Unregister::Clear();
+      if (unregister_message_ != NULL) unregister_message_->::protocol::ClientMessage_Unregister::Clear();
     }
     if (has_login_message()) {
-      if (login_message_ != NULL) login_message_->::ClientMessage_Login::Clear();
+      if (login_message_ != NULL) login_message_->::protocol::ClientMessage_Login::Clear();
     }
     if (has_logout_message()) {
-      if (logout_message_ != NULL) logout_message_->::ClientMessage_Logout::Clear();
+      if (logout_message_ != NULL) logout_message_->::protocol::ClientMessage_Logout::Clear();
     }
     if (has_list_networks_message()) {
-      if (list_networks_message_ != NULL) list_networks_message_->::ClientMessage_ListNetworks::Clear();
+      if (list_networks_message_ != NULL) list_networks_message_->::protocol::ClientMessage_ListNetworks::Clear();
     }
     if (has_list_my_networks_message()) {
-      if (list_my_networks_message_ != NULL) list_my_networks_message_->::ClientMessage_ListMyNetworks::Clear();
+      if (list_my_networks_message_ != NULL) list_my_networks_message_->::protocol::ClientMessage_ListMyNetworks::Clear();
     }
     if (has_list_servers_message()) {
-      if (list_servers_message_ != NULL) list_servers_message_->::ClientMessage_ListServers::Clear();
+      if (list_servers_message_ != NULL) list_servers_message_->::protocol::ClientMessage_ListServers::Clear();
     }
   }
   if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
     if (has_create_network_message()) {
-      if (create_network_message_ != NULL) create_network_message_->::ClientMessage_CreateNetwork::Clear();
+      if (create_network_message_ != NULL) create_network_message_->::protocol::ClientMessage_CreateNetwork::Clear();
     }
     if (has_delete_network_message()) {
-      if (delete_network_message_ != NULL) delete_network_message_->::ClientMessage_DeleteNetwork::Clear();
+      if (delete_network_message_ != NULL) delete_network_message_->::protocol::ClientMessage_DeleteNetwork::Clear();
     }
     if (has_invite_user_message()) {
-      if (invite_user_message_ != NULL) invite_user_message_->::ClientMessage_InviteUser::Clear();
+      if (invite_user_message_ != NULL) invite_user_message_->::protocol::ClientMessage_InviteUser::Clear();
     }
     if (has_remove_user_message()) {
-      if (remove_user_message_ != NULL) remove_user_message_->::ClientMessage_RemoveUser::Clear();
+      if (remove_user_message_ != NULL) remove_user_message_->::protocol::ClientMessage_RemoveUser::Clear();
     }
     if (has_user_info_message()) {
-      if (user_info_message_ != NULL) user_info_message_->::ClientMessage_UserInfo::Clear();
+      if (user_info_message_ != NULL) user_info_message_->::protocol::ClientMessage_UserInfo::Clear();
     }
     if (has_update_server_message()) {
-      if (update_server_message_ != NULL) update_server_message_->::ClientMessage_UpdateServer::Clear();
+      if (update_server_message_ != NULL) update_server_message_->::protocol::ClientMessage_UpdateServer::Clear();
     }
     if (has_stop_server_message()) {
-      if (stop_server_message_ != NULL) stop_server_message_->::ClientMessage_StopServer::Clear();
+      if (stop_server_message_ != NULL) stop_server_message_->::protocol::ClientMessage_StopServer::Clear();
     }
     if (has_sign_key_message()) {
-      if (sign_key_message_ != NULL) sign_key_message_->::ClientMessage_SignKey::Clear();
+      if (sign_key_message_ != NULL) sign_key_message_->::protocol::ClientMessage_SignKey::Clear();
     }
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
@@ -5755,7 +5764,7 @@ bool ClientMessage::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required .ClientMessage.RequestType request = 1;
+      // required .protocol.ClientMessage.RequestType request = 1;
       case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
@@ -5763,8 +5772,8 @@ bool ClientMessage::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (::ClientMessage_RequestType_IsValid(value)) {
-            set_request(static_cast< ::ClientMessage_RequestType >(value));
+          if (::protocol::ClientMessage_RequestType_IsValid(value)) {
+            set_request(static_cast< ::protocol::ClientMessage_RequestType >(value));
           } else {
             mutable_unknown_fields()->AddVarint(1, value);
           }
@@ -5775,7 +5784,7 @@ bool ClientMessage::MergePartialFromCodedStream(
         break;
       }
 
-      // optional .ClientMessage.Register register_message = 2;
+      // optional .protocol.ClientMessage.Register register_message = 2;
       case 2: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -5789,7 +5798,7 @@ bool ClientMessage::MergePartialFromCodedStream(
         break;
       }
 
-      // optional .ClientMessage.Unregister unregister_message = 3;
+      // optional .protocol.ClientMessage.Unregister unregister_message = 3;
       case 3: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -5803,7 +5812,7 @@ bool ClientMessage::MergePartialFromCodedStream(
         break;
       }
 
-      // optional .ClientMessage.Login login_message = 4;
+      // optional .protocol.ClientMessage.Login login_message = 4;
       case 4: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -5817,7 +5826,7 @@ bool ClientMessage::MergePartialFromCodedStream(
         break;
       }
 
-      // optional .ClientMessage.Logout logout_message = 5;
+      // optional .protocol.ClientMessage.Logout logout_message = 5;
       case 5: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -5831,7 +5840,7 @@ bool ClientMessage::MergePartialFromCodedStream(
         break;
       }
 
-      // optional .ClientMessage.ListNetworks list_networks_message = 6;
+      // optional .protocol.ClientMessage.ListNetworks list_networks_message = 6;
       case 6: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -5845,7 +5854,7 @@ bool ClientMessage::MergePartialFromCodedStream(
         break;
       }
 
-      // optional .ClientMessage.ListMyNetworks list_my_networks_message = 7;
+      // optional .protocol.ClientMessage.ListMyNetworks list_my_networks_message = 7;
       case 7: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -5859,7 +5868,7 @@ bool ClientMessage::MergePartialFromCodedStream(
         break;
       }
 
-      // optional .ClientMessage.ListServers list_servers_message = 8;
+      // optional .protocol.ClientMessage.ListServers list_servers_message = 8;
       case 8: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -5873,7 +5882,7 @@ bool ClientMessage::MergePartialFromCodedStream(
         break;
       }
 
-      // optional .ClientMessage.CreateNetwork create_network_message = 9;
+      // optional .protocol.ClientMessage.CreateNetwork create_network_message = 9;
       case 9: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -5887,7 +5896,7 @@ bool ClientMessage::MergePartialFromCodedStream(
         break;
       }
 
-      // optional .ClientMessage.DeleteNetwork delete_network_message = 10;
+      // optional .protocol.ClientMessage.DeleteNetwork delete_network_message = 10;
       case 10: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -5901,7 +5910,7 @@ bool ClientMessage::MergePartialFromCodedStream(
         break;
       }
 
-      // optional .ClientMessage.InviteUser invite_user_message = 11;
+      // optional .protocol.ClientMessage.InviteUser invite_user_message = 11;
       case 11: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -5915,7 +5924,7 @@ bool ClientMessage::MergePartialFromCodedStream(
         break;
       }
 
-      // optional .ClientMessage.RemoveUser remove_user_message = 12;
+      // optional .protocol.ClientMessage.RemoveUser remove_user_message = 12;
       case 12: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -5929,7 +5938,7 @@ bool ClientMessage::MergePartialFromCodedStream(
         break;
       }
 
-      // optional .ClientMessage.UserInfo user_info_message = 13;
+      // optional .protocol.ClientMessage.UserInfo user_info_message = 13;
       case 13: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -5943,7 +5952,7 @@ bool ClientMessage::MergePartialFromCodedStream(
         break;
       }
 
-      // optional .ClientMessage.UpdateServer update_server_message = 14;
+      // optional .protocol.ClientMessage.UpdateServer update_server_message = 14;
       case 14: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -5957,7 +5966,7 @@ bool ClientMessage::MergePartialFromCodedStream(
         break;
       }
 
-      // optional .ClientMessage.StopServer stop_server_message = 15;
+      // optional .protocol.ClientMessage.StopServer stop_server_message = 15;
       case 15: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -5971,7 +5980,7 @@ bool ClientMessage::MergePartialFromCodedStream(
         break;
       }
 
-      // optional .ClientMessage.SignKey sign_key_message = 16;
+      // optional .protocol.ClientMessage.SignKey sign_key_message = 16;
       case 16: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -6003,97 +6012,97 @@ bool ClientMessage::MergePartialFromCodedStream(
 
 void ClientMessage::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // required .ClientMessage.RequestType request = 1;
+  // required .protocol.ClientMessage.RequestType request = 1;
   if (has_request()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->request(), output);
   }
 
-  // optional .ClientMessage.Register register_message = 2;
+  // optional .protocol.ClientMessage.Register register_message = 2;
   if (has_register_message()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       2, this->register_message(), output);
   }
 
-  // optional .ClientMessage.Unregister unregister_message = 3;
+  // optional .protocol.ClientMessage.Unregister unregister_message = 3;
   if (has_unregister_message()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       3, this->unregister_message(), output);
   }
 
-  // optional .ClientMessage.Login login_message = 4;
+  // optional .protocol.ClientMessage.Login login_message = 4;
   if (has_login_message()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       4, this->login_message(), output);
   }
 
-  // optional .ClientMessage.Logout logout_message = 5;
+  // optional .protocol.ClientMessage.Logout logout_message = 5;
   if (has_logout_message()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       5, this->logout_message(), output);
   }
 
-  // optional .ClientMessage.ListNetworks list_networks_message = 6;
+  // optional .protocol.ClientMessage.ListNetworks list_networks_message = 6;
   if (has_list_networks_message()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       6, this->list_networks_message(), output);
   }
 
-  // optional .ClientMessage.ListMyNetworks list_my_networks_message = 7;
+  // optional .protocol.ClientMessage.ListMyNetworks list_my_networks_message = 7;
   if (has_list_my_networks_message()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       7, this->list_my_networks_message(), output);
   }
 
-  // optional .ClientMessage.ListServers list_servers_message = 8;
+  // optional .protocol.ClientMessage.ListServers list_servers_message = 8;
   if (has_list_servers_message()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       8, this->list_servers_message(), output);
   }
 
-  // optional .ClientMessage.CreateNetwork create_network_message = 9;
+  // optional .protocol.ClientMessage.CreateNetwork create_network_message = 9;
   if (has_create_network_message()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       9, this->create_network_message(), output);
   }
 
-  // optional .ClientMessage.DeleteNetwork delete_network_message = 10;
+  // optional .protocol.ClientMessage.DeleteNetwork delete_network_message = 10;
   if (has_delete_network_message()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       10, this->delete_network_message(), output);
   }
 
-  // optional .ClientMessage.InviteUser invite_user_message = 11;
+  // optional .protocol.ClientMessage.InviteUser invite_user_message = 11;
   if (has_invite_user_message()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       11, this->invite_user_message(), output);
   }
 
-  // optional .ClientMessage.RemoveUser remove_user_message = 12;
+  // optional .protocol.ClientMessage.RemoveUser remove_user_message = 12;
   if (has_remove_user_message()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       12, this->remove_user_message(), output);
   }
 
-  // optional .ClientMessage.UserInfo user_info_message = 13;
+  // optional .protocol.ClientMessage.UserInfo user_info_message = 13;
   if (has_user_info_message()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       13, this->user_info_message(), output);
   }
 
-  // optional .ClientMessage.UpdateServer update_server_message = 14;
+  // optional .protocol.ClientMessage.UpdateServer update_server_message = 14;
   if (has_update_server_message()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       14, this->update_server_message(), output);
   }
 
-  // optional .ClientMessage.StopServer stop_server_message = 15;
+  // optional .protocol.ClientMessage.StopServer stop_server_message = 15;
   if (has_stop_server_message()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       15, this->stop_server_message(), output);
   }
 
-  // optional .ClientMessage.SignKey sign_key_message = 16;
+  // optional .protocol.ClientMessage.SignKey sign_key_message = 16;
   if (has_sign_key_message()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       16, this->sign_key_message(), output);
@@ -6107,111 +6116,111 @@ void ClientMessage::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* ClientMessage::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // required .ClientMessage.RequestType request = 1;
+  // required .protocol.ClientMessage.RequestType request = 1;
   if (has_request()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->request(), target);
   }
 
-  // optional .ClientMessage.Register register_message = 2;
+  // optional .protocol.ClientMessage.Register register_message = 2;
   if (has_register_message()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         2, this->register_message(), target);
   }
 
-  // optional .ClientMessage.Unregister unregister_message = 3;
+  // optional .protocol.ClientMessage.Unregister unregister_message = 3;
   if (has_unregister_message()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         3, this->unregister_message(), target);
   }
 
-  // optional .ClientMessage.Login login_message = 4;
+  // optional .protocol.ClientMessage.Login login_message = 4;
   if (has_login_message()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         4, this->login_message(), target);
   }
 
-  // optional .ClientMessage.Logout logout_message = 5;
+  // optional .protocol.ClientMessage.Logout logout_message = 5;
   if (has_logout_message()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         5, this->logout_message(), target);
   }
 
-  // optional .ClientMessage.ListNetworks list_networks_message = 6;
+  // optional .protocol.ClientMessage.ListNetworks list_networks_message = 6;
   if (has_list_networks_message()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         6, this->list_networks_message(), target);
   }
 
-  // optional .ClientMessage.ListMyNetworks list_my_networks_message = 7;
+  // optional .protocol.ClientMessage.ListMyNetworks list_my_networks_message = 7;
   if (has_list_my_networks_message()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         7, this->list_my_networks_message(), target);
   }
 
-  // optional .ClientMessage.ListServers list_servers_message = 8;
+  // optional .protocol.ClientMessage.ListServers list_servers_message = 8;
   if (has_list_servers_message()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         8, this->list_servers_message(), target);
   }
 
-  // optional .ClientMessage.CreateNetwork create_network_message = 9;
+  // optional .protocol.ClientMessage.CreateNetwork create_network_message = 9;
   if (has_create_network_message()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         9, this->create_network_message(), target);
   }
 
-  // optional .ClientMessage.DeleteNetwork delete_network_message = 10;
+  // optional .protocol.ClientMessage.DeleteNetwork delete_network_message = 10;
   if (has_delete_network_message()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         10, this->delete_network_message(), target);
   }
 
-  // optional .ClientMessage.InviteUser invite_user_message = 11;
+  // optional .protocol.ClientMessage.InviteUser invite_user_message = 11;
   if (has_invite_user_message()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         11, this->invite_user_message(), target);
   }
 
-  // optional .ClientMessage.RemoveUser remove_user_message = 12;
+  // optional .protocol.ClientMessage.RemoveUser remove_user_message = 12;
   if (has_remove_user_message()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         12, this->remove_user_message(), target);
   }
 
-  // optional .ClientMessage.UserInfo user_info_message = 13;
+  // optional .protocol.ClientMessage.UserInfo user_info_message = 13;
   if (has_user_info_message()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         13, this->user_info_message(), target);
   }
 
-  // optional .ClientMessage.UpdateServer update_server_message = 14;
+  // optional .protocol.ClientMessage.UpdateServer update_server_message = 14;
   if (has_update_server_message()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         14, this->update_server_message(), target);
   }
 
-  // optional .ClientMessage.StopServer stop_server_message = 15;
+  // optional .protocol.ClientMessage.StopServer stop_server_message = 15;
   if (has_stop_server_message()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         15, this->stop_server_message(), target);
   }
 
-  // optional .ClientMessage.SignKey sign_key_message = 16;
+  // optional .protocol.ClientMessage.SignKey sign_key_message = 16;
   if (has_sign_key_message()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
@@ -6229,55 +6238,55 @@ int ClientMessage::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required .ClientMessage.RequestType request = 1;
+    // required .protocol.ClientMessage.RequestType request = 1;
     if (has_request()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->request());
     }
 
-    // optional .ClientMessage.Register register_message = 2;
+    // optional .protocol.ClientMessage.Register register_message = 2;
     if (has_register_message()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->register_message());
     }
 
-    // optional .ClientMessage.Unregister unregister_message = 3;
+    // optional .protocol.ClientMessage.Unregister unregister_message = 3;
     if (has_unregister_message()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->unregister_message());
     }
 
-    // optional .ClientMessage.Login login_message = 4;
+    // optional .protocol.ClientMessage.Login login_message = 4;
     if (has_login_message()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->login_message());
     }
 
-    // optional .ClientMessage.Logout logout_message = 5;
+    // optional .protocol.ClientMessage.Logout logout_message = 5;
     if (has_logout_message()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->logout_message());
     }
 
-    // optional .ClientMessage.ListNetworks list_networks_message = 6;
+    // optional .protocol.ClientMessage.ListNetworks list_networks_message = 6;
     if (has_list_networks_message()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->list_networks_message());
     }
 
-    // optional .ClientMessage.ListMyNetworks list_my_networks_message = 7;
+    // optional .protocol.ClientMessage.ListMyNetworks list_my_networks_message = 7;
     if (has_list_my_networks_message()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->list_my_networks_message());
     }
 
-    // optional .ClientMessage.ListServers list_servers_message = 8;
+    // optional .protocol.ClientMessage.ListServers list_servers_message = 8;
     if (has_list_servers_message()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
@@ -6286,56 +6295,56 @@ int ClientMessage::ByteSize() const {
 
   }
   if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
-    // optional .ClientMessage.CreateNetwork create_network_message = 9;
+    // optional .protocol.ClientMessage.CreateNetwork create_network_message = 9;
     if (has_create_network_message()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->create_network_message());
     }
 
-    // optional .ClientMessage.DeleteNetwork delete_network_message = 10;
+    // optional .protocol.ClientMessage.DeleteNetwork delete_network_message = 10;
     if (has_delete_network_message()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->delete_network_message());
     }
 
-    // optional .ClientMessage.InviteUser invite_user_message = 11;
+    // optional .protocol.ClientMessage.InviteUser invite_user_message = 11;
     if (has_invite_user_message()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->invite_user_message());
     }
 
-    // optional .ClientMessage.RemoveUser remove_user_message = 12;
+    // optional .protocol.ClientMessage.RemoveUser remove_user_message = 12;
     if (has_remove_user_message()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->remove_user_message());
     }
 
-    // optional .ClientMessage.UserInfo user_info_message = 13;
+    // optional .protocol.ClientMessage.UserInfo user_info_message = 13;
     if (has_user_info_message()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->user_info_message());
     }
 
-    // optional .ClientMessage.UpdateServer update_server_message = 14;
+    // optional .protocol.ClientMessage.UpdateServer update_server_message = 14;
     if (has_update_server_message()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->update_server_message());
     }
 
-    // optional .ClientMessage.StopServer stop_server_message = 15;
+    // optional .protocol.ClientMessage.StopServer stop_server_message = 15;
     if (has_stop_server_message()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->stop_server_message());
     }
 
-    // optional .ClientMessage.SignKey sign_key_message = 16;
+    // optional .protocol.ClientMessage.SignKey sign_key_message = 16;
     if (has_sign_key_message()) {
       total_size += 2 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
@@ -6373,51 +6382,51 @@ void ClientMessage::MergeFrom(const ClientMessage& from) {
       set_request(from.request());
     }
     if (from.has_register_message()) {
-      mutable_register_message()->::ClientMessage_Register::MergeFrom(from.register_message());
+      mutable_register_message()->::protocol::ClientMessage_Register::MergeFrom(from.register_message());
     }
     if (from.has_unregister_message()) {
-      mutable_unregister_message()->::ClientMessage_Unregister::MergeFrom(from.unregister_message());
+      mutable_unregister_message()->::protocol::ClientMessage_Unregister::MergeFrom(from.unregister_message());
     }
     if (from.has_login_message()) {
-      mutable_login_message()->::ClientMessage_Login::MergeFrom(from.login_message());
+      mutable_login_message()->::protocol::ClientMessage_Login::MergeFrom(from.login_message());
     }
     if (from.has_logout_message()) {
-      mutable_logout_message()->::ClientMessage_Logout::MergeFrom(from.logout_message());
+      mutable_logout_message()->::protocol::ClientMessage_Logout::MergeFrom(from.logout_message());
     }
     if (from.has_list_networks_message()) {
-      mutable_list_networks_message()->::ClientMessage_ListNetworks::MergeFrom(from.list_networks_message());
+      mutable_list_networks_message()->::protocol::ClientMessage_ListNetworks::MergeFrom(from.list_networks_message());
     }
     if (from.has_list_my_networks_message()) {
-      mutable_list_my_networks_message()->::ClientMessage_ListMyNetworks::MergeFrom(from.list_my_networks_message());
+      mutable_list_my_networks_message()->::protocol::ClientMessage_ListMyNetworks::MergeFrom(from.list_my_networks_message());
     }
     if (from.has_list_servers_message()) {
-      mutable_list_servers_message()->::ClientMessage_ListServers::MergeFrom(from.list_servers_message());
+      mutable_list_servers_message()->::protocol::ClientMessage_ListServers::MergeFrom(from.list_servers_message());
     }
   }
   if (from._has_bits_[8 / 32] & (0xffu << (8 % 32))) {
     if (from.has_create_network_message()) {
-      mutable_create_network_message()->::ClientMessage_CreateNetwork::MergeFrom(from.create_network_message());
+      mutable_create_network_message()->::protocol::ClientMessage_CreateNetwork::MergeFrom(from.create_network_message());
     }
     if (from.has_delete_network_message()) {
-      mutable_delete_network_message()->::ClientMessage_DeleteNetwork::MergeFrom(from.delete_network_message());
+      mutable_delete_network_message()->::protocol::ClientMessage_DeleteNetwork::MergeFrom(from.delete_network_message());
     }
     if (from.has_invite_user_message()) {
-      mutable_invite_user_message()->::ClientMessage_InviteUser::MergeFrom(from.invite_user_message());
+      mutable_invite_user_message()->::protocol::ClientMessage_InviteUser::MergeFrom(from.invite_user_message());
     }
     if (from.has_remove_user_message()) {
-      mutable_remove_user_message()->::ClientMessage_RemoveUser::MergeFrom(from.remove_user_message());
+      mutable_remove_user_message()->::protocol::ClientMessage_RemoveUser::MergeFrom(from.remove_user_message());
     }
     if (from.has_user_info_message()) {
-      mutable_user_info_message()->::ClientMessage_UserInfo::MergeFrom(from.user_info_message());
+      mutable_user_info_message()->::protocol::ClientMessage_UserInfo::MergeFrom(from.user_info_message());
     }
     if (from.has_update_server_message()) {
-      mutable_update_server_message()->::ClientMessage_UpdateServer::MergeFrom(from.update_server_message());
+      mutable_update_server_message()->::protocol::ClientMessage_UpdateServer::MergeFrom(from.update_server_message());
     }
     if (from.has_stop_server_message()) {
-      mutable_stop_server_message()->::ClientMessage_StopServer::MergeFrom(from.stop_server_message());
+      mutable_stop_server_message()->::protocol::ClientMessage_StopServer::MergeFrom(from.stop_server_message());
     }
     if (from.has_sign_key_message()) {
-      mutable_sign_key_message()->::ClientMessage_SignKey::MergeFrom(from.sign_key_message());
+      mutable_sign_key_message()->::protocol::ClientMessage_SignKey::MergeFrom(from.sign_key_message());
     }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
@@ -7283,7 +7292,7 @@ bool NodeMessage_ListNetworks_Network::MergePartialFromCodedStream(
         break;
       }
 
-      // required .ClientMessage.CreateNetwork.AccessRights access_rights = 4;
+      // required .protocol.ClientMessage.CreateNetwork.AccessRights access_rights = 4;
       case 4: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
@@ -7292,8 +7301,8 @@ bool NodeMessage_ListNetworks_Network::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (::ClientMessage_CreateNetwork_AccessRights_IsValid(value)) {
-            set_access_rights(static_cast< ::ClientMessage_CreateNetwork_AccessRights >(value));
+          if (::protocol::ClientMessage_CreateNetwork_AccessRights_IsValid(value)) {
+            set_access_rights(static_cast< ::protocol::ClientMessage_CreateNetwork_AccessRights >(value));
           } else {
             mutable_unknown_fields()->AddVarint(4, value);
           }
@@ -7304,7 +7313,7 @@ bool NodeMessage_ListNetworks_Network::MergePartialFromCodedStream(
         break;
       }
 
-      // required .ClientMessage.CreateNetwork.ParticipationRights participation_rights = 5;
+      // required .protocol.ClientMessage.CreateNetwork.ParticipationRights participation_rights = 5;
       case 5: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
@@ -7313,8 +7322,8 @@ bool NodeMessage_ListNetworks_Network::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (::ClientMessage_CreateNetwork_ParticipationRights_IsValid(value)) {
-            set_participation_rights(static_cast< ::ClientMessage_CreateNetwork_ParticipationRights >(value));
+          if (::protocol::ClientMessage_CreateNetwork_ParticipationRights_IsValid(value)) {
+            set_participation_rights(static_cast< ::protocol::ClientMessage_CreateNetwork_ParticipationRights >(value));
           } else {
             mutable_unknown_fields()->AddVarint(5, value);
           }
@@ -7387,13 +7396,13 @@ void NodeMessage_ListNetworks_Network::SerializeWithCachedSizes(
       3, this->creator_email(), output);
   }
 
-  // required .ClientMessage.CreateNetwork.AccessRights access_rights = 4;
+  // required .protocol.ClientMessage.CreateNetwork.AccessRights access_rights = 4;
   if (has_access_rights()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       4, this->access_rights(), output);
   }
 
-  // required .ClientMessage.CreateNetwork.ParticipationRights participation_rights = 5;
+  // required .protocol.ClientMessage.CreateNetwork.ParticipationRights participation_rights = 5;
   if (has_participation_rights()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       5, this->participation_rights(), output);
@@ -7446,13 +7455,13 @@ void NodeMessage_ListNetworks_Network::SerializeWithCachedSizes(
         3, this->creator_email(), target);
   }
 
-  // required .ClientMessage.CreateNetwork.AccessRights access_rights = 4;
+  // required .protocol.ClientMessage.CreateNetwork.AccessRights access_rights = 4;
   if (has_access_rights()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       4, this->access_rights(), target);
   }
 
-  // required .ClientMessage.CreateNetwork.ParticipationRights participation_rights = 5;
+  // required .protocol.ClientMessage.CreateNetwork.ParticipationRights participation_rights = 5;
   if (has_participation_rights()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       5, this->participation_rights(), target);
@@ -7500,13 +7509,13 @@ int NodeMessage_ListNetworks_Network::ByteSize() const {
           this->creator_email());
     }
 
-    // required .ClientMessage.CreateNetwork.AccessRights access_rights = 4;
+    // required .protocol.ClientMessage.CreateNetwork.AccessRights access_rights = 4;
     if (has_access_rights()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->access_rights());
     }
 
-    // required .ClientMessage.CreateNetwork.ParticipationRights participation_rights = 5;
+    // required .protocol.ClientMessage.CreateNetwork.ParticipationRights participation_rights = 5;
     if (has_participation_rights()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->participation_rights());
@@ -7676,7 +7685,7 @@ bool NodeMessage_ListNetworks::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .NodeMessage.ListNetworks.Network network_list = 1;
+      // repeated .protocol.NodeMessage.ListNetworks.Network network_list = 1;
       case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -7709,7 +7718,7 @@ bool NodeMessage_ListNetworks::MergePartialFromCodedStream(
 
 void NodeMessage_ListNetworks::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // repeated .NodeMessage.ListNetworks.Network network_list = 1;
+  // repeated .protocol.NodeMessage.ListNetworks.Network network_list = 1;
   for (int i = 0; i < this->network_list_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       1, this->network_list(i), output);
@@ -7723,7 +7732,7 @@ void NodeMessage_ListNetworks::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* NodeMessage_ListNetworks::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // repeated .NodeMessage.ListNetworks.Network network_list = 1;
+  // repeated .protocol.NodeMessage.ListNetworks.Network network_list = 1;
   for (int i = 0; i < this->network_list_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
@@ -7740,7 +7749,7 @@ void NodeMessage_ListNetworks::SerializeWithCachedSizes(
 int NodeMessage_ListNetworks::ByteSize() const {
   int total_size = 0;
 
-  // repeated .NodeMessage.ListNetworks.Network network_list = 1;
+  // repeated .protocol.NodeMessage.ListNetworks.Network network_list = 1;
   total_size += 1 * this->network_list_size();
   for (int i = 0; i < this->network_list_size(); i++) {
     total_size +=
@@ -7882,7 +7891,7 @@ bool NodeMessage_ListMyNetworks::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .NodeMessage.ListNetworks.Network network_list = 1;
+      // repeated .protocol.NodeMessage.ListNetworks.Network network_list = 1;
       case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -7915,7 +7924,7 @@ bool NodeMessage_ListMyNetworks::MergePartialFromCodedStream(
 
 void NodeMessage_ListMyNetworks::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // repeated .NodeMessage.ListNetworks.Network network_list = 1;
+  // repeated .protocol.NodeMessage.ListNetworks.Network network_list = 1;
   for (int i = 0; i < this->network_list_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       1, this->network_list(i), output);
@@ -7929,7 +7938,7 @@ void NodeMessage_ListMyNetworks::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* NodeMessage_ListMyNetworks::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // repeated .NodeMessage.ListNetworks.Network network_list = 1;
+  // repeated .protocol.NodeMessage.ListNetworks.Network network_list = 1;
   for (int i = 0; i < this->network_list_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
@@ -7946,7 +7955,7 @@ void NodeMessage_ListMyNetworks::SerializeWithCachedSizes(
 int NodeMessage_ListMyNetworks::ByteSize() const {
   int total_size = 0;
 
-  // repeated .NodeMessage.ListNetworks.Network network_list = 1;
+  // repeated .protocol.NodeMessage.ListNetworks.Network network_list = 1;
   total_size += 1 * this->network_list_size();
   for (int i = 0; i < this->network_list_size(); i++) {
     total_size +=
@@ -8411,7 +8420,7 @@ bool NodeMessage_ListServers::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .NodeMessage.ListServers list_servers = 1;
+      // repeated .protocol.NodeMessage.ListServers list_servers = 1;
       case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -8444,7 +8453,7 @@ bool NodeMessage_ListServers::MergePartialFromCodedStream(
 
 void NodeMessage_ListServers::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // repeated .NodeMessage.ListServers list_servers = 1;
+  // repeated .protocol.NodeMessage.ListServers list_servers = 1;
   for (int i = 0; i < this->list_servers_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       1, this->list_servers(i), output);
@@ -8458,7 +8467,7 @@ void NodeMessage_ListServers::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* NodeMessage_ListServers::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // repeated .NodeMessage.ListServers list_servers = 1;
+  // repeated .protocol.NodeMessage.ListServers list_servers = 1;
   for (int i = 0; i < this->list_servers_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
@@ -8475,7 +8484,7 @@ void NodeMessage_ListServers::SerializeWithCachedSizes(
 int NodeMessage_ListServers::ByteSize() const {
   int total_size = 0;
 
-  // repeated .NodeMessage.ListServers list_servers = 1;
+  // repeated .protocol.NodeMessage.ListServers list_servers = 1;
   total_size += 1 * this->list_servers_size();
   for (int i = 0; i < this->list_servers_size(); i++) {
     total_size +=
@@ -9228,14 +9237,14 @@ NodeMessage::NodeMessage()
 }
 
 void NodeMessage::InitAsDefaultInstance() {
-  register_response_ = const_cast< ::NodeMessage_Register*>(&::NodeMessage_Register::default_instance());
-  login_response_ = const_cast< ::NodeMessage_Login*>(&::NodeMessage_Login::default_instance());
-  list_networks_response_ = const_cast< ::NodeMessage_ListNetworks*>(&::NodeMessage_ListNetworks::default_instance());
-  list_my_networks_response_ = const_cast< ::NodeMessage_ListMyNetworks*>(&::NodeMessage_ListMyNetworks::default_instance());
-  list_servers_response_ = const_cast< ::NodeMessage_ListServers*>(&::NodeMessage_ListServers::default_instance());
-  user_info_response_ = const_cast< ::NodeMessage_UserInfo*>(&::NodeMessage_UserInfo::default_instance());
-  update_server_response_ = const_cast< ::NodeMessage_UpdateServer*>(&::NodeMessage_UpdateServer::default_instance());
-  sign_key_response_ = const_cast< ::NodeMessage_SignKey*>(&::NodeMessage_SignKey::default_instance());
+  register_response_ = const_cast< ::protocol::NodeMessage_Register*>(&::protocol::NodeMessage_Register::default_instance());
+  login_response_ = const_cast< ::protocol::NodeMessage_Login*>(&::protocol::NodeMessage_Login::default_instance());
+  list_networks_response_ = const_cast< ::protocol::NodeMessage_ListNetworks*>(&::protocol::NodeMessage_ListNetworks::default_instance());
+  list_my_networks_response_ = const_cast< ::protocol::NodeMessage_ListMyNetworks*>(&::protocol::NodeMessage_ListMyNetworks::default_instance());
+  list_servers_response_ = const_cast< ::protocol::NodeMessage_ListServers*>(&::protocol::NodeMessage_ListServers::default_instance());
+  user_info_response_ = const_cast< ::protocol::NodeMessage_UserInfo*>(&::protocol::NodeMessage_UserInfo::default_instance());
+  update_server_response_ = const_cast< ::protocol::NodeMessage_UpdateServer*>(&::protocol::NodeMessage_UpdateServer::default_instance());
+  sign_key_response_ = const_cast< ::protocol::NodeMessage_SignKey*>(&::protocol::NodeMessage_SignKey::default_instance());
 }
 
 NodeMessage::NodeMessage(const NodeMessage& from)
@@ -9300,30 +9309,30 @@ void NodeMessage::Clear() {
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     response_type_ = 200;
     if (has_register_response()) {
-      if (register_response_ != NULL) register_response_->::NodeMessage_Register::Clear();
+      if (register_response_ != NULL) register_response_->::protocol::NodeMessage_Register::Clear();
     }
     if (has_login_response()) {
-      if (login_response_ != NULL) login_response_->::NodeMessage_Login::Clear();
+      if (login_response_ != NULL) login_response_->::protocol::NodeMessage_Login::Clear();
     }
     if (has_list_networks_response()) {
-      if (list_networks_response_ != NULL) list_networks_response_->::NodeMessage_ListNetworks::Clear();
+      if (list_networks_response_ != NULL) list_networks_response_->::protocol::NodeMessage_ListNetworks::Clear();
     }
     if (has_list_my_networks_response()) {
-      if (list_my_networks_response_ != NULL) list_my_networks_response_->::NodeMessage_ListMyNetworks::Clear();
+      if (list_my_networks_response_ != NULL) list_my_networks_response_->::protocol::NodeMessage_ListMyNetworks::Clear();
     }
     if (has_list_servers_response()) {
-      if (list_servers_response_ != NULL) list_servers_response_->::NodeMessage_ListServers::Clear();
+      if (list_servers_response_ != NULL) list_servers_response_->::protocol::NodeMessage_ListServers::Clear();
     }
     if (has_user_info_response()) {
-      if (user_info_response_ != NULL) user_info_response_->::NodeMessage_UserInfo::Clear();
+      if (user_info_response_ != NULL) user_info_response_->::protocol::NodeMessage_UserInfo::Clear();
     }
     if (has_update_server_response()) {
-      if (update_server_response_ != NULL) update_server_response_->::NodeMessage_UpdateServer::Clear();
+      if (update_server_response_ != NULL) update_server_response_->::protocol::NodeMessage_UpdateServer::Clear();
     }
   }
   if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
     if (has_sign_key_response()) {
-      if (sign_key_response_ != NULL) sign_key_response_->::NodeMessage_SignKey::Clear();
+      if (sign_key_response_ != NULL) sign_key_response_->::protocol::NodeMessage_SignKey::Clear();
     }
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
@@ -9336,7 +9345,7 @@ bool NodeMessage::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required .NodeMessage.ResponseType response_type = 1;
+      // required .protocol.NodeMessage.ResponseType response_type = 1;
       case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
@@ -9344,8 +9353,8 @@ bool NodeMessage::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (::NodeMessage_ResponseType_IsValid(value)) {
-            set_response_type(static_cast< ::NodeMessage_ResponseType >(value));
+          if (::protocol::NodeMessage_ResponseType_IsValid(value)) {
+            set_response_type(static_cast< ::protocol::NodeMessage_ResponseType >(value));
           } else {
             mutable_unknown_fields()->AddVarint(1, value);
           }
@@ -9356,7 +9365,7 @@ bool NodeMessage::MergePartialFromCodedStream(
         break;
       }
 
-      // optional .NodeMessage.Register register_response = 2;
+      // optional .protocol.NodeMessage.Register register_response = 2;
       case 2: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -9370,7 +9379,7 @@ bool NodeMessage::MergePartialFromCodedStream(
         break;
       }
 
-      // optional .NodeMessage.Login login_response = 3;
+      // optional .protocol.NodeMessage.Login login_response = 3;
       case 3: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -9384,7 +9393,7 @@ bool NodeMessage::MergePartialFromCodedStream(
         break;
       }
 
-      // optional .NodeMessage.ListNetworks list_networks_response = 5;
+      // optional .protocol.NodeMessage.ListNetworks list_networks_response = 5;
       case 5: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -9398,7 +9407,7 @@ bool NodeMessage::MergePartialFromCodedStream(
         break;
       }
 
-      // optional .NodeMessage.ListMyNetworks list_my_networks_response = 6;
+      // optional .protocol.NodeMessage.ListMyNetworks list_my_networks_response = 6;
       case 6: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -9412,7 +9421,7 @@ bool NodeMessage::MergePartialFromCodedStream(
         break;
       }
 
-      // optional .NodeMessage.ListServers list_servers_response = 7;
+      // optional .protocol.NodeMessage.ListServers list_servers_response = 7;
       case 7: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -9426,7 +9435,7 @@ bool NodeMessage::MergePartialFromCodedStream(
         break;
       }
 
-      // optional .NodeMessage.UserInfo user_info_response = 13;
+      // optional .protocol.NodeMessage.UserInfo user_info_response = 13;
       case 13: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -9440,7 +9449,7 @@ bool NodeMessage::MergePartialFromCodedStream(
         break;
       }
 
-      // optional .NodeMessage.UpdateServer update_server_response = 14;
+      // optional .protocol.NodeMessage.UpdateServer update_server_response = 14;
       case 14: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -9454,7 +9463,7 @@ bool NodeMessage::MergePartialFromCodedStream(
         break;
       }
 
-      // optional .NodeMessage.SignKey sign_key_response = 16;
+      // optional .protocol.NodeMessage.SignKey sign_key_response = 16;
       case 16: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -9486,55 +9495,55 @@ bool NodeMessage::MergePartialFromCodedStream(
 
 void NodeMessage::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // required .NodeMessage.ResponseType response_type = 1;
+  // required .protocol.NodeMessage.ResponseType response_type = 1;
   if (has_response_type()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->response_type(), output);
   }
 
-  // optional .NodeMessage.Register register_response = 2;
+  // optional .protocol.NodeMessage.Register register_response = 2;
   if (has_register_response()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       2, this->register_response(), output);
   }
 
-  // optional .NodeMessage.Login login_response = 3;
+  // optional .protocol.NodeMessage.Login login_response = 3;
   if (has_login_response()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       3, this->login_response(), output);
   }
 
-  // optional .NodeMessage.ListNetworks list_networks_response = 5;
+  // optional .protocol.NodeMessage.ListNetworks list_networks_response = 5;
   if (has_list_networks_response()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       5, this->list_networks_response(), output);
   }
 
-  // optional .NodeMessage.ListMyNetworks list_my_networks_response = 6;
+  // optional .protocol.NodeMessage.ListMyNetworks list_my_networks_response = 6;
   if (has_list_my_networks_response()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       6, this->list_my_networks_response(), output);
   }
 
-  // optional .NodeMessage.ListServers list_servers_response = 7;
+  // optional .protocol.NodeMessage.ListServers list_servers_response = 7;
   if (has_list_servers_response()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       7, this->list_servers_response(), output);
   }
 
-  // optional .NodeMessage.UserInfo user_info_response = 13;
+  // optional .protocol.NodeMessage.UserInfo user_info_response = 13;
   if (has_user_info_response()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       13, this->user_info_response(), output);
   }
 
-  // optional .NodeMessage.UpdateServer update_server_response = 14;
+  // optional .protocol.NodeMessage.UpdateServer update_server_response = 14;
   if (has_update_server_response()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       14, this->update_server_response(), output);
   }
 
-  // optional .NodeMessage.SignKey sign_key_response = 16;
+  // optional .protocol.NodeMessage.SignKey sign_key_response = 16;
   if (has_sign_key_response()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       16, this->sign_key_response(), output);
@@ -9548,62 +9557,62 @@ void NodeMessage::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* NodeMessage::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // required .NodeMessage.ResponseType response_type = 1;
+  // required .protocol.NodeMessage.ResponseType response_type = 1;
   if (has_response_type()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->response_type(), target);
   }
 
-  // optional .NodeMessage.Register register_response = 2;
+  // optional .protocol.NodeMessage.Register register_response = 2;
   if (has_register_response()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         2, this->register_response(), target);
   }
 
-  // optional .NodeMessage.Login login_response = 3;
+  // optional .protocol.NodeMessage.Login login_response = 3;
   if (has_login_response()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         3, this->login_response(), target);
   }
 
-  // optional .NodeMessage.ListNetworks list_networks_response = 5;
+  // optional .protocol.NodeMessage.ListNetworks list_networks_response = 5;
   if (has_list_networks_response()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         5, this->list_networks_response(), target);
   }
 
-  // optional .NodeMessage.ListMyNetworks list_my_networks_response = 6;
+  // optional .protocol.NodeMessage.ListMyNetworks list_my_networks_response = 6;
   if (has_list_my_networks_response()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         6, this->list_my_networks_response(), target);
   }
 
-  // optional .NodeMessage.ListServers list_servers_response = 7;
+  // optional .protocol.NodeMessage.ListServers list_servers_response = 7;
   if (has_list_servers_response()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         7, this->list_servers_response(), target);
   }
 
-  // optional .NodeMessage.UserInfo user_info_response = 13;
+  // optional .protocol.NodeMessage.UserInfo user_info_response = 13;
   if (has_user_info_response()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         13, this->user_info_response(), target);
   }
 
-  // optional .NodeMessage.UpdateServer update_server_response = 14;
+  // optional .protocol.NodeMessage.UpdateServer update_server_response = 14;
   if (has_update_server_response()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         14, this->update_server_response(), target);
   }
 
-  // optional .NodeMessage.SignKey sign_key_response = 16;
+  // optional .protocol.NodeMessage.SignKey sign_key_response = 16;
   if (has_sign_key_response()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
@@ -9621,55 +9630,55 @@ int NodeMessage::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required .NodeMessage.ResponseType response_type = 1;
+    // required .protocol.NodeMessage.ResponseType response_type = 1;
     if (has_response_type()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->response_type());
     }
 
-    // optional .NodeMessage.Register register_response = 2;
+    // optional .protocol.NodeMessage.Register register_response = 2;
     if (has_register_response()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->register_response());
     }
 
-    // optional .NodeMessage.Login login_response = 3;
+    // optional .protocol.NodeMessage.Login login_response = 3;
     if (has_login_response()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->login_response());
     }
 
-    // optional .NodeMessage.ListNetworks list_networks_response = 5;
+    // optional .protocol.NodeMessage.ListNetworks list_networks_response = 5;
     if (has_list_networks_response()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->list_networks_response());
     }
 
-    // optional .NodeMessage.ListMyNetworks list_my_networks_response = 6;
+    // optional .protocol.NodeMessage.ListMyNetworks list_my_networks_response = 6;
     if (has_list_my_networks_response()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->list_my_networks_response());
     }
 
-    // optional .NodeMessage.ListServers list_servers_response = 7;
+    // optional .protocol.NodeMessage.ListServers list_servers_response = 7;
     if (has_list_servers_response()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->list_servers_response());
     }
 
-    // optional .NodeMessage.UserInfo user_info_response = 13;
+    // optional .protocol.NodeMessage.UserInfo user_info_response = 13;
     if (has_user_info_response()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->user_info_response());
     }
 
-    // optional .NodeMessage.UpdateServer update_server_response = 14;
+    // optional .protocol.NodeMessage.UpdateServer update_server_response = 14;
     if (has_update_server_response()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
@@ -9678,7 +9687,7 @@ int NodeMessage::ByteSize() const {
 
   }
   if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
-    // optional .NodeMessage.SignKey sign_key_response = 16;
+    // optional .protocol.NodeMessage.SignKey sign_key_response = 16;
     if (has_sign_key_response()) {
       total_size += 2 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
@@ -9716,30 +9725,30 @@ void NodeMessage::MergeFrom(const NodeMessage& from) {
       set_response_type(from.response_type());
     }
     if (from.has_register_response()) {
-      mutable_register_response()->::NodeMessage_Register::MergeFrom(from.register_response());
+      mutable_register_response()->::protocol::NodeMessage_Register::MergeFrom(from.register_response());
     }
     if (from.has_login_response()) {
-      mutable_login_response()->::NodeMessage_Login::MergeFrom(from.login_response());
+      mutable_login_response()->::protocol::NodeMessage_Login::MergeFrom(from.login_response());
     }
     if (from.has_list_networks_response()) {
-      mutable_list_networks_response()->::NodeMessage_ListNetworks::MergeFrom(from.list_networks_response());
+      mutable_list_networks_response()->::protocol::NodeMessage_ListNetworks::MergeFrom(from.list_networks_response());
     }
     if (from.has_list_my_networks_response()) {
-      mutable_list_my_networks_response()->::NodeMessage_ListMyNetworks::MergeFrom(from.list_my_networks_response());
+      mutable_list_my_networks_response()->::protocol::NodeMessage_ListMyNetworks::MergeFrom(from.list_my_networks_response());
     }
     if (from.has_list_servers_response()) {
-      mutable_list_servers_response()->::NodeMessage_ListServers::MergeFrom(from.list_servers_response());
+      mutable_list_servers_response()->::protocol::NodeMessage_ListServers::MergeFrom(from.list_servers_response());
     }
     if (from.has_user_info_response()) {
-      mutable_user_info_response()->::NodeMessage_UserInfo::MergeFrom(from.user_info_response());
+      mutable_user_info_response()->::protocol::NodeMessage_UserInfo::MergeFrom(from.user_info_response());
     }
     if (from.has_update_server_response()) {
-      mutable_update_server_response()->::NodeMessage_UpdateServer::MergeFrom(from.update_server_response());
+      mutable_update_server_response()->::protocol::NodeMessage_UpdateServer::MergeFrom(from.update_server_response());
     }
   }
   if (from._has_bits_[8 / 32] & (0xffu << (8 % 32))) {
     if (from.has_sign_key_response()) {
-      mutable_sign_key_response()->::NodeMessage_SignKey::MergeFrom(from.sign_key_response());
+      mutable_sign_key_response()->::protocol::NodeMessage_SignKey::MergeFrom(from.sign_key_response());
     }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
@@ -9811,5 +9820,7 @@ void NodeMessage::Swap(NodeMessage* other) {
 
 
 // @@protoc_insertion_point(namespace_scope)
+
+}  // namespace protocol
 
 // @@protoc_insertion_point(global_scope)

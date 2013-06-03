@@ -8,45 +8,19 @@
 #include "myserver.hpp"
 #include "user.hpp"
 #include "data.hpp"
+#include "node.hpp"
+#include "network_description.hpp"
 
 namespace sp2p {
 	namespace sercli {
 
-		namespace network {
-
-			enum class AccessRights { PUBLIC, PRIVATE };
-			enum class Visibility { LISTED, UNLISTED };
-			enum class ParticipationRights { CLIENT_ONLY, CLIENT_SERVER };
-
-		} /* namespace network_utilities */
-
-		struct NetworkDescription {
-			network::AccessRights access_rights;
-			network::Visibility  visability;
-			network::ParticipationRights participation_rights;
-			std::string protocol_name;
-			std::string network_name;
-
-			User creator;
-
-			bool operator<(const NetworkDescription& other) const;
-		};
-
-
 		class DataManager;
-		struct NodeDescription;
-		class Node;
-		typedef std::shared_ptr<Node> node_ptr;
 
-		#include "node.hpp"
 		/*
 		 * Class managing network existing on some nodes. It is assumed, that
 		 * such network is accessible to user on all of the nodes
 		 */
 		class Network : boost::noncopyable {
-
-			friend class Server;
-			friend class Manager;
 
 			public:
 				/**
@@ -81,7 +55,6 @@ namespace sp2p {
 		typedef std::shared_ptr<Network> network_ptr;
 
 	} /* namespace sercli */
-
 } /* namespace sp2p */
 
 #endif /* NETWORK_H */
