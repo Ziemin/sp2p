@@ -19,3 +19,8 @@ add_subdirectory(src)
 
 ENABLE_TESTING()
 ADD_TEST(sercli_inittest build/tests/sercli_inittest)
+ADD_TEST(sercli_edu_tests build/tests/sercli_edu_tests)
+
+ADD_CUSTOM_TARGET(check COMMAND ${CMAKE_CTEST_COMMAND} DEPENDS 
+	sercli_inittest
+	sercli_edu_tests)

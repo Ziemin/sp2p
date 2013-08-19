@@ -5,21 +5,63 @@
 #include <memory>
 #include <atomic>
 #include <boost/noncopyable.hpp>
-#include "toserverconnection.hpp"
+#include <boost/asio.hpp>
+
+#include "nodemessage.hpp"
+#include "connection.hpp"
+#include "node_description.hpp"
+#include "globals.hpp"
 
 namespace sp2p {
 	namespace sercli {
 
-		class NodeConnection : ToServerConnection, boost::noncopyable, 
+		/**
+		 * Wrapper over Connection<NodeRequest, NodeResponse>
+		 */
+		class NodeConnection : boost::noncopyable, 
 		public std::enable_shared_from_this<NodeConnection> {
 
 			public:
-				NodeConnection();
+				NodeConnection(ConnectionManager<NodeRequest, NodeResponse>& connection_manager);
+
  				bool isActive() const;
 
+				void connect(const NodeDescription& node_desc);
+
+				template <typename ConnectHandler>                    
+					void asyncConnect(const NodeDescription& node_desc, ConnectHandler handler);
+
+				void disconnect();
+
+				void resetDeadlineTimer(std::uint64_t seconds = global::node_timeout_seconds);
+				void stopDeadlineTimer();
+
+				connection_ptr<NodeRequest, NodeResponse> getConnection() const;
+
+				const std::string& getCookie();
+
+				void setCookie(std::string new_cookie);
+
+
 			private:
+
+				void closeConnection();
+
+			public:
+
 				std::atomic<bool> is_logged;
+
+			private:
+
+				boost::asio::deadline_timer timer;
+				boost::asio::io_service::strand strand;
+				boost::asio::ip::tcp::socket socket;
+
 				std::string cookie;
+
+				ConnectionManager<NodeRequest, NodeResponse>& connection_manager;
+				connection_ptr<NodeRequest, NodeResponse> connection;
+
 		};
 
 		typedef std::shared_ptr<NodeConnection> node_con_ptr;

@@ -3,19 +3,14 @@
 
 #include <boost/noncopyable.hpp>
 #include <memory>
-#include "toserverconnection.hpp"
 
 namespace sp2p {
 	namespace sercli {
 
         /**
-		 * Class representing server on some node.
+		 * Class representing basic server
 		 */
 		class Server {
-
-			public:
-				Server();
-        		tsc_ptr getConnection();
 
 		};
 
