@@ -8,10 +8,7 @@ namespace sp2p {
 
 		namespace utils {
 
-			std::shared_ptr<NodeRequest> getLoginMessage(
-					const std::string& username, 
-					const std::string& password) 
-			{
+			std::shared_ptr<NodeRequest> getLoginMessage(const std::string& username, const std::string& password) {
 
 				std::shared_ptr<NodeRequest> request(new NodeRequest());
 				protocol::ClientMessage& protoRequest = request->getRequest();
@@ -26,48 +23,179 @@ namespace sp2p {
 				return request;
 			}
 
+			std::shared_ptr<NodeRequest> getLogoutMessage(const std::string& cookie) {
 
+				std::shared_ptr<NodeRequest> request(new NodeRequest());
+				protocol::ClientMessage& protoRequest = request->getRequest();
+				protoRequest.set_request(protocol::ClientMessage::LOGOUT);
+
+				protocol::ClientMessage::Logout *logout_message = new protocol::ClientMessage::Logout();
+				logout_message->set_allocated_cookie(new std::string(cookie));
+
+				protoRequest.set_allocated_logout_message(logout_message);
+
+				return request;
+
+			}
+
+			std::shared_ptr<NodeRequest> getRegisterUserMessage(const MyUser& my_user, const std::string& public_key) {
+
+				std::shared_ptr<NodeRequest> request(new NodeRequest());
+				protocol::ClientMessage& protoRequest = request->getRequest();
+				protoRequest.set_request(protocol::ClientMessage::REGISTER);
+
+				protocol::ClientMessage::Register *register_message = new protocol::ClientMessage::Register();
+				register_message->set_allocated_username(new std::string(my_user.username));
+				register_message->set_allocated_password(new std::string(my_user.password));
+				register_message->set_allocated_public_key(new std::string(public_key));
+				
+				protoRequest.set_allocated_register_message(register_message);
+
+				return request;
+			}
+
+			std::shared_ptr<NodeRequest> getChangePasswordMessage(const MyUser& my_user, 
+					const std::string& new_password, const std::string& cookie) {
+
+				std::shared_ptr<NodeRequest> request(new NodeRequest());
+				protocol::ClientMessage& protoRequest = request->getRequest();
+				protoRequest.set_request(protocol::ClientMessage::CHANGE_PASSWORD);
+
+				protocol::ClientMessage::ChangePassword *change_password_message = new protocol::ClientMessage::ChangePassword();
+				change_password_message->set_allocated_old_password(new std::string(my_user.password));
+				change_password_message->set_allocated_new_password(new std::string(new_password));
+				change_password_message->set_allocated_cookie(new std::string(cookie));
+				
+				protoRequest.set_allocated_change_password_message(change_password_message);
+
+				return request;
+			}
+
+			std::shared_ptr<NodeRequest> getUserInfo(const NetworkDescription& network_desc, 
+						const std::string& username, std::string& cookie) {
+
+				std::shared_ptr<NodeRequest> request(new NodeRequest());
+				protocol::ClientMessage& protoRequest = request->getRequest();
+				protoRequest.set_request(protocol::ClientMessage::USER_INFO);
+
+				protocol::ClientMessage::UserInfo *user_info_message = new protocol::ClientMessage::UserInfo();
+				user_info_message->set_allocated_username(new std::string(username));
+				user_info_message->set_allocated_network_name(new std::string(network_desc.network_name));
+				user_info_message->set_allocated_cookie(new std::string(cookie));
+				
+				protoRequest.set_allocated_user_info_message(user_info_message);
+
+				return request;
+			}
+
+ 			std::shared_ptr<NodeRequest> getListNetworksMessage(std::string& cookie) {
+
+				std::shared_ptr<NodeRequest> request(new NodeRequest());
+				protocol::ClientMessage& protoRequest = request->getRequest();
+				protoRequest.set_request(protocol::ClientMessage::LIST_NETWORKS);
+
+				protocol::ClientMessage::ListNetworks *list_networks_message = new protocol::ClientMessage::ListNetworks();
+				list_networks_message->set_allocated_cookie(new std::string(cookie));
+				
+				protoRequest.set_allocated_list_networks_message(list_networks_message);
+
+				return request;
+			}                   
+
+ 			std::shared_ptr<NodeRequest> getListMyNetworksMessage(std::string& cookie) {
+
+				std::shared_ptr<NodeRequest> request(new NodeRequest());
+				protocol::ClientMessage& protoRequest = request->getRequest();
+				protoRequest.set_request(protocol::ClientMessage::LIST_MY_NETWORKS);
+
+				protocol::ClientMessage::ListMyNetworks *list_my_networks_message = new protocol::ClientMessage::ListMyNetworks();
+				list_my_networks_message->set_allocated_cookie(new std::string(cookie));
+				
+				protoRequest.set_allocated_list_my_networks_message(list_my_networks_message);
+
+				return request;
+			}                   
+
+			std::shared_ptr<NodeRequest> getListServersMessage(const NetworkDescription& network_desc, const std::string& cookie) {
+
+				std::shared_ptr<NodeRequest> request(new NodeRequest());
+				protocol::ClientMessage& protoRequest = request->getRequest();
+				protoRequest.set_request(protocol::ClientMessage::LIST_SERVERS);
+
+				protocol::ClientMessage::ListServers *list_servers_message = new protocol::ClientMessage::ListServers();
+				list_servers_message->set_allocated_cookie(new std::string(cookie));
+				list_servers_message->set_allocated_network_name(new std::string(network_desc.network_name));
+				
+				protoRequest.set_allocated_list_servers_message(list_servers_message);
+
+				return request;
+			}
+
+
+			NetworkDescription getNetworkDescriptionFromProto(const protocol::NodeMessage::ListNetworks::Network& network) {
+
+				NetworkDescription network_desc;
+
+				network_desc.network_name = network.name();
+				network_desc.creator = { network.creator_name(), network.creator_name() };
+				network_desc.protocol_name = network.protocol_name();
+
+				switch(network.participation_rights()) {
+					case protocol::ClientMessage::CreateNetwork::CLIENT_ONLY:
+						network_desc.participation_rights = NetworkDescription::ParticipationRights::CLIENT_ONLY;
+						break;
+					case protocol::ClientMessage::CreateNetwork::CLIENT_SERVER:
+						network_desc.participation_rights = NetworkDescription::ParticipationRights::CLIENT_SERVER;
+						break;
+				}
+
+				switch(network.access_rights()) {
+					case protocol::ClientMessage::CreateNetwork::PUBLIC:
+						network_desc.access_rights = NetworkDescription::AccessRights::PUBLIC;
+						break;
+					case protocol::ClientMessage::CreateNetwork::PRIVATE:
+						network_desc.access_rights = NetworkDescription::AccessRights::PRIVATE;
+						break;
+				}
+
+
+				return network_desc;
+			}
+
+			ServerDescription getServerDescriptionFromProto(const protocol::NodeMessage::ListServers::Server& network) {
+
+			}
 
 			NodeError getDefaultError(protocol::NodeMessage::ResponseType responseCode) {
 
-				NodeError result;
 				switch(responseCode) {
 
 					case protocol::NodeMessage::OK:
-						result = NodeError::OK;
-						return result;
+						return NodeError::OK;
 
 					case protocol::NodeMessage::BAD_CREDENTIALS:
-						result = NodeError::BAD_CREDENTIALS;
-						return result;
+						return NodeError::BAD_CREDENTIALS;
 						
 					case protocol::NodeMessage::BAD_REQUEST:
-						result = NodeError::BAD_REQUEST;
-						return result;
+						return NodeError::BAD_REQUEST;
 						
 					case protocol::NodeMessage::NO_PRIVILAGES:
-						result = NodeError::NO_PRIVILAGES;
-						return result;
+						return NodeError::NO_PRIVILAGES;
 						
 					case protocol::NodeMessage::NO_SUCH_USER:
-						result = NodeError::NO_SUCH_USER;
-						return result;
+						return NodeError::NO_SUCH_USER;
 						
 					case protocol::NodeMessage::NO_SUCH_NETWORK:
-						result = NodeError::NO_SUCH_NETWORK;
-						return result;
+						return NodeError::NO_SUCH_NETWORK;
 						
 					case protocol::NodeMessage::BAD_DATA:
-						result = NodeError::BAD_DATA;
-						return result;
+						return NodeError::BAD_DATA;
 						
 					case protocol::NodeMessage::INTERNAL_SERVER_ERROR:
-						result = NodeError::INTERNAL_SERVER_ERROR;
-						return result;
+						return NodeError::INTERNAL_SERVER_ERROR;
 
 					default:
-						result = NodeError::OTHER;
-						return result;
+						return NodeError::OTHER;
 				}
 			}
 

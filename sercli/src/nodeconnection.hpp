@@ -9,7 +9,7 @@
 
 #include "nodemessage.hpp"
 #include "connection.hpp"
-#include "node_description.hpp"
+#include "sp2p_types.hpp"
 #include "globals.hpp"
 
 namespace sp2p {
@@ -26,10 +26,10 @@ namespace sp2p {
 
  				bool isActive() const;
 
-				void connect(const NodeDescription& node_desc);
+				void connect(const types::NodeDescription& node_desc);
 
 				template <typename ConnectHandler>                    
-					void asyncConnect(const NodeDescription& node_desc, ConnectHandler handler);
+					void asyncConnect(const types::NodeDescription& node_desc, ConnectHandler handler);
 
 				void disconnect();
 

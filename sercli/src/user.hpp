@@ -13,6 +13,7 @@ namespace sp2p {
 		struct User {
 
 			std::string username, email;
+			// TODO public_key
 		};
 
 		/**

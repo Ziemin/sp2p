@@ -6,12 +6,11 @@
  
 
 		void Sp2pHandler::handleResponse(Connection<NodeRequest, NodeResponse>& connection, 
-				NodeResponse& response) 
-		{
+				NodeResponse& response) {
 			// TODO
 		}
 
-		void Sp2pHandler::handleSendError(Connection<NodeRequest, NodeResponse>& connection) {
+		void Sp2pHandler::handleSendError(Connection<NodeRequest, NodeResponse>& connection, NodeRequest& request) {
 			// TODO - coś ciekawszego
 			connection.stop();
 		}

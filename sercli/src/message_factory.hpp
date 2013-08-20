@@ -16,8 +16,27 @@ namespace sp2p {
 		namespace utils {
 
 			std::shared_ptr<NodeRequest> getLoginMessage(const std::string& username, const std::string& password);
+
 			std::shared_ptr<NodeRequest> getLogoutMessage(const std::string& cookie);
-			std::shared_ptr<NodeRequest> getRegisterUserMessage(const MyUser& my_user);
+
+			std::shared_ptr<NodeRequest> getRegisterUserMessage(const MyUser& my_user, const std::string& public_key);
+
+			std::shared_ptr<NodeRequest> getChangePasswordMessage(const MyUser& my_user, 
+					const std::string& new_password, const std::string& cookie);
+
+			std::shared_ptr<NodeRequest> getUserInfoMessage(const NetworkDescription& network_desc, 
+						const std::string& username, const std::string& cookie);
+
+			std::shared_ptr<NodeRequest> getListNetworksMessage(const std::string& cookie);
+
+			std::shared_ptr<NodeRequest> getListMyNetworksMessage(const std::string& cookie);
+
+			std::shared_ptr<NodeRequest> getListServersMessage(const NetworkDescription& network_desc, const std::string& cookie);
+
+
+			NetworkDescription getNetworkDescriptionFromProto(const protocol::NodeMessage::ListNetworks::Network& network);
+
+			ServerDescription getServerDescriptionFromProto(const protocol::NodeMessage::ListServers::Server& network);
 
 			NodeError getDefaultError(protocol::NodeMessage::ResponseType responseCode);
 

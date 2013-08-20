@@ -24,8 +24,6 @@ add_library(sercliLib STATIC
 	globals.cpp
 	manager.cpp
 	nodeconnection.cpp
-	network_description.cpp
-	node_description.cpp
 	message_factory.cpp
 )
 

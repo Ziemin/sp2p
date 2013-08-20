@@ -13,8 +13,6 @@
 
 #include "user.hpp"
 #include "nodeconnection.hpp"
-#include "node_description.hpp"
-#include "network_description.hpp"
 #include "sp2p_types.hpp"
 
 using namespace sp2p::sercli::types;
@@ -47,13 +45,15 @@ namespace sp2p {
 
 				NodeError registerUser();
 
-				std::tuple<NodeError> checkUser();
+				NodeError changePassword(const std::string& new_password);
 
-				std::tuple<NodeError> getNetworks();
+				std::tuple<NodeError, User> getUserInfo(const NetworkDescription& network_desc, const std::string& username);
 
-				std::tuple<NodeError> getMyNetworks();
+				std::tuple<NodeError, std::vector<NetworkDescription>> getNetworksList();
 
-				std::tuple<NodeError> getServers(NetworkDescription network_desc);
+				std::tuple<NodeError, std::vector<NetworkDescription>> getMyNetworks();
+
+				std::tuple<NodeError, std::vector<ServerDescription>> getServersList(const NetworkDescription& network_desc);
 
 				/*
 				 * Returns true if client is currently logged at node
@@ -70,6 +70,9 @@ namespace sp2p {
 				NodeDescription getDescription();
 				void setNewDescription(NodeDescription node_desc);
 
+			private:
+
+				NodeError beforeMessage();
 			private:
 
 				NodeDescription node_desc;

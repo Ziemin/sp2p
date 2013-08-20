@@ -22,6 +22,7 @@ message ClientMessage {
 									// (add to list of active servers if previously inactive)
 		STOP_SERVER = 13;           // Stop running server 
 		SIGN_KEY = 14; 				// Sign new key related to Node itself or certain Network
+		CHANGE_PASSWORD = 15; 		// Change user's password
 	}
 	required RequestType request = 1;
 
@@ -133,6 +134,13 @@ message ClientMessage {
 		optional string network_name = 3; // if provided Node associates new public key with network
 	}
 	optional SignKey sign_key_message = 16;
+
+	message ChangePassword {
+		required string cookie = 1;
+		required string old_password = 2;  // former user's password
+		optional string new_password = 3;  // new password
+	}
+	optional ChangePassword change_password_message = 17;
 }
 
 // ------------------------------------------------------------------------------
@@ -189,7 +197,7 @@ message NodeMessage {
 			required string ip_address = 2;
 			required int32 port_number = 3;
 		}	
-		repeated ListServers list_servers = 1;
+		repeated Server list_servers = 1;
 	}
 	optional ListServers list_servers_response = 7;
 
@@ -208,4 +216,5 @@ message NodeMessage {
     	required string user_certificate = 1;
 	}
 	optional SignKey sign_key_response = 16;
+
 }
