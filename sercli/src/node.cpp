@@ -126,7 +126,17 @@ namespace sp2p {
 		}
 
 		NodeError Node::registerUser() {
-			return NodeError::OK;
+			if(!node_connection.is_logged) 
+				return NodeError::NOT_LOGGED;
+
+			try {
+				if(!isActive()) node_connection.connect(node_desc);
+			} catch(NodeError& error) {
+				return error;
+			}
+
+			NodeError result;
+			std::shared_ptr<NodeRequest> registerUserMessage = utils::getRegisterUserMessage(my_user);
 		}
 
 	}

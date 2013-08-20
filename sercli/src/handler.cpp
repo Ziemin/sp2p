@@ -11,17 +11,17 @@
 			// TODO
 		}
 
-		void handleSendError(Connection<NodeRequest, NodeResponse>& connection) {
+		void Sp2pHandler::handleSendError(Connection<NodeRequest, NodeResponse>& connection) {
 			// TODO - coś ciekawszego
 			connection.stop();
 		}
 
-		void handleReadError(Connection<NodeRequest, NodeResponse>& connection) {
+		void Sp2pHandler::handleReadError(Connection<NodeRequest, NodeResponse>& connection) {
 			// TODO - coś ciekawszego
 			connection.stop();
 		}
 
-		void handleParseError(Connection<NodeRequest, NodeResponse>& connection) {
+		void Sp2pHandler::handleParseError(Connection<NodeRequest, NodeResponse>& connection) {
 			// TODO - coś ciekawszego
 			connection.stop();
 		}
