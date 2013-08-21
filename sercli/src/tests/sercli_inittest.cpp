@@ -1,5 +1,14 @@
 #define BOOST_TEST_MODULE sercli_inittest
 #include <boost/test/unit_test.hpp>
+#include <botan/botan.h>
+#include <botan/dsa.h>
+#include <botan/rsa.h>
+#include <botan/x509self.h>
+
+#include <iostream>
+#include <fstream>
+#include <memory>
+
 
 int funkcja(int a, int b) { return a+b; }
 

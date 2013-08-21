@@ -11,6 +11,7 @@
 #include "data.hpp"
 #include "node.hpp"
 #include "network.hpp"
+#include "connection_manager.hpp"
 
 namespace sp2p {
 	namespace sercli {
@@ -25,49 +26,62 @@ namespace sp2p {
 				/**
 				 * Creates Manager responsible for sp2p networks control
 				 *
-				 * @param io_s service for asynchronous operations
-				 * @param threads_num number of threads in pool
 				 * @param data_manager instance of class providing operations related to 
-				 * 		  saving/serializing data
+				 *		  saving/serializing data
 				 */
-				Manager(boost::asio::io_service& io_s, int threads_num, DataManager& data_manager);
-				Manager(int threads_num, DataManager data_manager);
+				Manager();
+				Manager(DataManager& dataManager);
+
+				void stopAll();
 
 				/**
-				 * Adds node to base. Registers client if necessary.
+				 * Creates new node and adds it to base. Registers client if necessary.
 				 * Synchronous version
 				 */
-				void addNode(Node& node);
+				Node& createNode(types::NodeDescription node_desc);
+				Node& createNode(types::NodeDescription node_desc, MyUser user);
 
 				/**
 				 * Returns desired nodes - self explanatory
 				 */
-				Node& getNode(NodeDescription node_desc) const;
+				Node& getNode(types::NodeDescription node_desc) const;
 				Node& getNode(std::string node_name) const;
 				std::vector<node_ptr> getAllNodes() const;
 				
-				void removeNode(NodeDescription node_desc);
+				void removeNode(types::NodeDescription node_desc);
 				void removeNode(std::string node_name);
+
+				Network& createNetwork(types::NetworkDescription network_desc);
 
 				/**
 				 * Returns desired networks - self explanatory
 				 */
-				Network& getNetwork(NetworkDescription network_desc) const;
+				Network& getNetwork(types::NetworkDescription network_desc) const;
 				Network& getNetwork(std::string network_name) const;
 				std::vector<network_ptr> getAllNetworks() const;
 
-				Network& createNetwork(NetworkDescription network_desc);
+				void removeNetwork(types::NetworkDescription node_desc);
+				void removeNetwork(std::string network_name);
 
 				/**
 				 * Saves manager state 
 				 */
-				void save();
+				void saveState();
+
+				void loadLastState();
+
+				void setDataManager(DataManager& dataManager);
+
 
 			private:
-				DataManager &data_manager;
+				DataManager *data_manager = nullptr;
 				boost::asio::io_service &io_s;
-				std::map<NodeDescription, node_ptr> nodes_map;
-				std::map<NetworkDescription, network_ptr> networks_map;
+				std::map<types::NodeDescription, node_ptr> nodes_map;
+				std::map<types::NetworkDescription, network_ptr> networks_map;
+
+				std::vector<std::shared_ptr<std::thread>> thread_pool;
+
+				ConnectionManager<NodeRequest, NodeResponse> connection_manager;
 		};
 
 	} /* namespace sercli */

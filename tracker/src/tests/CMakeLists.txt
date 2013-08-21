@@ -1,7 +1,7 @@
-find_package(Boost REQUIRED COMPONENTS unit_test_framework)
-find_package(Boost 1.50 COMPONENTS system REQUIRED)
-find_package(Boost 1.50 COMPONENTS thread)
-find_package(Boost 1.50 COMPONENTS date_time)
+find_package(Boost COMPONENTS system REQUIRED)
+find_package(Boost COMPONENTS thread)
+find_package(Boost COMPONENTS date_time)
+find_package(Boost COMPONENTS unit_test_framework)
 
 ADD_DEFINITIONS(-DBOOST_TEST_DYN_LINK)
 

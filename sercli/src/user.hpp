@@ -6,25 +6,25 @@
 namespace sp2p {
 	namespace sercli {
 
-        /**
+		/**
 		 * Class representing user account on some node.
 		 * It stores username and other necessary data
 		 */
-		class User {
-			public:
-				std::string username, email;
+		struct User {
+
+			std::string username, email;
+			// TODO public_key
 		};
 
 		/**
 		 * This class stores password for user
 		 */
-		class MyUser : public User {
-			public:
-				MyUser(std::string username, std::string password, std::string email);
+		struct MyUser : public User {
 
-			private:
-				std::string password;
+			MyUser(std::string username, std::string password, std::string email, bool registered=false);
 
+			std::string password;
+			bool is_registered;
 		};
 
 	} /* namespace sercli */

@@ -1,8 +1,8 @@
 add_subdirectory(tests)
 
-find_package(Boost 1.50 COMPONENTS system REQUIRED)
-find_package(Boost 1.50 COMPONENTS thread)
-find_package(Boost 1.50 COMPONENTS date_time)
+find_package(Boost COMPONENTS system REQUIRED)
+find_package(Boost COMPONENTS thread)
+find_package(Boost COMPONENTS date_time)
 find_package(Threads)
 find_package(Botan REQUIRED)
 
@@ -15,7 +15,16 @@ add_executable(sercli main.cpp)
 add_library(sercliLib STATIC
 	user.cpp
 	node.cpp
+	connection.cpp
+	connection_manager.cpp
 	sp2p_protocol.pb.cc
+	nodemessage.cpp
+	parser.cpp
+	handler.cpp
+	globals.cpp
+	manager.cpp
+	nodeconnection.cpp
+	message_factory.cpp
 )
 
 add_definitions(-BOOST_ASIO_ENABLE_HANDLER_TRACKING)

@@ -50,6 +50,7 @@ class ClientMessage_UserInfo;
 class ClientMessage_UpdateServer;
 class ClientMessage_StopServer;
 class ClientMessage_SignKey;
+class ClientMessage_ChangePassword;
 class NodeMessage;
 class NodeMessage_Register;
 class NodeMessage_Login;
@@ -134,11 +135,12 @@ enum ClientMessage_RequestType {
   ClientMessage_RequestType_USER_INFO = 11,
   ClientMessage_RequestType_UPDATE_SERVER = 12,
   ClientMessage_RequestType_STOP_SERVER = 13,
-  ClientMessage_RequestType_SIGN_KEY = 14
+  ClientMessage_RequestType_SIGN_KEY = 14,
+  ClientMessage_RequestType_CHANGE_PASSWORD = 15
 };
 bool ClientMessage_RequestType_IsValid(int value);
 const ClientMessage_RequestType ClientMessage_RequestType_RequestType_MIN = ClientMessage_RequestType_REGISTER;
-const ClientMessage_RequestType ClientMessage_RequestType_RequestType_MAX = ClientMessage_RequestType_SIGN_KEY;
+const ClientMessage_RequestType ClientMessage_RequestType_RequestType_MAX = ClientMessage_RequestType_CHANGE_PASSWORD;
 const int ClientMessage_RequestType_RequestType_ARRAYSIZE = ClientMessage_RequestType_RequestType_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* ClientMessage_RequestType_descriptor();
@@ -1866,6 +1868,123 @@ class ClientMessage_SignKey : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
+class ClientMessage_ChangePassword : public ::google::protobuf::Message {
+ public:
+  ClientMessage_ChangePassword();
+  virtual ~ClientMessage_ChangePassword();
+
+  ClientMessage_ChangePassword(const ClientMessage_ChangePassword& from);
+
+  inline ClientMessage_ChangePassword& operator=(const ClientMessage_ChangePassword& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const ClientMessage_ChangePassword& default_instance();
+
+  void Swap(ClientMessage_ChangePassword* other);
+
+  // implements Message ----------------------------------------------
+
+  ClientMessage_ChangePassword* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const ClientMessage_ChangePassword& from);
+  void MergeFrom(const ClientMessage_ChangePassword& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required string cookie = 1;
+  inline bool has_cookie() const;
+  inline void clear_cookie();
+  static const int kCookieFieldNumber = 1;
+  inline const ::std::string& cookie() const;
+  inline void set_cookie(const ::std::string& value);
+  inline void set_cookie(const char* value);
+  inline void set_cookie(const char* value, size_t size);
+  inline ::std::string* mutable_cookie();
+  inline ::std::string* release_cookie();
+  inline void set_allocated_cookie(::std::string* cookie);
+
+  // required string old_password = 2;
+  inline bool has_old_password() const;
+  inline void clear_old_password();
+  static const int kOldPasswordFieldNumber = 2;
+  inline const ::std::string& old_password() const;
+  inline void set_old_password(const ::std::string& value);
+  inline void set_old_password(const char* value);
+  inline void set_old_password(const char* value, size_t size);
+  inline ::std::string* mutable_old_password();
+  inline ::std::string* release_old_password();
+  inline void set_allocated_old_password(::std::string* old_password);
+
+  // optional string new_password = 3;
+  inline bool has_new_password() const;
+  inline void clear_new_password();
+  static const int kNewPasswordFieldNumber = 3;
+  inline const ::std::string& new_password() const;
+  inline void set_new_password(const ::std::string& value);
+  inline void set_new_password(const char* value);
+  inline void set_new_password(const char* value, size_t size);
+  inline ::std::string* mutable_new_password();
+  inline ::std::string* release_new_password();
+  inline void set_allocated_new_password(::std::string* new_password);
+
+  // @@protoc_insertion_point(class_scope:protocol.ClientMessage.ChangePassword)
+ private:
+  inline void set_has_cookie();
+  inline void clear_has_cookie();
+  inline void set_has_old_password();
+  inline void clear_has_old_password();
+  inline void set_has_new_password();
+  inline void clear_has_new_password();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::std::string* cookie_;
+  ::std::string* old_password_;
+  ::std::string* new_password_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
+
+  friend void  protobuf_AddDesc_sp2p_5fprotocol_2eproto();
+  friend void protobuf_AssignDesc_sp2p_5fprotocol_2eproto();
+  friend void protobuf_ShutdownFile_sp2p_5fprotocol_2eproto();
+
+  void InitAsDefaultInstance();
+  static ClientMessage_ChangePassword* default_instance_;
+};
+// -------------------------------------------------------------------
+
 class ClientMessage : public ::google::protobuf::Message {
  public:
   ClientMessage();
@@ -1933,6 +2052,7 @@ class ClientMessage : public ::google::protobuf::Message {
   typedef ClientMessage_UpdateServer UpdateServer;
   typedef ClientMessage_StopServer StopServer;
   typedef ClientMessage_SignKey SignKey;
+  typedef ClientMessage_ChangePassword ChangePassword;
 
   typedef ClientMessage_RequestType RequestType;
   static const RequestType REGISTER = ClientMessage_RequestType_REGISTER;
@@ -1950,6 +2070,7 @@ class ClientMessage : public ::google::protobuf::Message {
   static const RequestType UPDATE_SERVER = ClientMessage_RequestType_UPDATE_SERVER;
   static const RequestType STOP_SERVER = ClientMessage_RequestType_STOP_SERVER;
   static const RequestType SIGN_KEY = ClientMessage_RequestType_SIGN_KEY;
+  static const RequestType CHANGE_PASSWORD = ClientMessage_RequestType_CHANGE_PASSWORD;
   static inline bool RequestType_IsValid(int value) {
     return ClientMessage_RequestType_IsValid(value);
   }
@@ -2115,6 +2236,15 @@ class ClientMessage : public ::google::protobuf::Message {
   inline ::protocol::ClientMessage_SignKey* release_sign_key_message();
   inline void set_allocated_sign_key_message(::protocol::ClientMessage_SignKey* sign_key_message);
 
+  // optional .protocol.ClientMessage.ChangePassword change_password_message = 17;
+  inline bool has_change_password_message() const;
+  inline void clear_change_password_message();
+  static const int kChangePasswordMessageFieldNumber = 17;
+  inline const ::protocol::ClientMessage_ChangePassword& change_password_message() const;
+  inline ::protocol::ClientMessage_ChangePassword* mutable_change_password_message();
+  inline ::protocol::ClientMessage_ChangePassword* release_change_password_message();
+  inline void set_allocated_change_password_message(::protocol::ClientMessage_ChangePassword* change_password_message);
+
   // @@protoc_insertion_point(class_scope:protocol.ClientMessage)
  private:
   inline void set_has_request();
@@ -2149,6 +2279,8 @@ class ClientMessage : public ::google::protobuf::Message {
   inline void clear_has_stop_server_message();
   inline void set_has_sign_key_message();
   inline void clear_has_sign_key_message();
+  inline void set_has_change_password_message();
+  inline void clear_has_change_password_message();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -2167,10 +2299,11 @@ class ClientMessage : public ::google::protobuf::Message {
   ::protocol::ClientMessage_UpdateServer* update_server_message_;
   ::protocol::ClientMessage_StopServer* stop_server_message_;
   ::protocol::ClientMessage_SignKey* sign_key_message_;
+  ::protocol::ClientMessage_ChangePassword* change_password_message_;
   int request_;
 
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(16 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(17 + 31) / 32];
 
   friend void  protobuf_AddDesc_sp2p_5fprotocol_2eproto();
   friend void protobuf_AssignDesc_sp2p_5fprotocol_2eproto();
@@ -2877,16 +3010,16 @@ class NodeMessage_ListServers : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // repeated .protocol.NodeMessage.ListServers list_servers = 1;
+  // repeated .protocol.NodeMessage.ListServers.Server list_servers = 1;
   inline int list_servers_size() const;
   inline void clear_list_servers();
   static const int kListServersFieldNumber = 1;
-  inline const ::protocol::NodeMessage_ListServers& list_servers(int index) const;
-  inline ::protocol::NodeMessage_ListServers* mutable_list_servers(int index);
-  inline ::protocol::NodeMessage_ListServers* add_list_servers();
-  inline const ::google::protobuf::RepeatedPtrField< ::protocol::NodeMessage_ListServers >&
+  inline const ::protocol::NodeMessage_ListServers_Server& list_servers(int index) const;
+  inline ::protocol::NodeMessage_ListServers_Server* mutable_list_servers(int index);
+  inline ::protocol::NodeMessage_ListServers_Server* add_list_servers();
+  inline const ::google::protobuf::RepeatedPtrField< ::protocol::NodeMessage_ListServers_Server >&
       list_servers() const;
-  inline ::google::protobuf::RepeatedPtrField< ::protocol::NodeMessage_ListServers >*
+  inline ::google::protobuf::RepeatedPtrField< ::protocol::NodeMessage_ListServers_Server >*
       mutable_list_servers();
 
   // @@protoc_insertion_point(class_scope:protocol.NodeMessage.ListServers)
@@ -2894,7 +3027,7 @@ class NodeMessage_ListServers : public ::google::protobuf::Message {
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
-  ::google::protobuf::RepeatedPtrField< ::protocol::NodeMessage_ListServers > list_servers_;
+  ::google::protobuf::RepeatedPtrField< ::protocol::NodeMessage_ListServers_Server > list_servers_;
 
   mutable int _cached_size_;
   ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
@@ -5846,6 +5979,220 @@ inline void ClientMessage_SignKey::set_allocated_network_name(::std::string* net
 
 // -------------------------------------------------------------------
 
+// ClientMessage_ChangePassword
+
+// required string cookie = 1;
+inline bool ClientMessage_ChangePassword::has_cookie() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void ClientMessage_ChangePassword::set_has_cookie() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void ClientMessage_ChangePassword::clear_has_cookie() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void ClientMessage_ChangePassword::clear_cookie() {
+  if (cookie_ != &::google::protobuf::internal::kEmptyString) {
+    cookie_->clear();
+  }
+  clear_has_cookie();
+}
+inline const ::std::string& ClientMessage_ChangePassword::cookie() const {
+  return *cookie_;
+}
+inline void ClientMessage_ChangePassword::set_cookie(const ::std::string& value) {
+  set_has_cookie();
+  if (cookie_ == &::google::protobuf::internal::kEmptyString) {
+    cookie_ = new ::std::string;
+  }
+  cookie_->assign(value);
+}
+inline void ClientMessage_ChangePassword::set_cookie(const char* value) {
+  set_has_cookie();
+  if (cookie_ == &::google::protobuf::internal::kEmptyString) {
+    cookie_ = new ::std::string;
+  }
+  cookie_->assign(value);
+}
+inline void ClientMessage_ChangePassword::set_cookie(const char* value, size_t size) {
+  set_has_cookie();
+  if (cookie_ == &::google::protobuf::internal::kEmptyString) {
+    cookie_ = new ::std::string;
+  }
+  cookie_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* ClientMessage_ChangePassword::mutable_cookie() {
+  set_has_cookie();
+  if (cookie_ == &::google::protobuf::internal::kEmptyString) {
+    cookie_ = new ::std::string;
+  }
+  return cookie_;
+}
+inline ::std::string* ClientMessage_ChangePassword::release_cookie() {
+  clear_has_cookie();
+  if (cookie_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = cookie_;
+    cookie_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+inline void ClientMessage_ChangePassword::set_allocated_cookie(::std::string* cookie) {
+  if (cookie_ != &::google::protobuf::internal::kEmptyString) {
+    delete cookie_;
+  }
+  if (cookie) {
+    set_has_cookie();
+    cookie_ = cookie;
+  } else {
+    clear_has_cookie();
+    cookie_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  }
+}
+
+// required string old_password = 2;
+inline bool ClientMessage_ChangePassword::has_old_password() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void ClientMessage_ChangePassword::set_has_old_password() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void ClientMessage_ChangePassword::clear_has_old_password() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void ClientMessage_ChangePassword::clear_old_password() {
+  if (old_password_ != &::google::protobuf::internal::kEmptyString) {
+    old_password_->clear();
+  }
+  clear_has_old_password();
+}
+inline const ::std::string& ClientMessage_ChangePassword::old_password() const {
+  return *old_password_;
+}
+inline void ClientMessage_ChangePassword::set_old_password(const ::std::string& value) {
+  set_has_old_password();
+  if (old_password_ == &::google::protobuf::internal::kEmptyString) {
+    old_password_ = new ::std::string;
+  }
+  old_password_->assign(value);
+}
+inline void ClientMessage_ChangePassword::set_old_password(const char* value) {
+  set_has_old_password();
+  if (old_password_ == &::google::protobuf::internal::kEmptyString) {
+    old_password_ = new ::std::string;
+  }
+  old_password_->assign(value);
+}
+inline void ClientMessage_ChangePassword::set_old_password(const char* value, size_t size) {
+  set_has_old_password();
+  if (old_password_ == &::google::protobuf::internal::kEmptyString) {
+    old_password_ = new ::std::string;
+  }
+  old_password_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* ClientMessage_ChangePassword::mutable_old_password() {
+  set_has_old_password();
+  if (old_password_ == &::google::protobuf::internal::kEmptyString) {
+    old_password_ = new ::std::string;
+  }
+  return old_password_;
+}
+inline ::std::string* ClientMessage_ChangePassword::release_old_password() {
+  clear_has_old_password();
+  if (old_password_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = old_password_;
+    old_password_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+inline void ClientMessage_ChangePassword::set_allocated_old_password(::std::string* old_password) {
+  if (old_password_ != &::google::protobuf::internal::kEmptyString) {
+    delete old_password_;
+  }
+  if (old_password) {
+    set_has_old_password();
+    old_password_ = old_password;
+  } else {
+    clear_has_old_password();
+    old_password_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  }
+}
+
+// optional string new_password = 3;
+inline bool ClientMessage_ChangePassword::has_new_password() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void ClientMessage_ChangePassword::set_has_new_password() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void ClientMessage_ChangePassword::clear_has_new_password() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void ClientMessage_ChangePassword::clear_new_password() {
+  if (new_password_ != &::google::protobuf::internal::kEmptyString) {
+    new_password_->clear();
+  }
+  clear_has_new_password();
+}
+inline const ::std::string& ClientMessage_ChangePassword::new_password() const {
+  return *new_password_;
+}
+inline void ClientMessage_ChangePassword::set_new_password(const ::std::string& value) {
+  set_has_new_password();
+  if (new_password_ == &::google::protobuf::internal::kEmptyString) {
+    new_password_ = new ::std::string;
+  }
+  new_password_->assign(value);
+}
+inline void ClientMessage_ChangePassword::set_new_password(const char* value) {
+  set_has_new_password();
+  if (new_password_ == &::google::protobuf::internal::kEmptyString) {
+    new_password_ = new ::std::string;
+  }
+  new_password_->assign(value);
+}
+inline void ClientMessage_ChangePassword::set_new_password(const char* value, size_t size) {
+  set_has_new_password();
+  if (new_password_ == &::google::protobuf::internal::kEmptyString) {
+    new_password_ = new ::std::string;
+  }
+  new_password_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* ClientMessage_ChangePassword::mutable_new_password() {
+  set_has_new_password();
+  if (new_password_ == &::google::protobuf::internal::kEmptyString) {
+    new_password_ = new ::std::string;
+  }
+  return new_password_;
+}
+inline ::std::string* ClientMessage_ChangePassword::release_new_password() {
+  clear_has_new_password();
+  if (new_password_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = new_password_;
+    new_password_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+inline void ClientMessage_ChangePassword::set_allocated_new_password(::std::string* new_password) {
+  if (new_password_ != &::google::protobuf::internal::kEmptyString) {
+    delete new_password_;
+  }
+  if (new_password) {
+    set_has_new_password();
+    new_password_ = new_password;
+  } else {
+    clear_has_new_password();
+    new_password_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  }
+}
+
+// -------------------------------------------------------------------
+
 // ClientMessage
 
 // required .protocol.ClientMessage.RequestType request = 1;
@@ -6438,6 +6785,44 @@ inline void ClientMessage::set_allocated_sign_key_message(::protocol::ClientMess
     set_has_sign_key_message();
   } else {
     clear_has_sign_key_message();
+  }
+}
+
+// optional .protocol.ClientMessage.ChangePassword change_password_message = 17;
+inline bool ClientMessage::has_change_password_message() const {
+  return (_has_bits_[0] & 0x00010000u) != 0;
+}
+inline void ClientMessage::set_has_change_password_message() {
+  _has_bits_[0] |= 0x00010000u;
+}
+inline void ClientMessage::clear_has_change_password_message() {
+  _has_bits_[0] &= ~0x00010000u;
+}
+inline void ClientMessage::clear_change_password_message() {
+  if (change_password_message_ != NULL) change_password_message_->::protocol::ClientMessage_ChangePassword::Clear();
+  clear_has_change_password_message();
+}
+inline const ::protocol::ClientMessage_ChangePassword& ClientMessage::change_password_message() const {
+  return change_password_message_ != NULL ? *change_password_message_ : *default_instance_->change_password_message_;
+}
+inline ::protocol::ClientMessage_ChangePassword* ClientMessage::mutable_change_password_message() {
+  set_has_change_password_message();
+  if (change_password_message_ == NULL) change_password_message_ = new ::protocol::ClientMessage_ChangePassword;
+  return change_password_message_;
+}
+inline ::protocol::ClientMessage_ChangePassword* ClientMessage::release_change_password_message() {
+  clear_has_change_password_message();
+  ::protocol::ClientMessage_ChangePassword* temp = change_password_message_;
+  change_password_message_ = NULL;
+  return temp;
+}
+inline void ClientMessage::set_allocated_change_password_message(::protocol::ClientMessage_ChangePassword* change_password_message) {
+  delete change_password_message_;
+  change_password_message_ = change_password_message;
+  if (change_password_message) {
+    set_has_change_password_message();
+  } else {
+    clear_has_change_password_message();
   }
 }
 
@@ -7287,27 +7672,27 @@ inline void NodeMessage_ListServers_Server::set_port_number(::google::protobuf::
 
 // NodeMessage_ListServers
 
-// repeated .protocol.NodeMessage.ListServers list_servers = 1;
+// repeated .protocol.NodeMessage.ListServers.Server list_servers = 1;
 inline int NodeMessage_ListServers::list_servers_size() const {
   return list_servers_.size();
 }
 inline void NodeMessage_ListServers::clear_list_servers() {
   list_servers_.Clear();
 }
-inline const ::protocol::NodeMessage_ListServers& NodeMessage_ListServers::list_servers(int index) const {
+inline const ::protocol::NodeMessage_ListServers_Server& NodeMessage_ListServers::list_servers(int index) const {
   return list_servers_.Get(index);
 }
-inline ::protocol::NodeMessage_ListServers* NodeMessage_ListServers::mutable_list_servers(int index) {
+inline ::protocol::NodeMessage_ListServers_Server* NodeMessage_ListServers::mutable_list_servers(int index) {
   return list_servers_.Mutable(index);
 }
-inline ::protocol::NodeMessage_ListServers* NodeMessage_ListServers::add_list_servers() {
+inline ::protocol::NodeMessage_ListServers_Server* NodeMessage_ListServers::add_list_servers() {
   return list_servers_.Add();
 }
-inline const ::google::protobuf::RepeatedPtrField< ::protocol::NodeMessage_ListServers >&
+inline const ::google::protobuf::RepeatedPtrField< ::protocol::NodeMessage_ListServers_Server >&
 NodeMessage_ListServers::list_servers() const {
   return list_servers_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::protocol::NodeMessage_ListServers >*
+inline ::google::protobuf::RepeatedPtrField< ::protocol::NodeMessage_ListServers_Server >*
 NodeMessage_ListServers::mutable_list_servers() {
   return &list_servers_;
 }

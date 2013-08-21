@@ -10,29 +10,51 @@
 #include <atomic>
 #include <exception>
 #include <mutex>
+
 #include "user.hpp"
 #include "nodeconnection.hpp"
-#include "node_description.hpp"
-#include "network_description.hpp"
+#include "sp2p_types.hpp"
+
+using namespace sp2p::sercli::types;
 
 namespace sp2p {
 	namespace sercli {
 
+		// Error from node and nodeclass
+
 		class Node : boost::noncopyable { 
 			
+			typedef weak_connection_ptr<NodeRequest, NodeResponse> weak_node_con_ptr ;
+
 			public:
 				/**
 				 * Constructor...
 				 */
-				Node(NodeDescription node_desc, MyUser user, bool registered);
+				Node(NodeDescription node_desc, ConnectionManager<NodeRequest, NodeResponse>&);
 
-				void logIn();
-				void logOut();
+				Node(NodeDescription node_desc, ConnectionManager<NodeRequest, NodeResponse>&, 
+						MyUser user);
+
+				NodeError logIn();
+				NodeError logOut();
 
 				/**
 				 * Changes password if user is registered and new username==old username
 				 */
-				void setUser(MyUser user);
+				bool setUser(MyUser user);
+
+				NodeError registerUser();
+
+				NodeError changePassword(const std::string& new_password);
+
+				std::tuple<NodeError, User> getUserInfo(const NetworkDescription& network_desc, const std::string& username);
+
+				std::tuple<NodeError, std::vector<NetworkDescription>> getNetworksList();
+
+				std::tuple<NodeError, std::vector<NetworkDescription>> getMyNetworks();
+
+				std::tuple<NodeError, std::vector<ServerDescription>> getServersList(const NetworkDescription& network_desc);
+
 				/*
 				 * Returns true if client is currently logged at node
 				 */
@@ -42,37 +64,40 @@ namespace sp2p {
 				 */
 				bool isRegistered() const;
 
-				void registerNetwork(NetworkDescription network_desc);
-				void unregisterNetwork(NetworkDescription network_desc);
+				std::tuple<NodeError> registerNetwork(NetworkDescription network_desc);
+				std::tuple<NodeError> unregisterNetwork(NetworkDescription network_desc);
 
 				NodeDescription getDescription();
 				void setNewDescription(NodeDescription node_desc);
 
 			private:
 
+				NodeError beforeMessage();
+			private:
+
 				NodeDescription node_desc;
 				MyUser my_user;
-				bool is_registered;
-                node_con_ptr node_connection;
+                NodeConnection node_connection;
 				std::vector<Botan::X509_CA> ca_list;
 				std::vector<Botan::X509_Certificate> user_certificates;
-
-				std::mutex node_mutex;
 		};
 
 		typedef std::shared_ptr<Node> node_ptr;
 
-
+		// Error from Node class
 		class NodeException : public std::exception {
-			virtual const char* what() const throw() {
-				return "NodeException happend";
-			}
-		};
 
-        class NodeIsActiveException : public NodeException {
-			virtual const char* what() const throw() {
-				return "Node is active at the moment";
-			}
+			public:
+				NodeException(std::string message = "Node exception happened") 
+					: message(std::move(message)) { }
+
+				virtual const char* what() const throw() {
+					return message.data();
+				}
+
+			private:
+
+				std::string message;
 		};
 
 	} /* namespace sercli */
