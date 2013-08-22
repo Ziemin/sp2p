@@ -37,6 +37,10 @@ namespace sp2p {
 
 			struct ServerDescription {
 
+				std::string related_user;
+				std::string related_network;
+				boost::asio::ip::address ip_addres;
+
 			};
 
 			struct NetworkDescription {

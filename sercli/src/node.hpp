@@ -64,10 +64,16 @@ namespace sp2p {
 				 */
 				bool isRegistered() const;
 
-				std::tuple<NodeError> registerNetwork(NetworkDescription network_desc);
-				std::tuple<NodeError> unregisterNetwork(NetworkDescription network_desc);
+				NodeError registerNetwork(const NetworkDescription& network_desc);
+				NodeError deleteNetwork(const NetworkDescription& network_desc);
 
-				NodeDescription getDescription();
+				std::tuple<NodeError, std::int32_t> updateServer(const NetworkDescription& network_desc, const std::int32_t port); 
+				NodeError stopServer(const NetworkDescription& network_desc); 
+
+				std::tuple<NodeError, Botan::X509_Certificate*> signKey(const Botan::Public_Key& public_key, 
+						const NetworkDescription* network_desc);
+
+				const NodeDescription& getDescription();
 				void setNewDescription(NodeDescription node_desc);
 
 			private:
