@@ -92,3 +92,12 @@ shared_ptr<NodeMessage> listNetworksResponse() {
 shared_ptr<NodeMessage> listServersResponse() {
 
 }
+
+
+std::vector<boost::int8_t> sp2p::NodeMessageFactory::packNodeMessage(NodeMessage_ptr message)
+{
+
+}
+
+
+

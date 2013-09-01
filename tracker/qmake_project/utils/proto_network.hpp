@@ -1,14 +1,16 @@
 #ifndef NETWORK_HPP
 #define NETWORK_HPP
 
+#include <string>
+
 namespace sp2p{
 namespace tracker{
 namespace utils{
 
-class Network
+class ProtoNetwork
 {
 public:
-    Network();
+    ProtoNetwork();
 
     std::string getName() const;
     void setName(const std::string &value);

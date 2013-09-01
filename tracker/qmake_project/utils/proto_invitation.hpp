@@ -7,10 +7,10 @@ namespace sp2p{
 namespace tracker{
 namespace utils{
 
-class Invitation
+class ProtoInvitation
 {
 public:
-    Invitation();
+    ProtoInvitation();
 
 
     std::string getUserLogin() const;

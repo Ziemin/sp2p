@@ -8,7 +8,7 @@
 class AbstractDBConnector {
 public:
 
-    //    virtual ~AbstractDBConnector() = 0;
+    virtual ~AbstractDBConnector() = default;
 
     virtual DB_Response createUser(std::string& login, std::string& password)=0;
     virtual DB_Response removeUser(std::string& login)=0;

@@ -4,14 +4,26 @@
 #include <boost/logic/tribool.hpp>
 #include <boost/tuple/tuple.hpp>
 
+#include "types.hpp"
+#include "protocol_factory/abstractrequest.hpp"
+#include "protocol_factory/abstractrequestparser.hpp"
+
 namespace sp2p {
 namespace tracker {
 
-struct request;
 
 /// Parser for incoming requests.
-class request_parser
+class RequestParser : public protocol_factory::AbstractRequestParser
 {
+public:
+    RequestParser();
+    RequestParser(int len);
+    boost::tribool parse(protocol_factory::AbstractRequest *clientMessage, const char data[], int length);
+    int getLen() const;
+    void setLen(int value);
+
+private:
+    int len;
 
 };
 

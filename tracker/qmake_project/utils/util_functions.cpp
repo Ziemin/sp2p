@@ -1,8 +1,12 @@
-#include "utils.h"
+#include "utils/util_functions.h"
 
 #include <algorithm>
 
-std::string db_utils::getRandomString(int len) {
+namespace sp2p{
+namespace tracker{
+namespace utils{
+
+std::string getRandomString(int len) {
   auto randchar = []() -> char
   {
       const char charset[] =
@@ -16,3 +20,7 @@ std::string db_utils::getRandomString(int len) {
   std::generate_n( str.begin(), len, randchar );
   return str;
 }
+
+} // namespace utils
+} // namespace tracker
+} // namespace sp2p

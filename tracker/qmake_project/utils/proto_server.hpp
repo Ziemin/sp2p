@@ -1,14 +1,16 @@
 #ifndef SERVER_HPP
 #define SERVER_HPP
 
+#include <string>
+
 namespace sp2p{
 namespace tracker{
 namespace utils{
 
-class Server
+class ProtoServer
 {
 public:
-    Server();
+    ProtoServer();
 
     std::string getUserLogin() const;
     void setUserLogin(const std::string &value);

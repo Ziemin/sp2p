@@ -2,30 +2,29 @@
 #define REQUESTHANDLER_H
 
 #include <string>
+#include <memory>
 #include <boost/noncopyable.hpp>
+#include "types.hpp"
+#include "protocol_factory/abstractrequesthandler.hpp"
+#include "protocol_factory/abstractrequest.hpp"
+#include "protocol_factory/abstractresponse.hpp"
 
 namespace sp2p {
 namespace tracker {
 
-
 /// The common handler for all incoming requests.
 class RequestHandler
-  : private boost::noncopyable
+        : public protocol_factory::AbstractRequestHandler
 {
 public:
-  /// Construct with a directory containing files to be served.
-  explicit RequestHandler(const std::string& doc_root);
+    /// Construct with a directory containing files to be served.
+    explicit RequestHandler();
 
-  /// Handle a request and produce a reply.
-  void handle_request(const request& req, reply& rep);
+    /// Handle a request and produce a reply.
+    void handleRequest(const protocol_factory::AbstractRequest *req, protocol_factory::AbstractResponse *rep) const;
 
 private:
-  /// The directory containing the files to be served.
-  std::string doc_root_;
 
-  /// Perform URL-decoding on a string. Returns false if the encoding was
-  /// invalid.
-  static bool url_decode(const std::string& in, std::string& out);
 };
 
 } // namespace tracker
