@@ -15,8 +15,9 @@ namespace sp2p {
 			extern std::uint64_t node_timeout_seconds;
 			extern std::uint32_t max_buffer_size;
 
-			void init(int thread_number);
-			void init(int thread_number, boost::asio::io_service* io_s);
+			void init(int thread_number, boost::asio::io_service* io_s=nullptr);
+
+			void setLoggind();
 
 			void stop();
 

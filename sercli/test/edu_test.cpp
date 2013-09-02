@@ -9,7 +9,6 @@
 #include <fstream>
 #include <memory>
 
-
 BOOST_AUTO_TEST_SUITE(sercli_edu_tests)
 
 BOOST_AUTO_TEST_CASE(private_key) {
@@ -83,6 +82,8 @@ BOOST_AUTO_TEST_CASE(buffers) {
 	std::istream is(&sb);
 	int number;
 	is >> number;
+    BOOST_TEST_CHECKPOINT("sth");
+    BOOST_TEST_MESSAGE("other sth");
 	std::cout << "buffer size: " << sb.size() << std::endl;
 	std::cout << "number: " << number << std::endl;
 	os << "alal ma kota";

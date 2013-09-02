@@ -18,95 +18,102 @@
 using namespace sp2p::sercli::types;
 
 namespace sp2p {
-	namespace sercli {
+    namespace sercli {
 
-		// Error from node and nodeclass
+        // Error from node and nodeclass
 
-		class Node : boost::noncopyable { 
-			
-			typedef weak_connection_ptr<NodeRequest, NodeResponse> weak_node_con_ptr ;
+        class Node : boost::noncopyable { 
+            
+            typedef weak_connection_ptr<NodeRequest, NodeResponse> weak_node_con_ptr ;
 
-			public:
-				/**
-				 * Constructor...
-				 */
-				Node(NodeDescription node_desc, ConnectionManager<NodeRequest, NodeResponse>&);
+            public:
+                /**
+                 * Constructor...
+                 */
+                Node(NodeDescription node_desc, ConnectionManager<NodeRequest, NodeResponse>&);
 
-				Node(NodeDescription node_desc, ConnectionManager<NodeRequest, NodeResponse>&, 
-						MyUser user);
+                Node(NodeDescription node_desc, ConnectionManager<NodeRequest, NodeResponse>&, 
+                        MyUser user);
 
-				NodeError logIn();
-				NodeError logOut();
+                NodeError logIn();
+                NodeError logOut();
 
-				/**
-				 * Changes password if user is registered and new username==old username
-				 */
-				bool setUser(MyUser user);
+                /**
+                 * Changes password if user is registered and new username==old username
+                 */
+                bool setUser(MyUser user);
 
-				NodeError registerUser();
+                NodeError registerUser();
 
-				NodeError changePassword(const std::string& new_password);
+                NodeError changePassword(const std::string& new_password);
 
-				std::tuple<NodeError, User> getUserInfo(const NetworkDescription& network_desc, const std::string& username);
+                std::tuple<NodeError, User> getUserInfo(const NetworkDescription& network_desc, const std::string& username);
 
-				std::tuple<NodeError, std::vector<NetworkDescription>> getNetworksList();
+                std::tuple<NodeError, std::vector<NetworkDescription>> getNetworksList();
 
-				std::tuple<NodeError, std::vector<NetworkDescription>> getMyNetworks();
+                std::tuple<NodeError, std::vector<NetworkDescription>> getMyNetworks();
 
-				std::tuple<NodeError, std::vector<ServerDescription>> getServersList(const NetworkDescription& network_desc);
+                std::tuple<NodeError, std::vector<ServerDescription>> getServersList(const NetworkDescription& network_desc);
 
-				/*
-				 * Returns true if client is currently logged at node
-				 */
-				bool isActive() const;
-				/** 
-				 * Returns true if client is registered at this node
-				 */
-				bool isRegistered() const;
+                /*
+                 * Returns true if client is currently logged at node
+                 */
+                bool isActive() const;
+                /** 
+                 * Returns true if client is registered at this node
+                 */
+                bool isRegistered() const;
 
-				NodeError registerNetwork(const NetworkDescription& network_desc);
-				NodeError deleteNetwork(const NetworkDescription& network_desc);
+                NodeError registerNetwork(const NetworkDescription& network_desc);
+                NodeError deleteNetwork(const NetworkDescription& network_desc);
 
-				std::tuple<NodeError, std::int32_t> updateServer(const NetworkDescription& network_desc, const std::int32_t port); 
-				NodeError stopServer(const NetworkDescription& network_desc); 
+                std::tuple<NodeError, std::int32_t> updateServer(const NetworkDescription& network_desc, const std::int32_t port); 
 
-				std::tuple<NodeError, Botan::X509_Certificate*> signKey(const Botan::Public_Key& public_key, 
-						const NetworkDescription* network_desc);
+                // async function - handler signature is updateHandler(NodeError, std::int32_t)
+                template<typename UpdateHandler>
+                    void asyncUpdateServer(const NetworkDescription& network_desc, const std::int32_t port, UpdateHandler updateHandler);
 
-				const NodeDescription& getDescription();
-				void setNewDescription(NodeDescription node_desc);
+                NodeError stopServer(const NetworkDescription& network_desc); 
 
-			private:
+                std::tuple<NodeError, Botan::X509_Certificate*> signKey(const Botan::Public_Key& public_key, 
+                        const NetworkDescription* network_desc);
 
-				NodeError beforeMessage();
-			private:
+                const NodeDescription& getDescription();
+                void setNewDescription(NodeDescription node_desc);
 
-				NodeDescription node_desc;
-				MyUser my_user;
+                void stopConnections();
+
+            private:
+
+                NodeError beforeMessage();
+            private:
+
+                NodeDescription node_desc;
+                MyUser my_user;
                 NodeConnection node_connection;
-				std::vector<Botan::X509_CA> ca_list;
-				std::vector<Botan::X509_Certificate> user_certificates;
-		};
+                std::vector<Botan::X509_CA> ca_list;
+                std::vector<Botan::X509_Certificate> user_certificates;
+        };
 
-		typedef std::shared_ptr<Node> node_ptr;
+        typedef std::shared_ptr<Node> node_ptr;
 
-		// Error from Node class
-		class NodeException : public std::exception {
+        // Error from Node class
+        class NodeException : public std::exception {
 
-			public:
-				NodeException(std::string message = "Node exception happened") 
-					: message(std::move(message)) { }
+            public:
+                NodeException(std::string message = "Node exception happened") 
+                    : message(std::move(message)) { }
 
-				virtual const char* what() const throw() {
-					return message.data();
-				}
+                virtual const char* what() const throw() {
+                    return message.data();
+                }
 
-			private:
+            private:
 
-				std::string message;
-		};
+                std::string message;
+        };
 
-	} /* namespace sercli */
+    } /* namespace sercli */
 } /* namespace sp2p */
 
 #endif /* NODE_H */

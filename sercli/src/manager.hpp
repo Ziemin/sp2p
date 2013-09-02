@@ -38,30 +38,30 @@ namespace sp2p {
 				 * Creates new node and adds it to base. Registers client if necessary.
 				 * Synchronous version
 				 */
-				Node& createNode(types::NodeDescription node_desc);
-				Node& createNode(types::NodeDescription node_desc, MyUser user);
+				node_ptr createNode(const types::NodeDescription& node_desc);
+				node_ptr createNode(const types::NodeDescription& node_desc, MyUser user);
 
 				/**
 				 * Returns desired nodes - self explanatory
 				 */
-				Node& getNode(types::NodeDescription node_desc) const;
-				Node& getNode(std::string node_name) const;
+				node_ptr getNode(const types::NodeDescription& node_desc) const;
+				node_ptr getNode(const std::string& node_name) const;
 				std::vector<node_ptr> getAllNodes() const;
 				
-				void removeNode(types::NodeDescription node_desc);
-				void removeNode(std::string node_name);
+				void removeNode(const types::NodeDescription& node_desc);
+				void removeNode(const std::string& node_name);
 
-				Network& createNetwork(types::NetworkDescription network_desc);
+				network_ptr createNetwork(const types::NetworkDescription& network_desc);
 
 				/**
 				 * Returns desired networks - self explanatory
 				 */
-				Network& getNetwork(types::NetworkDescription network_desc) const;
-				Network& getNetwork(std::string network_name) const;
+				network_ptr getNetwork(const types::NetworkDescription& network_desc) const;
+				network_ptr getNetwork(const std::string& network_name) const;
 				std::vector<network_ptr> getAllNetworks() const;
 
-				void removeNetwork(types::NetworkDescription node_desc);
-				void removeNetwork(std::string network_name);
+				void removeNetwork(const types::NetworkDescription& node_desc);
+				void removeNetwork(const std::string& network_name);
 
 				/**
 				 * Saves manager state 

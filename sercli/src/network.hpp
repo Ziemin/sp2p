@@ -3,9 +3,9 @@
 
 #include <string>
 #include <map>
-#include <tuple>
-#include "server.hpp"
-#include "myserver.hpp"
+#include <memory>
+#include <boost/asio.hpp>
+
 #include "user.hpp"
 #include "data.hpp"
 #include "node.hpp"
@@ -13,65 +13,66 @@
 
 
 namespace sp2p {
-	namespace sercli {
+    namespace sercli {
 
-		class DataManager;
+        class DataManager;
 
-		/*
-		 * Class managing network existing on some nodes. It is assumed, that
-		 * such network is accessible to user on all of the nodes
-		 */
-		class Network : boost::noncopyable {
+        /*
+         * Class managing network existing on some nodes. It is assumed, that
+         * such network is accessible to user on all of the nodes
+         */
+        class Network : boost::noncopyable {
 
-			public:
+            public:
 
-				Network(types::NetworkDescription network_desc);
-				/**
-				 * Associates node with certain network
-				 * @param network_desc data identyfying network created on node
-				 */
-				void associateNode(const Node& node);
+                Network(types::NetworkDescription network_desc);
+                /**
+                 * Associates node with certain network
+                 * @param network_desc data identyfying network created on node
+                 */
+                void associateNode(std::weak_ptr<Node> node_ptr);
 
-				/**
-				 * Removes node from network
-				 * @param network_id data identyfying network created on node
-				 */
-				void detachNode(NodeDescription node_desc);
+                /**
+                 * Removes node from network
+                 * @param network_id data identyfying network created on node
+                 */
+                void detachNode(const types::NodeDescription& node_desc);
 
-				bool isServer() const;
-				bool isClient() const;
-				bool isActive() const;
+                bool isActive();
 
-				types::NetworkDescription getDescription() const;
-				const std::map<NodeDescription, node_ptr>& getAssociatedNodes() const;
+                const types::NetworkDescription& getDescription() const;
+                const std::map<NodeDescription, std::weak_ptr<Node>>& getAssociatedNodes() const;
 
-                my_server_ptr becomeServer();
-				std::vector<Server> getAvailableServers();
+                std::vector<types::ServerDescription> getAvailableServers() const;
 
-			private:
+            private:
 
-				types::NetworkDescription network_desc;
-				std::map<NodeDescription, node_ptr> node_set;
-		};
+                void clearExpiredNodes();
 
-		typedef std::shared_ptr<Network> network_ptr;
+            private:
 
-		class NetworkException : public std::exception {
+                types::NetworkDescription network_desc;
+                std::map<NodeDescription, std::weak_ptr<Node>> node_set;
+        };
 
-			public:
-				NetworkException(std::string message = "Network exception happened") 
-					: message(std::move(message)) { }
+        typedef std::shared_ptr<Network> network_ptr;
 
-				virtual const char* what() const throw() {
-					return message.data();
-				}
+        class NetworkException : public std::exception {
 
-			private:
+            public:
+                NetworkException(std::string message = "Network exception happened") 
+                    : message(std::move(message)) { }
 
-				std::string message;
-		};
+                virtual const char* what() const throw() {
+                    return message.data();
+                }
 
-	} /* namespace sercli */
+            private:
+
+                std::string message;
+        };
+
+    } /* namespace sercli */
 } /* namespace sp2p */
 
 #endif /* NETWORK_H */

@@ -9,3 +9,4 @@ build
 !Find*
 *.jpg
 *kdev4
+sercli/test/resources/*

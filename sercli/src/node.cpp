@@ -79,10 +79,10 @@ namespace sp2p {
                 std::shared_ptr<NodeRequest> loginMessage = 
                     utils::getLoginMessage(my_user.username, my_user.password);
 
-                Connection<NodeRequest, NodeResponse>* con = node_connection.getConnection().get();
+                connection_ptr<NodeRequest, NodeResponse> con = node_connection.getConnection();
                 try {
-                    NodeResponse nodeResponse = con->sendRequest(loginMessage).get();
-                    protocol::NodeMessage& response = nodeResponse.getResponse();
+                    std::shared_ptr<NodeResponse> nodeResponse = con->sendRequest(loginMessage).get();
+                    protocol::NodeMessage& response = nodeResponse->getResponse();
 
                     switch(response.response_type()) {
 
@@ -121,10 +121,10 @@ namespace sp2p {
 
             std::shared_ptr<NodeRequest> logoutMessage = utils::getLogoutMessage(node_connection.getCookie());
 
-            Connection<NodeRequest, NodeResponse>* con = node_connection.getConnection().get();
+            connection_ptr<NodeRequest, NodeResponse> con = node_connection.getConnection();
             try {
-                NodeResponse nodeResponse = con->sendRequest(logoutMessage).get();
-                protocol::NodeMessage response = nodeResponse.getResponse();
+                std::shared_ptr<NodeResponse> nodeResponse = con->sendRequest(logoutMessage).get();
+                protocol::NodeMessage response = nodeResponse->getResponse();
 
                 switch(response.response_type()) {
                     case protocol::NodeMessage::OK:
@@ -155,10 +155,10 @@ namespace sp2p {
 
             std::shared_ptr<NodeRequest> registerUserMessage = utils::getRegisterUserMessage(my_user, ""); // TODO implement
 
-            Connection<NodeRequest, NodeResponse>* con = node_connection.getConnection().get();
+            connection_ptr<NodeRequest, NodeResponse> con = node_connection.getConnection();
             try {
-                NodeResponse nodeResponse = con->sendRequest(registerUserMessage).get();
-                protocol::NodeMessage response = nodeResponse.getResponse();
+                std::shared_ptr<NodeResponse> nodeResponse = con->sendRequest(registerUserMessage).get();
+                protocol::NodeMessage response = nodeResponse->getResponse();
 
                 switch(response.response_type()) {
                     case protocol::NodeMessage::OK:
@@ -188,10 +188,10 @@ namespace sp2p {
             std::shared_ptr<NodeRequest> changePasswordMessage = 
                 utils::getChangePasswordMessage(my_user, new_password, node_connection.getCookie());
 
-            Connection<NodeRequest, NodeResponse>* con = node_connection.getConnection().get();
+            connection_ptr<NodeRequest, NodeResponse> con = node_connection.getConnection();
             try {
-                NodeResponse nodeResponse = con->sendRequest(changePasswordMessage).get();
-                protocol::NodeMessage response = nodeResponse.getResponse();
+                std::shared_ptr<NodeResponse> nodeResponse = con->sendRequest(changePasswordMessage).get();
+                protocol::NodeMessage response = nodeResponse->getResponse();
 
                 switch(response.response_type()) {
                     case protocol::NodeMessage::OK:
@@ -226,10 +226,10 @@ namespace sp2p {
             std::shared_ptr<NodeRequest> userInfoMessage = 
                 utils::getUserInfoMessage(network_desc, username, node_connection.getCookie());
 
-            Connection<NodeRequest, NodeResponse>* con = node_connection.getConnection().get();
+            connection_ptr<NodeRequest, NodeResponse> con = node_connection.getConnection();
             try {
-                NodeResponse nodeResponse = con->sendRequest(userInfoMessage).get();
-                protocol::NodeMessage response = nodeResponse.getResponse();
+                std::shared_ptr<NodeResponse> nodeResponse = con->sendRequest(userInfoMessage).get();
+                protocol::NodeMessage response = nodeResponse->getResponse();
 
                 switch(response.response_type()) {
                     case protocol::NodeMessage::OK:
@@ -263,10 +263,10 @@ namespace sp2p {
             std::shared_ptr<NodeRequest> listNetworksMessage = 
                 utils::getListNetworksMessage(node_connection.getCookie());
 
-            Connection<NodeRequest, NodeResponse>* con = node_connection.getConnection().get();
+            connection_ptr<NodeRequest, NodeResponse> con = node_connection.getConnection();
             try {
-                NodeResponse nodeResponse = con->sendRequest(listNetworksMessage).get();
-                protocol::NodeMessage response = nodeResponse.getResponse();
+                std::shared_ptr<NodeResponse> nodeResponse = con->sendRequest(listNetworksMessage).get();
+                protocol::NodeMessage response = nodeResponse->getResponse();
 
                 switch(response.response_type()) {
                     case protocol::NodeMessage::OK:
@@ -310,10 +310,10 @@ namespace sp2p {
             std::shared_ptr<NodeRequest> listMyNetworksMessage = 
                 utils::getListMyNetworksMessage(node_connection.getCookie());
 
-            Connection<NodeRequest, NodeResponse>* con = node_connection.getConnection().get();
+            connection_ptr<NodeRequest, NodeResponse> con = node_connection.getConnection();
             try {
-                NodeResponse nodeResponse = con->sendRequest(listMyNetworksMessage).get();
-                protocol::NodeMessage response = nodeResponse.getResponse();
+                std::shared_ptr<NodeResponse> nodeResponse = con->sendRequest(listMyNetworksMessage).get();
+                protocol::NodeMessage response = nodeResponse->getResponse();
 
                 switch(response.response_type()) {
                     case protocol::NodeMessage::OK:
@@ -357,10 +357,10 @@ namespace sp2p {
             std::shared_ptr<NodeRequest> listServersMessage = 
                 utils::getListServersMessage(network_desc, node_connection.getCookie());
 
-            Connection<NodeRequest, NodeResponse>* con = node_connection.getConnection().get();
+            connection_ptr<NodeRequest, NodeResponse> con = node_connection.getConnection();
             try {
-                NodeResponse nodeResponse = con->sendRequest(listServersMessage).get();
-                protocol::NodeMessage response = nodeResponse.getResponse();
+                std::shared_ptr<NodeResponse> nodeResponse = con->sendRequest(listServersMessage).get();
+                protocol::NodeMessage response = nodeResponse->getResponse();
 
                 switch(response.response_type()) {
                     case protocol::NodeMessage::OK:
@@ -399,10 +399,10 @@ namespace sp2p {
             std::shared_ptr<NodeRequest> createNetworkMessage = 
                 utils::getCreateNetworkMessage(network_desc, node_connection.getCookie());
 
-            Connection<NodeRequest, NodeResponse>* con = node_connection.getConnection().get();
+            connection_ptr<NodeRequest, NodeResponse> con = node_connection.getConnection();
             try {
-                NodeResponse nodeResponse = con->sendRequest(createNetworkMessage).get();
-                protocol::NodeMessage response = nodeResponse.getResponse();
+                std::shared_ptr<NodeResponse> nodeResponse = con->sendRequest(createNetworkMessage).get();
+                protocol::NodeMessage response = nodeResponse->getResponse();
 
                 switch(response.response_type()) {
                     case protocol::NodeMessage::OK:
@@ -430,10 +430,10 @@ namespace sp2p {
             std::shared_ptr<NodeRequest> unregisterNetworkMessage = 
                 utils::getDeleteNetworkMessage(network_desc, node_connection.getCookie());
 
-            Connection<NodeRequest, NodeResponse>* con = node_connection.getConnection().get();
+            connection_ptr<NodeRequest, NodeResponse> con = node_connection.getConnection();
             try {
-                NodeResponse nodeResponse = con->sendRequest(unregisterNetworkMessage).get();
-                protocol::NodeMessage response = nodeResponse.getResponse();
+                std::shared_ptr<NodeResponse> nodeResponse = con->sendRequest(unregisterNetworkMessage).get();
+                protocol::NodeMessage response = nodeResponse->getResponse();
 
                 switch(response.response_type()) {
                     case protocol::NodeMessage::OK:
@@ -453,6 +453,8 @@ namespace sp2p {
             return error;
         }
 
+        // ------- Update Server ---------------------------------------------------------------------------------------
+
         std::tuple<NodeError, std::int32_t> Node::updateServer(const NetworkDescription& network_desc,
                const std::int32_t port) {
 
@@ -466,10 +468,10 @@ namespace sp2p {
             std::shared_ptr<NodeRequest> updateServerMessage = 
                 utils::getUpdateServerMessage(network_desc, port, node_connection.getCookie());
 
-            Connection<NodeRequest, NodeResponse>* con = node_connection.getConnection().get();
+            connection_ptr<NodeRequest, NodeResponse> con = node_connection.getConnection();
             try {
-                NodeResponse nodeResponse = con->sendRequest(updateServerMessage).get();
-                protocol::NodeMessage response = nodeResponse.getResponse();
+                std::shared_ptr<NodeResponse> nodeResponse = con->sendRequest(updateServerMessage).get();
+                protocol::NodeMessage response = nodeResponse->getResponse();
 
                 switch(response.response_type()) {
                     case protocol::NodeMessage::OK:
@@ -491,6 +493,37 @@ namespace sp2p {
             return resultTuple;
         }
 
+        template<typename UpdateHandler>
+            void Node::asyncUpdateServer(const NetworkDescription& network_desc, const std::int32_t port, UpdateHandler updateHandler) {
+                // TODO implementation change completely to be more asynchronous
+                NodeError error = beforeMessage();
+                if(any(error)) {
+                    updateHandler(nullptr, error);
+                    return;
+                }
+
+                std::shared_ptr<NodeRequest> updateServerMessage = 
+                    utils::getUpdateServerMessage(network_desc, port, node_connection.getCookie());
+
+                connection_ptr<NodeRequest, NodeResponse> con = node_connection.getConnection();
+                con->sendMessage(updateServerMessage, 
+                        [this, &con, &updateHandler](boost::system::error_code ec) 
+                        {
+                            if(!ec) {
+                                con->readMessage([&updateHandler](std::shared_ptr<NodeResponse> response_ptr,
+                                        boost::system::error_code ec)  
+                                {
+                                    updateHandler(response_ptr, ec);
+                                });
+                            } else {
+                                updateHandler(nullptr, ec);
+                            }
+                        });
+            }
+
+        // ------- \ Update Server ---------------------------------------------------------------------------------------
+
+
         NodeError Node::stopServer(const NetworkDescription& network_desc) {
 
             NodeError error = beforeMessage();
@@ -499,10 +532,10 @@ namespace sp2p {
             std::shared_ptr<NodeRequest> stopServerMessage = 
                 utils::getStopServerMessage(network_desc, node_connection.getCookie());
 
-            Connection<NodeRequest, NodeResponse>* con = node_connection.getConnection().get();
+            connection_ptr<NodeRequest, NodeResponse> con = node_connection.getConnection();
             try {
-                NodeResponse nodeResponse = con->sendRequest(stopServerMessage).get();
-                protocol::NodeMessage response = nodeResponse.getResponse();
+                std::shared_ptr<NodeResponse> nodeResponse = con->sendRequest(stopServerMessage).get();
+                protocol::NodeMessage response = nodeResponse->getResponse();
 
                 switch(response.response_type()) {
                     case protocol::NodeMessage::OK:
@@ -535,10 +568,10 @@ namespace sp2p {
             std::shared_ptr<NodeRequest> signKeyMessage = 
                 utils::getSignKeyMessage(public_key, network_desc, node_connection.getCookie());
 
-            Connection<NodeRequest, NodeResponse>* con = node_connection.getConnection().get();
+            connection_ptr<NodeRequest, NodeResponse> con = node_connection.getConnection();
             try {
-                NodeResponse nodeResponse = con->sendRequest(signKeyMessage).get();
-                protocol::NodeMessage response = nodeResponse.getResponse();
+                std::shared_ptr<NodeResponse> nodeResponse = con->sendRequest(signKeyMessage).get();
+                protocol::NodeMessage response = nodeResponse->getResponse();
 
                 switch(response.response_type()) {
                     case protocol::NodeMessage::OK:
@@ -562,6 +595,10 @@ namespace sp2p {
 
             std::get<0>(resultTuple) = error;
             return resultTuple;
+        }
+
+        void Node::stopConnections() {
+            node_connection.disconnect();
         }
 
     } /* namespace sercli */

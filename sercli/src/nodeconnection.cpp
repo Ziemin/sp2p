@@ -37,15 +37,14 @@ namespace sp2p {
 			   if(ec) throw NodeError::NO_CONNECTION;
 
 			   std::shared_ptr<NodeResponseParser> parser(new NodeResponseParser);
+			   std::shared_ptr<Sp2pHandler> handler(global::sp2p_handler);
 			   connection.reset(
 					   new Connection<NodeRequest, NodeResponse>(
 						   *global::io_s,
 						   std::move(socket),
 						   connection_manager,
 						   std::dynamic_pointer_cast<Parser<NodeResponse>>(parser),
-						   global::sp2p_handler,
-						   [](){} // do nothing
-						   ));
+						   std::dynamic_pointer_cast<Handler<NodeRequest, NodeResponse>>(handler)));
 
 			   connection_manager.start(connection);
 
@@ -54,7 +53,7 @@ namespace sp2p {
 	   }
 
 	   template <typename ConnectHandler>                    
-	   	   void NodeConnection::asyncConnect(const NodeDescription& node_desc, ConnectHandler handler) {
+	   	   void NodeConnection::asyncConnect(const NodeDescription& node_desc, ConnectHandler con_handler) {
 			   if(!isActive()) {
 				   boost::asio::ip::tcp::resolver resolver(*global::io_s);
 				   auto endpoint_iterator = resolver.resolve({ node_desc.ip_address, node_desc.port });
@@ -65,6 +64,7 @@ namespace sp2p {
 						   {
 						   		if(!ec) {
 									std::shared_ptr<NodeResponseParser> parser(new NodeResponseParser);
+									std::shared_ptr<Sp2pHandler> handler(global::sp2p_handler);
 
 									connection.reset(
 										new Connection<NodeRequest, NodeResponse>(
@@ -72,10 +72,8 @@ namespace sp2p {
 											std::move(socket),
 											connection_manager,
 											std::dynamic_pointer_cast<Parser<NodeResponse>>(parser),
-											global::sp2p_handler,
-											handler
-											));
-
+											std::dynamic_pointer_cast<Handler<NodeRequest, NodeResponse>>(handler)
+										));
 									connection_manager.start(connection);
 								} else {
 									// handle connect error

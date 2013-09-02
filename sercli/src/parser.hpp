@@ -10,47 +10,46 @@
 #include "nodemessage.hpp"
 
 namespace sp2p {
-	namespace sercli {
+    namespace sercli {
 
-		enum class parse_result {
-			GOOD, BAD, INDETERMINATE
-		};
+        enum class parse_result {
+            GOOD, BAD, INDETERMINATE
+        };
 
-		template <typename Mess, typename Enable = void>
-			class Parser;
+        template <typename Mess, typename Enable = void>
+            class Parser;
 
-		template <typename Mess>
-			class Parser <Mess, typename std::enable_if<std::is_base_of<Message, Mess>::value>::type> {
+        template <typename Mess>
+            class Parser <Mess, typename std::enable_if<std::is_base_of<Message, Mess>::value>::type> {
 
-				public:
+                public:
+					~Parser() = default;
 
-					virtual ~Parser();
+                    virtual void reset() = 0;
 
-					virtual void reset() = 0;
+                    virtual parse_result parse(Mess& message, const char data[], int length) = 0;
 
-					virtual parse_result parse(Mess& message, const char data[], int length) = 0;
-
-			};
+            };
 
 
-		class NodeResponseParser : public Parser<NodeResponse> {
+        class NodeResponseParser : public Parser<NodeResponse> {
 
-			public:
+            public:
 
-				void reset();
-				parse_result parse(NodeResponse&, const char data[], int length);
+                void reset();
+                parse_result parse(NodeResponse&, const char data[], int length);
 
-			private:
+            private:
 
-				int message_size = -1;
-				boost::asio::streambuf sb;
+                int message_size = -1;
+                boost::asio::streambuf sb;
 
-		};
+        };
 
-		template <typename Mess>
-			using parser_ptr = std::shared_ptr<Parser<Mess>>;
+        template <typename Mess>
+            using parser_ptr = std::shared_ptr<Parser<Mess>>;
 
-	} /* namespace sercli */
+    } /* namespace sercli */
 } /* namespace sp2p */
 
 #endif /* PARSER_HPP */

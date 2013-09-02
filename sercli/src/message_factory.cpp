@@ -91,8 +91,8 @@ namespace sp2p {
                 return request;
             }
 
-            std::shared_ptr<NodeRequest> getUserInfo(const NetworkDescription& network_desc, 
-                        const std::string& username, std::string& cookie) {
+            std::shared_ptr<NodeRequest> getUserInfoMessage(const NetworkDescription& network_desc, 
+                        const std::string& username, const std::string& cookie) {
 
                 std::shared_ptr<NodeRequest> request(new NodeRequest());
                 protocol::ClientMessage& protoRequest = request->getRequest();
@@ -108,7 +108,7 @@ namespace sp2p {
                 return request;
             }
 
-            std::shared_ptr<NodeRequest> getListNetworksMessage(std::string& cookie) {
+            std::shared_ptr<NodeRequest> getListNetworksMessage(const std::string& cookie) {
 
                 std::shared_ptr<NodeRequest> request(new NodeRequest());
                 protocol::ClientMessage& protoRequest = request->getRequest();
@@ -122,7 +122,7 @@ namespace sp2p {
                 return request;
             }                   
 
-            std::shared_ptr<NodeRequest> getListMyNetworksMessage(std::string& cookie) {
+            std::shared_ptr<NodeRequest> getListMyNetworksMessage(const std::string& cookie) {
 
                 std::shared_ptr<NodeRequest> request(new NodeRequest());
                 protocol::ClientMessage& protoRequest = request->getRequest();

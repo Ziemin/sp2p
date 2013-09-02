@@ -15,12 +15,11 @@ SET (CMAKE_LINKER  "/usr/bin/llvm-ld")
 
 add_definitions(-BOOST_ASIO_ENABLE_HANDLER_TRACKING)
 
+SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${sp2p_SOURCE_DIR}/sercli/build)
+set(LIBRARY_OUTPUT_PATH ${sp2p_SOURCE_DIR}/sercli/lib)
+
+# SOURCES
 add_subdirectory(src)
 
-ENABLE_TESTING()
-ADD_TEST(sercli_inittest build/tests/sercli_inittest)
-ADD_TEST(sercli_edu_tests build/tests/sercli_edu_tests)
-
-ADD_CUSTOM_TARGET(check COMMAND ${CMAKE_CTEST_COMMAND} DEPENDS 
-	sercli_inittest
-	sercli_edu_tests)
+# TESTS
+add_subdirectory(test)

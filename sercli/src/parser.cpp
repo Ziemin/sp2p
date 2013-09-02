@@ -2,49 +2,50 @@
 #include "globals.hpp"
 
 namespace sp2p {
-	namespace sercli {
+    namespace sercli {
 
-		void NodeResponseParser::reset() {
 
-			sb.consume(sb.size());
-			message_size = -1;
-		}
+        void NodeResponseParser::reset() {
 
-		parse_result NodeResponseParser::parse(NodeResponse& message, const char data[], int length) {
+            sb.consume(sb.size());
+            message_size = -1;
+        }
 
-			parse_result  result;
-			std::ostream os(&sb);
+        parse_result NodeResponseParser::parse(NodeResponse& message, const char data[], int length) {
 
-			os.write(data, length);
-			if(sb.size() > global::max_buffer_size) {
-				reset();
-				return parse_result::BAD;
-			}
+            parse_result  result;
+            std::ostream os(&sb);
 
-			if(message_size == -1 && sb.size() >= sizeof(std::uint32_t)) {
-				std::istream is(&sb);
-				std::uint32_t len;
-				is >> len;
-				message_size = (int) len;
-			}
+            os.write(data, length);
+            if(sb.size() > global::max_buffer_size) {
+                reset();
+                return parse_result::BAD;
+            }
 
-			if(message_size <= (int) sb.size() && message_size != -1) {
+            if(message_size == -1 && sb.size() >= sizeof(std::uint32_t)) {
+                std::istream is(&sb);
+                std::uint32_t len;
+                is >> len;
+                message_size = (int) len;
+            }
 
-				std::istream is(&sb);
-				if(message.ParseFromIstream(&is)) {
-					result = parse_result::GOOD;
-					message_size = -1;
-				}
-				else {
-					reset();
-					result = parse_result::BAD;
-				}
+            if(message_size <= (int) sb.size() && message_size != -1) {
 
-			}
-			else result = parse_result::INDETERMINATE;
+                std::istream is(&sb);
+                if(message.ParseFromIstream(&is)) {
+                    result = parse_result::GOOD;
+                    message_size = -1;
+                }
+                else {
+                    reset();
+                    result = parse_result::BAD;
+                }
 
-			return result;
-		}
+            }
+            else result = parse_result::INDETERMINATE;
 
-	} /* namespace sercli */
+            return result;
+        }
+
+    } /* namespace sercli */
 } /* namespace sp2p */

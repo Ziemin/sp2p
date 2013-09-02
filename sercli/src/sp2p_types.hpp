@@ -32,7 +32,9 @@ namespace sp2p {
 				OTHER
 			};
 
-			bool any(const NodeError& error);
+			inline bool any(const NodeError& error) {
+                return error != NodeError::OK;
+			}
 
 
 			struct ServerDescription {
@@ -57,7 +59,10 @@ namespace sp2p {
 
 				User creator;
 
-				bool operator<(const NetworkDescription& other) const;
+				inline bool operator<(const NetworkDescription& other) const {
+					return this->network_name < other.network_name;
+
+				}
 			};
 
 
@@ -66,7 +71,9 @@ namespace sp2p {
 				std::string node_name;
 				std::uint32_t port;
 
-				bool operator<(const NodeDescription& other) const;
+				inline bool operator<(const NodeDescription& other) const {
+					return (this->ip_address < other.ip_address);
+				}
 			};
 
 		}

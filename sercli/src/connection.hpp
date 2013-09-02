@@ -3,6 +3,7 @@
 
 #include <boost/noncopyable.hpp>
 #include <boost/asio.hpp>
+#include <boost/array.hpp>
 
 #include <type_traits>
 #include <array>
@@ -19,7 +20,7 @@
 namespace sp2p {
 	namespace sercli {
 
-		void defaultHandlerMethod() { }
+		inline void defaultHandlerMethod(boost::system::error_code /* ec */) { }
 
 		template <typename Request, typename Response>
 			class ConnectionManager;
@@ -47,7 +48,9 @@ namespace sp2p {
 
 					Connection(boost::asio::io_service&, boost::asio::ip::tcp::socket, 
 							ConnectionManager<Request, Response>&, parser_ptr<Response>, 
-							Handler<Request, Response>*, std::function<void()>);
+							handler_ptr<Request, Response>, std::function<void()> = []()->void{});
+
+					void setStarterFunction(std::function<void()> fun);
 
 					/**
 					 * Starts connection's job
@@ -61,19 +64,20 @@ namespace sp2p {
 
 					void gracefulStop();
 
-					std::future<Response> sendRequest(std::shared_ptr<Request> request);
+					std::future<std::shared_ptr<Response>> sendRequest(std::shared_ptr<Request> request);
 
 					/*
-					 * HandlerMethod has signature: handlerMethod()
+					 * HandlerMethod has signature: handlerMethod(boost::system::error_code ec)
 					 */
-					template <typename HandlerMethod>
-						void sendMessage(std::shared_ptr<Request> request, HandlerMethod handlerMethod=defaultHandlerMethod);
+					template<typename SendHandler>
+						void sendMessage(std::shared_ptr<Request> request, SendHandler sendHandler);
 
 					/*
-					 * HandlerMethod has signature: handlerMethod(Response response);
+					 * HandlerMethod has signature: 
+					 * handlerMethod(std::shared_ptr<Response> response,  boost::system::error_code ec);
 					 */
-					template <typename HandlerMethod>
-						void readMessage(HandlerMethod handlerMethod);
+					template <typename ReadHandler>
+						void readMessage(ReadHandler readHandler);
 
 					bool isActive();
 
@@ -81,21 +85,27 @@ namespace sp2p {
 
 				private:
 
-					template <typename HandlerMethod>
-						void send(std::shared_ptr<Request> request, HandlerMethod handlerMethod);
+					void send(std::shared_ptr<Request> request,
+						   std::function<void(boost::system::error_code)> sendHandler);
+
+					void readHandler(std::shared_ptr<Response> resp_ptr, boost::system::error_code ec,
+							std::shared_ptr<std::promise<std::shared_ptr<Response>>> pr);
+
+					void sendHandler(boost::system::error_code ec, 
+							std::shared_ptr<std::promise<std::shared_ptr<Response>>> prom);
 
 				private:
 
-					ConnectionManager<Request, Response>& connection_manager;
 					boost::asio::ip::tcp::socket socket_;
 					boost::asio::io_service::strand strand;
+					ConnectionManager<Request, Response>& connection_manager;
 
-					std::array<char, 8192> recv_buf;
+					boost::array<char, 8192> recv_buf;
 					boost::asio::streambuf send_buf;
 
 					std::atomic_bool is_active;
 					parser_ptr<Response> parser;
-					Handler<Request, Response>* handler;
+					handler_ptr<Request, Response> handler;
 
 					std::function<void()> starter_function;
 
@@ -118,5 +128,7 @@ namespace sp2p {
 
 	} /* namespace sercli */
 } /* namespace sp2p */
+
+#include "connection.cpp"
 
 #endif /* CONNECTION_HPP */

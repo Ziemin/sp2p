@@ -5,142 +5,142 @@ package protocol;
 // ------------------------------------------------------------------------------
 
 message ClientMessage {
-	enum RequestType {
-		REGISTER = 0;               // Register new user
-		UNREGISTER = 1;             // Remove account from Node
-		LOGIN = 2;                  // Login user
-		LOGOUT = 3;                 // Logout user
-		LIST_NETWORKS = 4;          // List all visible networks on Node
-		LIST_MY_NETWORKS = 5;       // List all accessible networks to user
-		LIST_SERVERS = 6;           // List all active servers of some Network
-		CREATE_NETWORK = 7;         // Create new Network
-		DELETE_NETWORK = 8;         // Delete Network
-		INVITE_USER = 9;            // Invite user to network
-		REMOVE_USER = 10;  			// Remove user from network
-		USER_INFO = 11;             // Get information about user of Network
-		UPDATE_SERVER = 12;         // Update information about running server 
-									// (add to list of active servers if previously inactive)
-		STOP_SERVER = 13;           // Stop running server 
-		SIGN_KEY = 14; 				// Sign new key related to Node itself or certain Network
-		CHANGE_PASSWORD = 15; 		// Change user's password
-	}
-	required RequestType request = 1;
+    enum RequestType {
+        REGISTER = 0;               // Register new user
+        UNREGISTER = 1;             // Remove account from Node
+        LOGIN = 2;                  // Login user
+        LOGOUT = 3;                 // Logout user
+        LIST_NETWORKS = 4;          // List all visible networks on Node
+        LIST_MY_NETWORKS = 5;       // List all accessible networks to user
+        LIST_SERVERS = 6;           // List all active servers of some Network
+        CREATE_NETWORK = 7;         // Create new Network
+        DELETE_NETWORK = 8;         // Delete Network
+        INVITE_USER = 9;            // Invite user to network
+        REMOVE_USER = 10;           // Remove user from network
+        USER_INFO = 11;             // Get information about user of Network
+        UPDATE_SERVER = 12;         // Update information about running server 
+                                    // (add to list of active servers if previously inactive)
+        STOP_SERVER = 13;           // Stop running server 
+        SIGN_KEY = 14;              // Sign new key related to Node itself or certain Network
+        CHANGE_PASSWORD = 15;       // Change user's password
+    }
+    required RequestType request = 1;
 
-	message Register {
-		required string username = 1;
-		required string password = 2;
-		required string public_key = 3; 	// PEM encoded public key to be signed by Node
-	}
-	optional Register register_message = 2;
+    message Register {
+        required string username = 1;
+        required string password = 2;
+        required string public_key = 3;     // PEM encoded public key to be signed by Node
+    }
+    optional Register register_message = 2;
 
-	message Unregister {
-		required string cookie = 1;
-	}
-	optional Unregister unregister_message = 3;
+    message Unregister {
+        required string cookie = 1;
+    }
+    optional Unregister unregister_message = 3;
 
-	message Login {
-       	required string username = 1;
-		required string password = 2;
-	}
-	optional Login login_message = 4;
+    message Login {
+        required string username = 1;
+        required string password = 2;
+    }
+    optional Login login_message = 4;
 
-	message Logout {
-		required string cookie = 1;
-	}
-	optional Logout logout_message = 5;
+    message Logout {
+        required string cookie = 1;
+    }
+    optional Logout logout_message = 5;
 
-	message ListNetworks {
-		required string cookie = 1;
-	}
-	optional ListNetworks list_networks_message = 6;
+    message ListNetworks {
+        required string cookie = 1;
+    }
+    optional ListNetworks list_networks_message = 6;
 
-	message ListMyNetworks {
-		required string cookie = 1;
-	}
-	optional ListMyNetworks list_my_networks_message = 7;
+    message ListMyNetworks {
+        required string cookie = 1;
+    }
+    optional ListMyNetworks list_my_networks_message = 7;
 
-	message ListServers {
-       	required string cookie = 1;
-		required string network_name = 2;
-	}
-	optional ListServers list_servers_message = 8;
+    message ListServers {
+        required string cookie = 1;
+        required string network_name = 2;
+    }
+    optional ListServers list_servers_message = 8;
 
-	message CreateNetwork {
-		required string cookie = 1;
-		required string network_name = 2;
-		enum AccessRights {
-			PUBLIC = 1;
-			PRIVATE = 2;
-		}
-		required AccessRights access_rights = 3;
-		enum Visiblity {
-			LISTED = 3;
-			UNLISTED = 4;
-		}
-		required Visiblity visibility = 4;
-		enum ParticipationRights {
-			CLIENT_ONLY = 5;
-			CLIENT_SERVER = 6;
-		}
-		required ParticipationRights participation_rights = 5;
-		optional string creator_email = 6;
-		optional string protocol_name = 7;
-	}
-	optional CreateNetwork create_network_message = 9;
+    message CreateNetwork {
+        required string cookie = 1;
+        required string network_name = 2;
+        enum AccessRights {
+            PUBLIC = 1;
+            PRIVATE = 2;
+        }
+        required AccessRights access_rights = 3;
+        enum Visiblity {
+            LISTED = 3;
+            UNLISTED = 4;
+        }
+        required Visiblity visibility = 4;
+        enum ParticipationRights {
+            CLIENT_ONLY = 5;
+            CLIENT_SERVER = 6;
+        }
+        required ParticipationRights participation_rights = 5;
+        optional string creator_email = 6;
+        optional string protocol_name = 7;
+    }
+    optional CreateNetwork create_network_message = 9;
 
-	message DeleteNetwork {
-		required string cookie = 1;
-		required string name = 2;
-	}
-   	optional DeleteNetwork delete_network_message = 10;
+    message DeleteNetwork {
+        required string cookie = 1;
+        required string name = 2;
+    }
+    optional DeleteNetwork delete_network_message = 10;
 
-	message InviteUser {
-    	required string cookie = 1;
-		required string username = 2;
-		required string network_name = 3;
-	}
-	optional InviteUser invite_user_message = 11;
+    message InviteUser {
+        required string cookie = 1;
+        required string username = 2;
+        required string network_name = 3;
+    }
+    optional InviteUser invite_user_message = 11;
 
-	message RemoveUser {
-		required string cookie = 1;
-		required string username = 2;
-		required string network_name = 3;
-	}
-	optional RemoveUser remove_user_message = 12;
+    message RemoveUser {
+        required string cookie = 1;
+        required string username = 2;
+        required string network_name = 3;
+    }
+    optional RemoveUser remove_user_message = 12;
 
-	message UserInfo {
-		required string cookie = 1;
-		required string username = 2;
-		required string network_name = 3;
-	}
-	optional UserInfo user_info_message = 13;
+    message UserInfo {
+        required string cookie = 1;
+        required string username = 2;
+        required string network_name = 3;
+    }
+    optional UserInfo user_info_message = 13;
 
-	message UpdateServer {
-		required string cookie = 1;
-		required string network_name = 2;
-		required int32 port_number = 3;
-	}
-	optional UpdateServer update_server_message = 14;
+    message UpdateServer {
+        required string cookie = 1;
+        required string network_name = 2;
+        required int32 port_number = 3;
+    }
+    optional UpdateServer update_server_message = 14;
 
-	message StopServer {
-		required string cookie = 1;
-		required string network_name = 2;
-	}
-	optional StopServer stop_server_message = 15;
-	
-	message SignKey {
-		required string cookie = 1;
-		required string public_key = 2;   // PEM encoded public key
-		optional string network_name = 3; // if provided Node associates new public key with network
-	}
-	optional SignKey sign_key_message = 16;
+    message StopServer {
+        required string cookie = 1;
+        required string network_name = 2;
+    }
+    optional StopServer stop_server_message = 15;
+    
+    message SignKey {
+        required string cookie = 1;
+        required string public_key = 2;   // PEM encoded public key
+        optional string network_name = 3; // if provided Node associates new public key with network
+    }
+    optional SignKey sign_key_message = 16;
 
-	message ChangePassword {
-		required string cookie = 1;
-		required string old_password = 2;  // former user's password
-		optional string new_password = 3;  // new password
-	}
-	optional ChangePassword change_password_message = 17;
+    message ChangePassword {
+        required string cookie = 1;
+        required string old_password = 2;  // former user's password
+        optional string new_password = 3;  // new password
+    }
+    optional ChangePassword change_password_message = 17;
 }
 
 // ------------------------------------------------------------------------------
@@ -148,73 +148,73 @@ message ClientMessage {
 // ------------------------------------------------------------------------------
 
 message NodeMessage {
-	enum ResponseType {
-		OK = 200;
-		INTERNAL_SERVER_ERROR = 400;
-		BAD_REQUEST = 500;
-		NO_PRIVILAGES = 501;
-		NOT_LOGGED = 502;
-		BAD_CREDENTIALS = 503;
-		NO_SUCH_USER = 504;
-		NO_SUCH_NETWORK = 505;
-		BAD_DATA = 506;
-	}
-	required ResponseType response_type = 1;
+    enum ResponseType {
+        OK = 200;
+        INTERNAL_SERVER_ERROR = 400;
+        BAD_REQUEST = 500;
+        NO_PRIVILAGES = 501;
+        NOT_LOGGED = 502;
+        BAD_CREDENTIALS = 503;
+        NO_SUCH_USER = 504;
+        NO_SUCH_NETWORK = 505;
+        BAD_DATA = 506;
+    }
+    required ResponseType response_type = 1;
 
-	message Register {
-		required string user_certificate = 1; // signed public_key of user
-		required string node_certificate = 2; // usually self-signed certificate of node
-	}
-	optional Register register_response = 2;
-	
-   	message Login {
-		required string cookie = 1;
-		optional string node_certificate = 2; // if node wants to add new self-signed certificate
-	}
-	optional Login login_response = 3;
+    message Register {
+        required string user_certificate = 1; // signed public_key of user
+        required string node_certificate = 2; // usually self-signed certificate of node
+    }
+    optional Register register_response = 2;
+    
+    message Login {
+        required string cookie = 1;
+        optional string node_certificate = 2; // if node wants to add new self-signed certificate
+    }
+    optional Login login_response = 3;
 
-	message ListNetworks {
-		message Network {
-			required string name = 1;
-			required string creator_name = 2;
-			optional string creator_email = 3;
-		   	required ClientMessage.CreateNetwork.AccessRights access_rights = 4;
-		   	required ClientMessage.CreateNetwork.ParticipationRights participation_rights = 5;
-			optional string protocol_name = 6;
-		}
-		repeated Network network_list = 1;
-	}
-	optional ListNetworks list_networks_response = 5;
+    message ListNetworks {
+        message Network {
+            required string name = 1;
+            required string creator_name = 2;
+            optional string creator_email = 3;
+            required ClientMessage.CreateNetwork.AccessRights access_rights = 4;
+            required ClientMessage.CreateNetwork.ParticipationRights participation_rights = 5;
+            optional string protocol_name = 6;
+        }
+        repeated Network network_list = 1;
+    }
+    optional ListNetworks list_networks_response = 5;
 
-	message ListMyNetworks {
-		repeated ListNetworks.Network network_list = 1;
-	}
-	optional ListMyNetworks list_my_networks_response = 6;
+    message ListMyNetworks {
+        repeated ListNetworks.Network network_list = 1;
+    }
+    optional ListMyNetworks list_my_networks_response = 6;
 
-	message ListServers {
-		message Server {
-			required string username = 1;
-			required string ip_address = 2;
-			required int32 port_number = 3;
-		}	
-		repeated Server list_servers = 1;
-	}
-	optional ListServers list_servers_response = 7;
+    message ListServers {
+        message Server {
+            required string username = 1;
+            required string ip_address = 2;
+            required int32 port_number = 3;
+        }   
+        repeated Server list_servers = 1;
+    }
+    optional ListServers list_servers_response = 7;
 
-	message UserInfo {
-    	required string user_public_key = 1;
-	}
-	optional UserInfo user_info_response = 13;
+    message UserInfo {
+        required string user_public_key = 1;
+    }
+    optional UserInfo user_info_response = 13;
 
-	message UpdateServer {
-		required int32 seconds_to_update = 1; // seconds until server is 
-					               // removed from list of active servers
-	}
-	optional UpdateServer update_server_response = 14;
+    message UpdateServer {
+        required int32 seconds_to_update = 1; // seconds until server is 
+                                   // removed from list of active servers
+    }
+    optional UpdateServer update_server_response = 14;
 
-	message SignKey {
-    	required string user_certificate = 1;
-	}
-	optional SignKey sign_key_response = 16;
+    message SignKey {
+        required string user_certificate = 1;
+    }
+    optional SignKey sign_key_response = 16;
 
 }

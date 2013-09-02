@@ -13,60 +13,60 @@
 #include "globals.hpp"
 
 namespace sp2p {
-	namespace sercli {
+    namespace sercli {
 
-		/**
-		 * Wrapper over Connection<NodeRequest, NodeResponse>
-		 */
-		class NodeConnection : boost::noncopyable, 
-		public std::enable_shared_from_this<NodeConnection> {
+        /**
+         * Wrapper over Connection<NodeRequest, NodeResponse>
+         */
+        class NodeConnection : boost::noncopyable, 
+        public std::enable_shared_from_this<NodeConnection> {
 
-			public:
-				NodeConnection(ConnectionManager<NodeRequest, NodeResponse>& connection_manager);
+            public:
+                NodeConnection(ConnectionManager<NodeRequest, NodeResponse>& connection_manager);
 
- 				bool isActive() const;
+                bool isActive() const;
 
-				void connect(const types::NodeDescription& node_desc);
+                void connect(const types::NodeDescription& node_desc);
 
-				template <typename ConnectHandler>                    
-					void asyncConnect(const types::NodeDescription& node_desc, ConnectHandler handler);
+                template <typename ConnectHandler>                    
+                    void asyncConnect(const types::NodeDescription& node_desc, ConnectHandler handler);
 
-				void disconnect();
+                void disconnect();
 
-				void resetDeadlineTimer(std::uint64_t seconds = global::node_timeout_seconds);
-				void stopDeadlineTimer();
+                void resetDeadlineTimer(std::uint64_t seconds = global::node_timeout_seconds);
+                void stopDeadlineTimer();
 
-				connection_ptr<NodeRequest, NodeResponse> getConnection() const;
+                connection_ptr<NodeRequest, NodeResponse> getConnection() const;
 
-				const std::string& getCookie();
+                const std::string& getCookie();
 
-				void setCookie(std::string new_cookie);
+                void setCookie(std::string new_cookie);
 
 
-			private:
+            private:
 
-				void closeConnection();
+                void closeConnection();
 
-			public:
+            public:
 
-				std::atomic<bool> is_logged;
+                std::atomic<bool> is_logged;
 
-			private:
+            private:
 
-				boost::asio::deadline_timer timer;
-				boost::asio::io_service::strand strand;
-				boost::asio::ip::tcp::socket socket;
+                boost::asio::deadline_timer timer;
+                boost::asio::io_service::strand strand;
+                boost::asio::ip::tcp::socket socket;
 
-				std::string cookie;
+                std::string cookie;
 
-				ConnectionManager<NodeRequest, NodeResponse>& connection_manager;
-				connection_ptr<NodeRequest, NodeResponse> connection;
+                ConnectionManager<NodeRequest, NodeResponse>& connection_manager;
+                connection_ptr<NodeRequest, NodeResponse> connection;
 
-		};
+        };
 
-		typedef std::shared_ptr<NodeConnection> node_con_ptr;
+        typedef std::shared_ptr<NodeConnection> node_con_ptr;
 
-	} /* namespace sercli */
+    } /* namespace sercli */
 } /* namespace sp2p */
 
 #endif /* NODE_CONNECTION_HPP */

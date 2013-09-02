@@ -33,4 +33,6 @@ namespace sp2p {
 	} /* namespace sercli */
 } /* namespace sp2p */
 
+#include "connection_manager.cpp"
+
 #endif /* CONNECTION_MANAGER */
