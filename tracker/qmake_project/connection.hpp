@@ -5,12 +5,23 @@
 #include <boost/array.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/enable_shared_from_this.hpp>
 #include "requesthandler.hpp"
 #include "requestparser.hpp"
+#include "types.hpp"
+
+#include "protocol_factory/abstractprotocolfactory.hpp"
+#include "protocol_factory/abstractrequest.hpp"
+#include "protocol_factory/abstractrequesthandler.hpp"
+#include "protocol_factory/abstractrequestparser.hpp"
+#include "protocol_factory/abstractresponse.hpp"
 
 namespace sp2p {
 namespace tracker {
+
+typedef boost::shared_ptr<protocol_factory::AbstractRequest> Request_ptr;
+typedef boost::shared_ptr<protocol_factory::AbstractResponse> Response_ptr;
 
 /// Represents a single connection from a client.
 class Connection
@@ -20,7 +31,7 @@ class Connection
 public:
   /// Construct a connection with the given io_service.
   explicit Connection(boost::asio::io_service& io_service,
-      request_handler& handler);
+      const protocol_factory::AbstractRequestHandler *handler);
 
   /// Get the socket associated with the connection.
   boost::asio::ip::tcp::socket& socket();
@@ -43,22 +54,25 @@ private:
   boost::asio::ip::tcp::socket socket_;
 
   /// The handler used to process the incoming request.
-  request_handler& request_handler_;
+  const protocol_factory::AbstractRequestHandler* requestHandler;
 
   /// Buffer for incoming data.
   boost::array<char, 8192> buffer_;
 
   /// The incoming request.
-  request request_;
+  Request_ptr request_;
 
   /// The parser for the incoming request.
-  request_parser request_parser_;
+  protocol_factory::AbstractRequestParser* requestParser;
 
   /// The reply to be sent back to the client.
-  reply reply_;
+  Response_ptr reply_;
+
+  boost::asio::streambuf buff;
 };
 
-typedef boost::shared_ptr<Connection> connection_ptr;
+
+typedef boost::shared_ptr<Connection> Connection_ptr;
 
 } // namespace tracker
 } // namespace sp2p

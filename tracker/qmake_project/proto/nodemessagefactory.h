@@ -4,32 +4,40 @@
 #include <memory>
 #include <string>
 #include <iostream>
+#include <vector>
+#include <boost/cstdint.hpp>
+
+#include "types.hpp"
 
 #include "sp2p_protocol.pb.h"
 
-namespace NodeMessageFactory
-{
+
+namespace sp2p {
+namespace NodeMessageFactory {
 using namespace protocol;
 using namespace std;
 
-shared_ptr<NodeMessage> errorMesage(NodeMessage_ResponseType resp);
+NodeMessage_ptr errorMesage(NodeMessage_ResponseType resp);
 
-shared_ptr<NodeMessage> registerResponse(string& userCertificate, string& nodeCertificate);
+NodeMessage_ptr registerResponse(string& userCertificate, string& nodeCertificate);
 
-shared_ptr<NodeMessage> loginResponse(string& cookie);
+NodeMessage_ptr loginResponse(string& cookie);
 
-shared_ptr<NodeMessage> loginResponse(string& cookie, string& certificate);
+NodeMessage_ptr loginResponse(string& cookie, string& certificate);
 
-shared_ptr<NodeMessage> userInfoResponse(string& userCertificate);
+NodeMessage_ptr userInfoResponse(string& userCertificate);
 
-shared_ptr<NodeMessage> updateServerResponse(int secondsToUpdate);
+NodeMessage_ptr updateServerResponse(int secondsToUpdate);
 
-shared_ptr<NodeMessage> signKeyResponse(string& userCertificate);
+NodeMessage_ptr signKeyResponse(string& userCertificate);
 
-shared_ptr<NodeMessage> listNetworksResponse();
+NodeMessage_ptr listNetworksResponse();
 
-shared_ptr<NodeMessage> listServersResponse();
+NodeMessage_ptr ListServersResponse();
 
-}
+std::vector<boost::int8_t> packNodeMessage(NodeMessage_ptr message);
+
+} // namespace NodeMessageFactory
+} // namespace sp2p
 
 #endif // NODEMESSAGEFACTORY_H
