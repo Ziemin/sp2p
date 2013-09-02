@@ -1,6 +1,7 @@
 #include "utils/util_functions.h"
 
 #include <algorithm>
+#include <time.h>
 
 namespace sp2p{
 namespace tracker{
@@ -19,6 +20,11 @@ std::string getRandomString(int len) {
   std::string str(len, 0);
   std::generate_n( str.begin(), len, randchar );
   return str;
+}
+
+long long currTimeInMS()
+{
+    return time_t(0)*1000;
 }
 
 } // namespace utils

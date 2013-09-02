@@ -9,6 +9,8 @@ namespace utils{
 
 std::string getRandomString(int len);
 
+long long currTimeInMS();
+
 } // namespace utils
 } // namespace tracker
 } // namespace sp2p

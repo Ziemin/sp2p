@@ -18,7 +18,8 @@ SOURCES += main.cpp \
     utils/proto_user.cpp \
     request.cpp \
     response.cpp \
-    protocolfactory.cpp
+    protocolfactory.cpp \
+    logincontroler.cpp
 
 unix|win32: LIBS +=
 
@@ -46,7 +47,9 @@ HEADERS += \
     protocol_factory/abstractresponse.hpp \
     protocol_factory/abstractrequestparser.hpp \
     protocol_factory/abstractrequesthandler.hpp \
-    protocolfactory.hpp
+    protocolfactory.hpp \
+    logincontroler.hpp \
+    protocol_factory/abstractlogincontroler.hpp
 
 QMAKE_CXXFLAGS = -std=c++11
 
