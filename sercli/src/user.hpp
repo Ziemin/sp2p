@@ -2,6 +2,8 @@
 #define USER_H
 
 #include <string>
+#include <boost/serialization/utility.hpp>
+#include <boost/serialization/base_object.hpp>
 
 namespace sp2p {
 	namespace sercli {
@@ -14,6 +16,13 @@ namespace sp2p {
 
 			std::string username, email;
 			// TODO public_key
+			private:
+				friend class boost::serialization::access;
+
+				template<class Archive> void serialize(Archive& ar, const unsigned int /* version */) {
+					ar & username & email;
+				}
+
 		};
 
 		/**
@@ -21,10 +30,19 @@ namespace sp2p {
 		 */
 		struct MyUser : public User {
 
+			MyUser() = default;
 			MyUser(std::string username, std::string password, std::string email, bool registered=false);
 
 			std::string password;
 			bool is_registered;
+
+			private:
+				friend class boost::serialization::access;
+
+				template<class Archive> void serialize(Archive& ar, const unsigned int /* version */) {
+					ar & boost::serialization::base_object<User>(*this);
+					ar & password & is_registered;
+				}
 		};
 
 	} /* namespace sercli */

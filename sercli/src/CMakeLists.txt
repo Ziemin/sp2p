@@ -2,6 +2,7 @@ include(FindProtobuf)
 find_package(Boost COMPONENTS system REQUIRED)
 find_package(Boost COMPONENTS thread)
 find_package(Boost COMPONENTS date_time)
+find_package(Boost COMPONENTS serialization)
 find_package(Threads)
 find_package(Botan REQUIRED)
 find_package(Protobuf REQUIRED)
@@ -12,8 +13,6 @@ include_directories( ${Boost_INCLUDE_DIRS} ${BOTAN_INCLUDE_DIR} ${PROTOBUF_INCLU
 add_library(Sercli STATIC
 	user.cpp
 	node.cpp
-	#connection.cpp
-	#connection_manager.cpp
 	sp2p_protocol.pb.cc
 	nodemessage.cpp
 	parser.cpp
@@ -23,7 +22,7 @@ add_library(Sercli STATIC
 	nodeconnection.cpp
 	message_factory.cpp
 	network.cpp
-	server.cpp
+	parser_factory.cpp
 )
 
 add_definitions(-BOOST_ASIO_ENABLE_HANDLER_TRACKING)

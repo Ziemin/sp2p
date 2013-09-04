@@ -2,6 +2,7 @@
 #define PARSER_FACTORY_HPP
 
 #include "parser.hpp"
+#include "nodemessage.hpp"
 
 namespace sp2p {
     namespace sercli {
@@ -9,15 +10,17 @@ namespace sp2p {
         template<typename Message>
             class ParserFactory {
 
-                private:
-
-                    ParserFactory();
-
                 public:
 
-                    virtual ParserFactory& getInstance() const;
-                    virtual parser_ptr<Message> getParser();
+                    ~ParserFactory() = default;
+                    virtual parser_ptr<Message> getParser() = 0;
             };
+
+        class NodeParserFactory : ParserFactory<NodeResponse> {
+
+            public:
+                parser_ptr<NodeResponse> getParser();
+        };
     }
 }
 

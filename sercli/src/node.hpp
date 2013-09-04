@@ -11,6 +11,9 @@
 #include <exception>
 #include <mutex>
 
+#include <boost/serialization/utility.hpp>
+#include <boost/serialization/string.hpp>
+
 #include "user.hpp"
 #include "nodeconnection.hpp"
 #include "sp2p_types.hpp"
@@ -86,6 +89,7 @@ namespace sp2p {
             private:
 
                 NodeError beforeMessage();
+
             private:
 
                 NodeDescription node_desc;
@@ -93,6 +97,23 @@ namespace sp2p {
                 NodeConnection node_connection;
                 std::vector<Botan::X509_CA> ca_list;
                 std::vector<Botan::X509_Certificate> user_certificates;
+
+            // serialization
+            private:
+                friend class boost::serialization::access;
+
+                template<class Archive> void save(Archive& ar, const unsigned int /* version */) const {
+                    ar & node_desc;
+                    ar & my_user;
+                    // TODO Crypto layer
+                }
+
+                template<class Archive> void load(Archive& ar, const unsigned int /* version */) {
+                    ar & node_desc;
+                    ar & my_user;
+                    // TODO Crypto layer
+                }
+                BOOST_SERIALIZATION_SPLIT_MEMBER();
         };
 
         typedef std::shared_ptr<Node> node_ptr;

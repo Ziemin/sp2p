@@ -3,6 +3,8 @@
 
 #include <string>
 #include <boost/asio.hpp>
+#include <boost/serialization/utility.hpp>
+#include <boost/serialization/string.hpp>
 
 #include "user.hpp"
 
@@ -43,6 +45,26 @@ namespace sp2p {
 				std::string related_network;
 				boost::asio::ip::address ip_addres;
 
+				// serialization
+				private: 
+					friend class boost::serialization::access;
+
+					template<class Archive> void save(Archive& ar, const unsigned int /* version */) const {
+						ar & related_user;
+						ar & related_network;
+						std::string ip_str = ip_addres.to_string();
+						ar & ip_str;
+					}
+
+					template<class Archive> void load(Archive& ar, const unsigned int /* version */) {
+						ar & related_user;
+						ar & related_network;
+						std::string ip_str;
+						ar & ip_str;
+						ip_addres = boost::asio::ip::address::from_string(ip_str);
+					}
+					BOOST_SERIALIZATION_SPLIT_MEMBER();
+
 			};
 
 			struct NetworkDescription {
@@ -63,6 +85,15 @@ namespace sp2p {
 					return this->network_name < other.network_name;
 
 				}
+
+				// serialization
+				private: 
+					friend class boost::serialization::access;
+					template<class Archive> void serialize(Archive& ar, const unsigned int /* version */) {
+						ar & access_rights & visability & participation_rights;
+						ar & protocol_name & network_name;
+						ar & creator;
+					}
 			};
 
 
@@ -74,6 +105,27 @@ namespace sp2p {
 				inline bool operator<(const NodeDescription& other) const {
 					return (this->ip_address < other.ip_address);
 				}
+
+				// serialization
+				private: 
+					friend class boost::serialization::access;
+
+					template<class Archive> void save(Archive& ar, const unsigned int /* version */) const {
+						std::string ip_str = ip_address.to_string();
+						ar & ip_str;
+						ar & node_name;
+						ar & port;
+					}
+
+					template<class Archive> void load(Archive& ar, const unsigned int /* version */) {
+						std::string ip_str;
+						ar & ip_str;
+						ar & node_name;
+						ar & port;
+
+						ip_address = boost::asio::ip::address::from_string(ip_str);
+					}
+					BOOST_SERIALIZATION_SPLIT_MEMBER();
 			};
 
 		}

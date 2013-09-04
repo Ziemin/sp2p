@@ -98,7 +98,8 @@ namespace sp2p {
                    std::function<void(boost::system::error_code)> newSendHandler) {
 
                 std::ostream os(&send_buf);
-                os << (std::uint32_t) request->ByteSize();
+                std::uint32_t message_size = request->ByteSize();
+                os.write(reinterpret_cast<const char*>(&message_size), sizeof(std::uint32_t));
                 request->SerializeToOstream(&os);
 
                 auto self(this->shared_from_this());

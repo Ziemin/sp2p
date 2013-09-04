@@ -6,16 +6,16 @@
 #include <memory>
 #include <boost/asio.hpp>
 
+#include <boost/serialization/utility.hpp>
+#include <boost/serialization/string.hpp>
+
 #include "user.hpp"
-#include "data.hpp"
 #include "node.hpp"
 #include "sp2p_types.hpp"
 
 
 namespace sp2p {
     namespace sercli {
-
-        class DataManager;
 
         /*
          * Class managing network existing on some nodes. It is assumed, that
@@ -53,6 +53,19 @@ namespace sp2p {
 
                 types::NetworkDescription network_desc;
                 std::map<NodeDescription, std::weak_ptr<Node>> node_set;
+
+            // serialization
+            private:
+                friend class boost::serialization::access;
+
+                template<class Archive> void save(Archive& ar, const unsigned int /* version */) const {
+                    ar & network_desc;
+                }
+
+                template<class Archive> void load(Archive& ar, const unsigned int /* version */) {
+                    ar & network_desc;
+                }
+                BOOST_SERIALIZATION_SPLIT_MEMBER();
         };
 
         typedef std::shared_ptr<Network> network_ptr;

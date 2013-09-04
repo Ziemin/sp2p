@@ -1,4 +1,4 @@
-#define BOOST_TEST_MODULE sercli_inittest
+#define BOOST_TEST_MODULE sercli_edu_tests
 #include <boost/test/unit_test.hpp>
 #include <botan/botan.h>
 #include <botan/dsa.h>

@@ -78,4 +78,6 @@ namespace sp2p {
     } /* namespace sercli */
 } /* namespace sp2p */
 
+#include "server.cpp"
+
 #endif /* SERVER_H */

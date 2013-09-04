@@ -25,7 +25,7 @@ namespace sp2p {
             if(message_size == -1 && sb.size() >= sizeof(std::uint32_t)) {
                 std::istream is(&sb);
                 std::uint32_t len;
-                is >> len;
+				is.read(reinterpret_cast<char*>(&len), sizeof(len));
                 message_size = (int) len;
             }
 
