@@ -5,6 +5,7 @@
 #include <boost/serialization/utility.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
+#include <fstream>
 
 #include "node.hpp"
 #include "network.hpp"
@@ -23,21 +24,28 @@ namespace sp2p {
 					virtual ~AbstractSink() = default;
 
 					virtual AbstractSink& operator<<(const Node& node) = 0;
-					virtual AbstractSink& operator<<(const Network& node) = 0;
+					virtual AbstractSink& operator<<(const Network& network) = 0;
+					virtual AbstractSink& operator<<(const std::vector<types::NodeDescription>& nodes) = 0;
+					virtual AbstractSink& operator<<(const std::vector<types::NetworkDescription>& networks) = 0;
+					virtual AbstractSink& operator<<(const std::string& text) = 0;
 			};
 
-			class BasicSink : AbstractSink {
+			class BasicSink : public AbstractSink {
 
 				public:
 
 					BasicSink(const std::string& dataFile);
 					virtual ~BasicSink();
 
-					virtual AbstractSink& operator<<(const Node& node);
-					virtual AbstractSink& operator<<(const Network& node);
+					virtual BasicSink& operator<<(const Node& node) override;
+					virtual BasicSink& operator<<(const Network& network) override;
+					virtual BasicSink& operator<<(const std::vector<types::NodeDescription>& nodes) override;
+					virtual BasicSink& operator<<(const std::vector<types::NetworkDescription>& networks) override;
+					virtual BasicSink& operator<<(const std::string& text) override;
 
 				protected:
 
+					std::ofstream os;
 					boost::archive::text_oarchive oa;
 
 			};
@@ -48,21 +56,38 @@ namespace sp2p {
 					virtual ~AbstractSource() = default;
 
 					virtual AbstractSource& operator>>(Node& node) = 0;
-					virtual AbstractSource& operator>>(Network& node) = 0;
+					virtual AbstractSource& operator>>(Network& network) = 0;
+					virtual AbstractSource& operator>>(std::vector<types::NodeDescription>& nodes) = 0;
+					virtual AbstractSource& operator>>(std::vector<types::NetworkDescription>& networks) = 0;
+					virtual AbstractSource& operator>>(std::string& text) = 0;
 			};
 
-			class BasicSource : AbstractSource {
+			class BasicSource : public AbstractSource {
 
 				public:
 					BasicSource(const std::string& dataFile);
 					virtual ~BasicSource();
 
-					virtual AbstractSource& operator>>(Node& node);
-					virtual AbstractSource& operator>>(Network& node);
+					virtual BasicSource& operator>>(Node& node) override;
+					virtual BasicSource& operator>>(Network& network) override;
+					virtual BasicSource& operator>>(std::vector<types::NodeDescription>& nodes) override;
+					virtual BasicSource& operator>>(std::vector<types::NetworkDescription>& networks) override;
+					virtual BasicSource& operator>>(std::string& text) override;
 
 				protected:
-
+					std::ifstream is;
 					boost::archive::text_iarchive ia;
+			};
+
+			class DataException : public std::exception {
+
+				public:
+
+					DataException(std::string message = "Node exception happened");
+					virtual const char* what() const throw();
+
+				private:
+					std::string message;
 			};
 
 		} /* namespace serialization */
@@ -72,11 +97,11 @@ namespace sp2p {
 		 * Abstract class representing data manager, whose duty is to save state
 		 * of networks and nodes
 		 */
-		class BasicDataManager {
+		class DataManager {
 
 			public:
 
-				virtual ~BasicDataManager();
+				virtual ~DataManager();
 
 				virtual std::shared_ptr<serialization::AbstractSink> getSink();
 				virtual std::shared_ptr<serialization::AbstractSource> getSource();

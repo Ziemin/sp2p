@@ -103,7 +103,7 @@ namespace sp2p {
 				std::uint32_t port;
 
 				inline bool operator<(const NodeDescription& other) const {
-					return (this->ip_address < other.ip_address);
+					return this->node_name < other.node_name;
 				}
 
 				// serialization

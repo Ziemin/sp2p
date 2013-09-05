@@ -1,5 +1,6 @@
 #include <thread>
 #include <boost/asio.hpp>
+#include <vector>
 
 #include "manager.hpp"
 #include "globals.hpp"
@@ -8,12 +9,10 @@
 namespace sp2p {
 	namespace sercli {
 
-		Manager::Manager() : io_s(*global::io_s) { }
-
-		Manager::Manager(DataManager& dataManager) : data_manager(&dataManager), io_s(*global::io_s) { }
+		Manager::Manager(DataManager& dataManager) : data_manager(dataManager) { }
 
 		void Manager::stopAll() {
-			// TODO 
+			for(auto node_pair: nodes_map) node_pair.second->stopConnections();
 		}
 
 		node_ptr Manager::createNode(const NodeDescription& node_desc) {
@@ -127,7 +126,96 @@ namespace sp2p {
 		}
 
 		void Manager::setDataManager(DataManager& dataManager) {
-			this->data_manager = &dataManager;
+			this->data_manager = dataManager;
+		}
+
+		void Manager::saveState() {
+			std::shared_ptr<serialization::AbstractSink> sink = data_manager.getSink(); 
+
+			try {
+				std::string nodes_count(std::to_string(nodes_map.size()));
+				*sink << nodes_count;
+				for(auto node_pair: nodes_map) *sink << *node_pair.second;
+
+				std::vector<types::NodeDescription> related_nodes;
+				std::string network_count(std::to_string(networks_map.size()));
+				*sink << network_count;
+
+				for(auto network_pair: networks_map) {
+					*sink << *network_pair.second;
+
+					for(auto node_pair: network_pair.second->getAssociatedNodes()) 
+						related_nodes.push_back(node_pair.first);
+
+					*sink << related_nodes;
+					related_nodes.clear();
+				}
+			} catch(serialization::DataException& de) {
+				throw de;
+			}
+			catch(std::exception& e) {
+				throw serialization::DataException("Could not save object");
+			}
+		}
+
+		void Manager::saveState(const std::string& dest_file) {
+			data_manager.setDataFile(dest_file);
+			saveState();
+		}
+
+		void Manager::loadState() {
+			clear();
+
+			std::shared_ptr<serialization::AbstractSource> source = data_manager.getSource();
+
+			try {
+				std::string count;
+				*source >> count;
+				int nc = std::stoi(count);
+
+				types::NodeDescription temp_node_desc;
+				for(int i = 0; i < nc; ++i) {
+					node_ptr node(new Node(temp_node_desc, connection_manager));
+					*source >> *node;
+					nodes_map[node->getDescription()] = node;
+				}
+
+				*source >> count;
+				nc = std::stoi(count);
+				types::NetworkDescription temp_network_desc;
+				std::vector<types::NodeDescription> related_nodes;
+				for(int i = 0; i < nc; i++) {
+
+					network_ptr network(new Network(temp_network_desc));
+					*source >> *network;
+					networks_map[network->getDescription()] = network;
+
+					*source >> related_nodes;
+					for(auto& node_desc: related_nodes) {
+
+						auto node_it = nodes_map.find(node_desc);
+						if(node_it == nodes_map.end()) {
+							throw serialization::DataException("Bad data format");
+						} else {
+							network->associateNode(node_it->second);
+						}
+					}
+				}
+			} catch(serialization::DataException& de) {
+				throw de;
+			} catch(std::exception& e) {
+				throw serialization::DataException("Could not load object");
+			}
+		}
+
+		void Manager::loadState(const std::string& source_file) {
+			data_manager.setDataFile(source_file);
+			loadState();
+		}
+
+		void Manager::clear() {
+			nodes_map.clear();
+			networks_map.clear();
 		}
 
 

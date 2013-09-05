@@ -23,6 +23,7 @@ add_library(Sercli STATIC
 	message_factory.cpp
 	network.cpp
 	parser_factory.cpp
+	data.cpp
 )
 
 add_definitions(-BOOST_ASIO_ENABLE_HANDLER_TRACKING)
