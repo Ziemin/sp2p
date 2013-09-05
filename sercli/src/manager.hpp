@@ -29,7 +29,6 @@ namespace sp2p {
 				 * @param data_manager instance of class providing operations related to 
 				 *		  saving/serializing data
 				 */
-				Manager();
 				Manager(DataManager& dataManager);
 
 				void stopAll();
@@ -67,15 +66,19 @@ namespace sp2p {
 				 * Saves manager state 
 				 */
 				void saveState();
+				void saveState(const std::string& dest_file);
 
-				void loadLastState();
+				void loadState();
+				void loadState(const std::string& source_file);
+
+				void clear();
 
 				void setDataManager(DataManager& dataManager);
 
 
+
 			private:
-				DataManager *data_manager = nullptr;
-				boost::asio::io_service &io_s;
+				DataManager& data_manager;
 				std::map<types::NodeDescription, node_ptr> nodes_map;
 				std::map<types::NetworkDescription, network_ptr> networks_map;
 

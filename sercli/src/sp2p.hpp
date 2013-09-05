@@ -14,5 +14,6 @@
 #include "server.hpp"
 #include "globals.hpp"
 #include "user.hpp"
+#include "data.hpp"
 
 #endif
