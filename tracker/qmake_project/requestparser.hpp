@@ -17,13 +17,13 @@ class RequestParser : public protocol_factory::AbstractRequestParser
 {
 public:
     RequestParser();
-    RequestParser(int len);
+    RequestParser(std::int32_t len);
     boost::tribool parse(protocol_factory::AbstractRequest *clientMessage, const char data[], int length);
     int getLen() const;
     void setLen(int value);
 
 private:
-    int len;
+    std::int32_t len;
 
 };
 

@@ -14,10 +14,10 @@ class ProtocolFactory : public protocol_factory::AbstractProtocolFactory
 {
 public:
     ProtocolFactory();
-    protocol_factory::AbstractRequest *produceRequest();
-    protocol_factory::AbstractRequestHandler *produceRequestHandler();
-    protocol_factory::AbstractRequestParser *produceRequestParser();
-    protocol_factory::AbstractResponse *produceResponse();
+    protocol_factory::AbstractRequest *produceRequest()const;
+    protocol_factory::AbstractRequestHandler *produceRequestHandler() const;
+    protocol_factory::AbstractRequestParser *produceRequestParser() const;
+    protocol_factory::AbstractResponse *produceResponse() const;
 };
 
 } // namespace tracker

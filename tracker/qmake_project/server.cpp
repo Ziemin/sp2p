@@ -3,11 +3,12 @@
 #include <boost/bind.hpp>
 #include <boost/shared_ptr.hpp>
 #include <vector>
+#include <iostream>
 
 namespace sp2p {
 namespace tracker {
 
-Server::Server(const protocol_factory::AbstractProtocolFactory *factory, const std::string& address, const std::string& port, std::size_t thread_pool_size)
+Server::Server(Factory_ptr factory, const std::string& address, const std::string& port, std::size_t thread_pool_size)
     : thread_pool_size_(thread_pool_size),
       acceptor_(io_service_),
       new_connection_()
@@ -44,7 +45,8 @@ void Server::run()
 
 void Server::start_accept()
 {
-    new_connection_.reset(new sp2p::tracker::Connection(io_service_, requestHandler));
+    std::cout << __FUNCTION__ << std::endl;
+    new_connection_.reset(new sp2p::tracker::Connection(io_service_, protocolFactory));
     acceptor_.async_accept(new_connection_->socket(),
                            boost::bind(&sp2p::tracker::Server::handle_accept, this,
                                        boost::asio::placeholders::error));
@@ -52,6 +54,7 @@ void Server::start_accept()
 
 void Server::handle_accept(const boost::system::error_code& e)
 {
+    std::cout << __FUNCTION__ << std::endl;
     if (!e)
     {
         new_connection_->start();

@@ -19,9 +19,9 @@ SOURCES += main.cpp \
     request.cpp \
     response.cpp \
     protocolfactory.cpp \
-    logincontroler.cpp
+    logincontroler.cpp \
+    logger.cpp
 
-unix|win32: LIBS +=
 
 HEADERS += \
     requestparser.hpp \
@@ -49,8 +49,11 @@ HEADERS += \
     protocol_factory/abstractrequesthandler.hpp \
     protocolfactory.hpp \
     logincontroler.hpp \
-    protocol_factory/abstractlogincontroler.hpp
+    protocol_factory/abstractlogincontroler.hpp \
+    logger.hpp
 
 QMAKE_CXXFLAGS = -std=c++11
 
-unix|win32: LIBS += -lpqxx -lboost_system -lboost_thread -lprotobuf -lpthread
+unix|win32: LIBS += -lpqxx -lboost_system -lboost_thread -lprotobuf -lboost_log -lboost_log_setup -lpthread
+
+DEFINES += BOOST_ALL_DYN_LINK LOGGING DEBUG_LOGGING

@@ -10,8 +10,8 @@ namespace protocol_factory {
 class AbstractResponse
 {
 public:
-    virtual bool parseIntoOstream(std::ostream *stream) const = 0;
-    virtual int getSize() = 0;
+    virtual bool parseIntoOstream(std::ostream *stream) = 0;
+    virtual int getSize() const = 0;
     virtual ~AbstractResponse() = default;
 };
 

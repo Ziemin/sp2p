@@ -20,55 +20,57 @@
 namespace sp2p {
 namespace tracker {
 
-typedef boost::shared_ptr<protocol_factory::AbstractRequest> Request_ptr;
-typedef boost::shared_ptr<protocol_factory::AbstractResponse> Response_ptr;
-
 /// Represents a single connection from a client.
 class Connection
-  : public boost::enable_shared_from_this<Connection>,
-    private boost::noncopyable
+        : public boost::enable_shared_from_this<Connection>,
+        private boost::noncopyable
 {
 public:
-  /// Construct a connection with the given io_service.
-  explicit Connection(boost::asio::io_service& io_service,
-      const protocol_factory::AbstractRequestHandler *handler);
+    /// Construct a connection with the given io_service.
+    explicit Connection(boost::asio::io_service& io_service,
+                        Factory_ptr factory);
 
-  /// Get the socket associated with the connection.
-  boost::asio::ip::tcp::socket& socket();
+    /// Get the socket associated with the connection.
+    boost::asio::ip::tcp::socket& socket();
 
-  /// Start the first asynchronous operation for the connection.
-  void start();
+    /// Start the first asynchronous operation for the connection.
+    void start();
 
 private:
-  /// Handle completion of a read operation.
-  void handle_read(const boost::system::error_code& e,
-      std::size_t bytes_transferred);
 
-  /// Handle completion of a write operation.
-  void handle_write(const boost::system::error_code& e);
+    /// Handle completion of a read operation.
+    void handle_read(const boost::system::error_code& e,
+                     std::size_t bytes_transferred);
 
-  /// Strand to ensure the connection's handlers are not called concurrently.
-  boost::asio::io_service::strand strand_;
+    /// Handle completion of a write operation.
+    void handle_write(const boost::system::error_code& e);
 
-  /// Socket for the connection.
-  boost::asio::ip::tcp::socket socket_;
+    /// Strand to ensure the connection's handlers are not called concurrently.
+    boost::asio::io_service::strand strand_;
 
-  /// The handler used to process the incoming request.
-  const protocol_factory::AbstractRequestHandler* requestHandler;
+    /// Socket for the connection.
+    boost::asio::ip::tcp::socket socket_;
 
-  /// Buffer for incoming data.
-  boost::array<char, 8192> buffer_;
+    Factory_ptr factory;
 
-  /// The incoming request.
-  Request_ptr request_;
+    /// The handler used to process the incoming request.
+    RequestHandler_ptr requestHandler;
 
-  /// The parser for the incoming request.
-  protocol_factory::AbstractRequestParser* requestParser;
+    /// Buffer for incoming data.
+    boost::array<char, 8192> buffer_;
 
-  /// The reply to be sent back to the client.
-  Response_ptr reply_;
+    /// The incoming request.
+    Request_ptr request_;
 
-  boost::asio::streambuf buff;
+    /// The parser for the incoming request.
+    RequestParser_ptr requestParser;
+
+    /// The reply to be sent back to the client.
+    Response_ptr reply_;
+
+    boost::asio::streambuf outBuff;
+
+//    boost::asio::streambuf buffer_;
 };
 
 

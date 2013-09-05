@@ -1,17 +1,24 @@
 #include "connection.hpp"
 #include <vector>
 #include <boost/bind.hpp>
+#include <boost/log/core.hpp>
+#include <boost/log/trivial.hpp>
+#include <boost/log/expressions.hpp>
 #include "requesthandler.hpp"
+#include "utils/util_functions.h"
 
 namespace sp2p {
 namespace tracker {
 
 Connection::Connection(boost::asio::io_service& io_service,
-                       const protocol_factory::AbstractRequestHandler *handler)
+                       Factory_ptr factory)
     : strand_(io_service),
       socket_(io_service)
 {
-    this->requestHandler = handler;
+    this->factory = factory;
+    this->requestHandler = RequestHandler_ptr(factory->produceRequestHandler());
+    this->requestParser = RequestParser_ptr(factory->produceRequestParser());
+    this->request_ = Request_ptr(factory->produceRequest());
 }
 
 boost::asio::ip::tcp::socket& Connection::socket()
@@ -21,16 +28,23 @@ boost::asio::ip::tcp::socket& Connection::socket()
 
 void Connection::start()
 {
-    socket_.async_read_some(boost::asio::buffer(buffer_),
-                            strand_.wrap(
+#ifdef DEBUG_LOGGING
+    BOOST_LOG_TRIVIAL(debug) << "New connection";
+#endif
+    socket_.async_read_some(boost::asio::buffer(buffer_), strand_.wrap(
                                 boost::bind(&Connection::handle_read, shared_from_this(),
                                             boost::asio::placeholders::error,
                                             boost::asio::placeholders::bytes_transferred)));
 }
 
+
 void Connection::handle_read(const boost::system::error_code& e,
                              std::size_t bytes_transferred)
 {
+#ifdef DEBUG_LOGGING
+    BOOST_LOG_TRIVIAL(debug) << "Reading body";
+    BOOST_LOG_TRIVIAL(debug) << "Bytes transfered: " << bytes_transferred;
+#endif
     if (!e)
     {
         boost::tribool result;
@@ -38,37 +52,44 @@ void Connection::handle_read(const boost::system::error_code& e,
 
         if (result)
         {
+#ifdef DEBUG_LOGGING
+            BOOST_LOG_TRIVIAL(debug) << "WTF!? Resault, dude!";
+#endif
+            reply_ = Response_ptr(factory->produceResponse());
             requestHandler->handleRequest(request_.get(), reply_.get());
-            std::ostream ostream(&this->buff);
+            std::ostream ostream(&outBuff);
             reply_->parseIntoOstream(&ostream);
-            boost::asio::async_write(socket_, this->buff,
+            boost::asio::async_write(socket_, outBuff,
                                      strand_.wrap(
                                          boost::bind(&Connection::handle_write, shared_from_this(),
                                                      boost::asio::placeholders::error)));
         }
         else if (!result)
         {
-            // reply with BAD_REQUEST
-            //      reply_ = reply::stock_reply(reply::bad_request);
-            //      boost::asio::async_write(socket_, reply_.to_buffers(),
-            //          strand_.wrap(
-            //            boost::bind(&Connection::handle_write, shared_from_this(),
-            //              boost::asio::placeholders::error)));
+#ifdef DEBUG_LOGGING
+            BOOST_LOG_TRIVIAL(debug) << "Damn you, resault! Next time you'll be mine!";
+#endif
+            reply_ = Response_ptr(factory->produceResponse());
+            requestHandler->badRequestResponse(reply_.get());
+            std::ostream ostream(&outBuff);
+            reply_->parseIntoOstream(&ostream);
+            boost::asio::async_write(socket_, outBuff,
+                                     strand_.wrap(
+                                         boost::bind(&Connection::handle_write, shared_from_this(),
+                                                     boost::asio::placeholders::error)));
         }
         else
         {
-            socket_.async_read_some(boost::asio::buffer(buffer_),
-                                    strand_.wrap(
+#ifdef DEBUG_LOGGING
+            BOOST_LOG_TRIVIAL(debug) << "Yes? No? Pomidor.";
+#endif
+            socket_.async_read_some(boost::asio::buffer(buffer_), strand_.wrap(
                                         boost::bind(&Connection::handle_read, shared_from_this(),
                                                     boost::asio::placeholders::error,
                                                     boost::asio::placeholders::bytes_transferred)));
         }
     }
 
-    // If an error occurs then no new asynchronous operations are started. This
-    // means that all shared_ptr references to the connection object will
-    // disappear and the object will be destroyed automatically after this
-    // handler returns. The connection class's destructor closes the socket.
 }
 
 void Connection::handle_write(const boost::system::error_code& e)

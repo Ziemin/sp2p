@@ -14,6 +14,7 @@ class AbstractRequestHandler
 {
 public:
     virtual void handleRequest(const AbstractRequest *req, AbstractResponse *rep) const = 0;
+    virtual void badRequestResponse(AbstractResponse *rep) const = 0;
     virtual ~AbstractRequestHandler() = default;
 };
 
