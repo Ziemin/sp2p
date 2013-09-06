@@ -71,6 +71,9 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* ClientMessage_SignKey_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   ClientMessage_SignKey_reflection_ = NULL;
+const ::google::protobuf::Descriptor* ClientMessage_ChangePassword_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  ClientMessage_ChangePassword_reflection_ = NULL;
 const ::google::protobuf::EnumDescriptor* ClientMessage_RequestType_descriptor_ = NULL;
 const ::google::protobuf::Descriptor* NodeMessage_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
@@ -117,7 +120,7 @@ void protobuf_AssignDesc_sp2p_5fprotocol_2eproto() {
       "sp2p_protocol.proto");
   GOOGLE_CHECK(file != NULL);
   ClientMessage_descriptor_ = file->message_type(0);
-  static const int ClientMessage_offsets_[16] = {
+  static const int ClientMessage_offsets_[17] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ClientMessage, request_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ClientMessage, register_message_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ClientMessage, unregister_message_),
@@ -134,6 +137,7 @@ void protobuf_AssignDesc_sp2p_5fprotocol_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ClientMessage, update_server_message_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ClientMessage, stop_server_message_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ClientMessage, sign_key_message_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ClientMessage, change_password_message_),
   };
   ClientMessage_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -396,6 +400,23 @@ void protobuf_AssignDesc_sp2p_5fprotocol_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(ClientMessage_SignKey));
+  ClientMessage_ChangePassword_descriptor_ = ClientMessage_descriptor_->nested_type(15);
+  static const int ClientMessage_ChangePassword_offsets_[3] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ClientMessage_ChangePassword, cookie_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ClientMessage_ChangePassword, old_password_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ClientMessage_ChangePassword, new_password_),
+  };
+  ClientMessage_ChangePassword_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      ClientMessage_ChangePassword_descriptor_,
+      ClientMessage_ChangePassword::default_instance_,
+      ClientMessage_ChangePassword_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ClientMessage_ChangePassword, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ClientMessage_ChangePassword, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(ClientMessage_ChangePassword));
   ClientMessage_RequestType_descriptor_ = ClientMessage_descriptor_->enum_type(0);
   NodeMessage_descriptor_ = file->message_type(1);
   static const int NodeMessage_offsets_[9] = {
@@ -625,6 +646,8 @@ void protobuf_RegisterTypes(const ::std::string&) {
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     ClientMessage_SignKey_descriptor_, &ClientMessage_SignKey::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    ClientMessage_ChangePassword_descriptor_, &ClientMessage_ChangePassword::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     NodeMessage_descriptor_, &NodeMessage::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     NodeMessage_Register_descriptor_, &NodeMessage_Register::default_instance());
@@ -683,6 +706,8 @@ void protobuf_ShutdownFile_sp2p_5fprotocol_2eproto() {
   delete ClientMessage_StopServer_reflection_;
   delete ClientMessage_SignKey::default_instance_;
   delete ClientMessage_SignKey_reflection_;
+  delete ClientMessage_ChangePassword::default_instance_;
+  delete ClientMessage_ChangePassword_reflection_;
   delete NodeMessage::default_instance_;
   delete NodeMessage_reflection_;
   delete NodeMessage_Register::default_instance_;
@@ -714,7 +739,7 @@ void protobuf_AddDesc_sp2p_5fprotocol_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\023sp2p_protocol.proto\022\010protocol\"\327\023\n\rClie"
+    "\n\023sp2p_protocol.proto\022\010protocol\"\203\025\n\rClie"
     "ntMessage\0224\n\007request\030\001 \002(\0162#.protocol.Cl"
     "ientMessage.RequestType\022:\n\020register_mess"
     "age\030\002 \001(\0132 .protocol.ClientMessage.Regis"
@@ -740,83 +765,88 @@ void protobuf_AddDesc_sp2p_5fprotocol_2eproto() {
     "ol.ClientMessage.UpdateServer\022\?\n\023stop_se"
     "rver_message\030\017 \001(\0132\".protocol.ClientMess"
     "age.StopServer\0229\n\020sign_key_message\030\020 \001(\013"
-    "2\037.protocol.ClientMessage.SignKey\032B\n\010Reg"
-    "ister\022\020\n\010username\030\001 \002(\t\022\020\n\010password\030\002 \002("
-    "\t\022\022\n\npublic_key\030\003 \002(\t\032\034\n\nUnregister\022\016\n\006c"
-    "ookie\030\001 \002(\t\032+\n\005Login\022\020\n\010username\030\001 \002(\t\022\020"
-    "\n\010password\030\002 \002(\t\032\030\n\006Logout\022\016\n\006cookie\030\001 \002"
-    "(\t\032\036\n\014ListNetworks\022\016\n\006cookie\030\001 \002(\t\032 \n\016Li"
-    "stMyNetworks\022\016\n\006cookie\030\001 \002(\t\0323\n\013ListServ"
-    "ers\022\016\n\006cookie\030\001 \002(\t\022\024\n\014network_name\030\002 \002("
-    "\t\032\327\003\n\rCreateNetwork\022\016\n\006cookie\030\001 \002(\t\022\024\n\014n"
-    "etwork_name\030\002 \002(\t\022I\n\raccess_rights\030\003 \002(\016"
-    "22.protocol.ClientMessage.CreateNetwork."
-    "AccessRights\022C\n\nvisibility\030\004 \002(\0162/.proto"
-    "col.ClientMessage.CreateNetwork.Visiblit"
-    "y\022W\n\024participation_rights\030\005 \002(\01629.protoc"
-    "ol.ClientMessage.CreateNetwork.Participa"
-    "tionRights\022\025\n\rcreator_email\030\006 \001(\t\022\025\n\rpro"
-    "tocol_name\030\007 \001(\t\"\'\n\014AccessRights\022\n\n\006PUBL"
-    "IC\020\001\022\013\n\007PRIVATE\020\002\"%\n\tVisiblity\022\n\n\006LISTED"
-    "\020\003\022\014\n\010UNLISTED\020\004\"9\n\023ParticipationRights\022"
-    "\017\n\013CLIENT_ONLY\020\005\022\021\n\rCLIENT_SERVER\020\006\032-\n\rD"
-    "eleteNetwork\022\016\n\006cookie\030\001 \002(\t\022\014\n\004name\030\002 \002"
-    "(\t\032D\n\nInviteUser\022\016\n\006cookie\030\001 \002(\t\022\020\n\010user"
-    "name\030\002 \002(\t\022\024\n\014network_name\030\003 \002(\t\032D\n\nRemo"
-    "veUser\022\016\n\006cookie\030\001 \002(\t\022\020\n\010username\030\002 \002(\t"
-    "\022\024\n\014network_name\030\003 \002(\t\032B\n\010UserInfo\022\016\n\006co"
-    "okie\030\001 \002(\t\022\020\n\010username\030\002 \002(\t\022\024\n\014network_"
-    "name\030\003 \002(\t\032I\n\014UpdateServer\022\016\n\006cookie\030\001 \002"
-    "(\t\022\024\n\014network_name\030\002 \002(\t\022\023\n\013port_number\030"
-    "\003 \002(\005\0322\n\nStopServer\022\016\n\006cookie\030\001 \002(\t\022\024\n\014n"
-    "etwork_name\030\002 \002(\t\032C\n\007SignKey\022\016\n\006cookie\030\001"
-    " \002(\t\022\022\n\npublic_key\030\002 \002(\t\022\024\n\014network_name"
-    "\030\003 \001(\t\"\210\002\n\013RequestType\022\014\n\010REGISTER\020\000\022\016\n\n"
-    "UNREGISTER\020\001\022\t\n\005LOGIN\020\002\022\n\n\006LOGOUT\020\003\022\021\n\rL"
-    "IST_NETWORKS\020\004\022\024\n\020LIST_MY_NETWORKS\020\005\022\020\n\014"
-    "LIST_SERVERS\020\006\022\022\n\016CREATE_NETWORK\020\007\022\022\n\016DE"
-    "LETE_NETWORK\020\010\022\017\n\013INVITE_USER\020\t\022\017\n\013REMOV"
-    "E_USER\020\n\022\r\n\tUSER_INFO\020\013\022\021\n\rUPDATE_SERVER"
-    "\020\014\022\017\n\013STOP_SERVER\020\r\022\014\n\010SIGN_KEY\020\016\"\233\014\n\013No"
-    "deMessage\0229\n\rresponse_type\030\001 \002(\0162\".proto"
-    "col.NodeMessage.ResponseType\0229\n\021register"
-    "_response\030\002 \001(\0132\036.protocol.NodeMessage.R"
-    "egister\0223\n\016login_response\030\003 \001(\0132\033.protoc"
-    "ol.NodeMessage.Login\022B\n\026list_networks_re"
-    "sponse\030\005 \001(\0132\".protocol.NodeMessage.List"
-    "Networks\022G\n\031list_my_networks_response\030\006 "
-    "\001(\0132$.protocol.NodeMessage.ListMyNetwork"
-    "s\022@\n\025list_servers_response\030\007 \001(\0132!.proto"
-    "col.NodeMessage.ListServers\022:\n\022user_info"
-    "_response\030\r \001(\0132\036.protocol.NodeMessage.U"
-    "serInfo\022B\n\026update_server_response\030\016 \001(\0132"
-    "\".protocol.NodeMessage.UpdateServer\0228\n\021s"
-    "ign_key_response\030\020 \001(\0132\035.protocol.NodeMe"
-    "ssage.SignKey\032>\n\010Register\022\030\n\020user_certif"
-    "icate\030\001 \002(\t\022\030\n\020node_certificate\030\002 \002(\t\0321\n"
-    "\005Login\022\016\n\006cookie\030\001 \002(\t\022\030\n\020node_certifica"
-    "te\030\002 \001(\t\032\322\002\n\014ListNetworks\022@\n\014network_lis"
-    "t\030\001 \003(\0132*.protocol.NodeMessage.ListNetwo"
-    "rks.Network\032\377\001\n\007Network\022\014\n\004name\030\001 \002(\t\022\024\n"
-    "\014creator_name\030\002 \002(\t\022\025\n\rcreator_email\030\003 \001"
-    "(\t\022I\n\raccess_rights\030\004 \002(\01622.protocol.Cli"
-    "entMessage.CreateNetwork.AccessRights\022W\n"
-    "\024participation_rights\030\005 \002(\01629.protocol.C"
-    "lientMessage.CreateNetwork.Participation"
-    "Rights\022\025\n\rprotocol_name\030\006 \001(\t\032R\n\016ListMyN"
-    "etworks\022@\n\014network_list\030\001 \003(\0132*.protocol"
-    ".NodeMessage.ListNetworks.Network\032\213\001\n\013Li"
-    "stServers\0227\n\014list_servers\030\001 \003(\0132!.protoc"
-    "ol.NodeMessage.ListServers\032C\n\006Server\022\020\n\010"
-    "username\030\001 \002(\t\022\022\n\nip_address\030\002 \002(\t\022\023\n\013po"
-    "rt_number\030\003 \002(\005\032#\n\010UserInfo\022\027\n\017user_publ"
-    "ic_key\030\001 \002(\t\032)\n\014UpdateServer\022\031\n\021seconds_"
-    "to_update\030\001 \002(\005\032#\n\007SignKey\022\030\n\020user_certi"
-    "ficate\030\001 \002(\t\"\270\001\n\014ResponseType\022\007\n\002OK\020\310\001\022\032"
-    "\n\025INTERNAL_SERVER_ERROR\020\220\003\022\020\n\013BAD_REQUES"
-    "T\020\364\003\022\022\n\rNO_PRIVILAGES\020\365\003\022\017\n\nNOT_LOGGED\020\366"
-    "\003\022\024\n\017BAD_CREDENTIALS\020\367\003\022\021\n\014NO_SUCH_USER\020"
-    "\370\003\022\024\n\017NO_SUCH_NETWORK\020\371\003\022\r\n\010BAD_DATA\020\372\003", 4119);
+    "2\037.protocol.ClientMessage.SignKey\022G\n\027cha"
+    "nge_password_message\030\021 \001(\0132&.protocol.Cl"
+    "ientMessage.ChangePassword\032B\n\010Register\022\020"
+    "\n\010username\030\001 \002(\t\022\020\n\010password\030\002 \002(\t\022\022\n\npu"
+    "blic_key\030\003 \002(\t\032\034\n\nUnregister\022\016\n\006cookie\030\001"
+    " \002(\t\032+\n\005Login\022\020\n\010username\030\001 \002(\t\022\020\n\010passw"
+    "ord\030\002 \002(\t\032\030\n\006Logout\022\016\n\006cookie\030\001 \002(\t\032\036\n\014L"
+    "istNetworks\022\016\n\006cookie\030\001 \002(\t\032 \n\016ListMyNet"
+    "works\022\016\n\006cookie\030\001 \002(\t\0323\n\013ListServers\022\016\n\006"
+    "cookie\030\001 \002(\t\022\024\n\014network_name\030\002 \002(\t\032\327\003\n\rC"
+    "reateNetwork\022\016\n\006cookie\030\001 \002(\t\022\024\n\014network_"
+    "name\030\002 \002(\t\022I\n\raccess_rights\030\003 \002(\01622.prot"
+    "ocol.ClientMessage.CreateNetwork.AccessR"
+    "ights\022C\n\nvisibility\030\004 \002(\0162/.protocol.Cli"
+    "entMessage.CreateNetwork.Visiblity\022W\n\024pa"
+    "rticipation_rights\030\005 \002(\01629.protocol.Clie"
+    "ntMessage.CreateNetwork.ParticipationRig"
+    "hts\022\025\n\rcreator_email\030\006 \001(\t\022\025\n\rprotocol_n"
+    "ame\030\007 \001(\t\"\'\n\014AccessRights\022\n\n\006PUBLIC\020\001\022\013\n"
+    "\007PRIVATE\020\002\"%\n\tVisiblity\022\n\n\006LISTED\020\003\022\014\n\010U"
+    "NLISTED\020\004\"9\n\023ParticipationRights\022\017\n\013CLIE"
+    "NT_ONLY\020\005\022\021\n\rCLIENT_SERVER\020\006\032-\n\rDeleteNe"
+    "twork\022\016\n\006cookie\030\001 \002(\t\022\014\n\004name\030\002 \002(\t\032D\n\nI"
+    "nviteUser\022\016\n\006cookie\030\001 \002(\t\022\020\n\010username\030\002 "
+    "\002(\t\022\024\n\014network_name\030\003 \002(\t\032D\n\nRemoveUser\022"
+    "\016\n\006cookie\030\001 \002(\t\022\020\n\010username\030\002 \002(\t\022\024\n\014net"
+    "work_name\030\003 \002(\t\032B\n\010UserInfo\022\016\n\006cookie\030\001 "
+    "\002(\t\022\020\n\010username\030\002 \002(\t\022\024\n\014network_name\030\003 "
+    "\002(\t\032I\n\014UpdateServer\022\016\n\006cookie\030\001 \002(\t\022\024\n\014n"
+    "etwork_name\030\002 \002(\t\022\023\n\013port_number\030\003 \002(\005\0322"
+    "\n\nStopServer\022\016\n\006cookie\030\001 \002(\t\022\024\n\014network_"
+    "name\030\002 \002(\t\032C\n\007SignKey\022\016\n\006cookie\030\001 \002(\t\022\022\n"
+    "\npublic_key\030\002 \002(\t\022\024\n\014network_name\030\003 \001(\t\032"
+    "L\n\016ChangePassword\022\016\n\006cookie\030\001 \002(\t\022\024\n\014old"
+    "_password\030\002 \002(\t\022\024\n\014new_password\030\003 \001(\t\"\235\002"
+    "\n\013RequestType\022\014\n\010REGISTER\020\000\022\016\n\nUNREGISTE"
+    "R\020\001\022\t\n\005LOGIN\020\002\022\n\n\006LOGOUT\020\003\022\021\n\rLIST_NETWO"
+    "RKS\020\004\022\024\n\020LIST_MY_NETWORKS\020\005\022\020\n\014LIST_SERV"
+    "ERS\020\006\022\022\n\016CREATE_NETWORK\020\007\022\022\n\016DELETE_NETW"
+    "ORK\020\010\022\017\n\013INVITE_USER\020\t\022\017\n\013REMOVE_USER\020\n\022"
+    "\r\n\tUSER_INFO\020\013\022\021\n\rUPDATE_SERVER\020\014\022\017\n\013STO"
+    "P_SERVER\020\r\022\014\n\010SIGN_KEY\020\016\022\023\n\017CHANGE_PASSW"
+    "ORD\020\017\"\242\014\n\013NodeMessage\0229\n\rresponse_type\030\001"
+    " \002(\0162\".protocol.NodeMessage.ResponseType"
+    "\0229\n\021register_response\030\002 \001(\0132\036.protocol.N"
+    "odeMessage.Register\0223\n\016login_response\030\003 "
+    "\001(\0132\033.protocol.NodeMessage.Login\022B\n\026list"
+    "_networks_response\030\005 \001(\0132\".protocol.Node"
+    "Message.ListNetworks\022G\n\031list_my_networks"
+    "_response\030\006 \001(\0132$.protocol.NodeMessage.L"
+    "istMyNetworks\022@\n\025list_servers_response\030\007"
+    " \001(\0132!.protocol.NodeMessage.ListServers\022"
+    ":\n\022user_info_response\030\r \001(\0132\036.protocol.N"
+    "odeMessage.UserInfo\022B\n\026update_server_res"
+    "ponse\030\016 \001(\0132\".protocol.NodeMessage.Updat"
+    "eServer\0228\n\021sign_key_response\030\020 \001(\0132\035.pro"
+    "tocol.NodeMessage.SignKey\032>\n\010Register\022\030\n"
+    "\020user_certificate\030\001 \002(\t\022\030\n\020node_certific"
+    "ate\030\002 \002(\t\0321\n\005Login\022\016\n\006cookie\030\001 \002(\t\022\030\n\020no"
+    "de_certificate\030\002 \001(\t\032\322\002\n\014ListNetworks\022@\n"
+    "\014network_list\030\001 \003(\0132*.protocol.NodeMessa"
+    "ge.ListNetworks.Network\032\377\001\n\007Network\022\014\n\004n"
+    "ame\030\001 \002(\t\022\024\n\014creator_name\030\002 \002(\t\022\025\n\rcreat"
+    "or_email\030\003 \001(\t\022I\n\raccess_rights\030\004 \002(\01622."
+    "protocol.ClientMessage.CreateNetwork.Acc"
+    "essRights\022W\n\024participation_rights\030\005 \002(\0162"
+    "9.protocol.ClientMessage.CreateNetwork.P"
+    "articipationRights\022\025\n\rprotocol_name\030\006 \001("
+    "\t\032R\n\016ListMyNetworks\022@\n\014network_list\030\001 \003("
+    "\0132*.protocol.NodeMessage.ListNetworks.Ne"
+    "twork\032\222\001\n\013ListServers\022>\n\014list_servers\030\001 "
+    "\003(\0132(.protocol.NodeMessage.ListServers.S"
+    "erver\032C\n\006Server\022\020\n\010username\030\001 \002(\t\022\022\n\nip_"
+    "address\030\002 \002(\t\022\023\n\013port_number\030\003 \002(\005\032#\n\010Us"
+    "erInfo\022\027\n\017user_public_key\030\001 \002(\t\032)\n\014Updat"
+    "eServer\022\031\n\021seconds_to_update\030\001 \002(\005\032#\n\007Si"
+    "gnKey\022\030\n\020user_certificate\030\001 \002(\t\"\270\001\n\014Resp"
+    "onseType\022\007\n\002OK\020\310\001\022\032\n\025INTERNAL_SERVER_ERR"
+    "OR\020\220\003\022\020\n\013BAD_REQUEST\020\364\003\022\022\n\rNO_PRIVILAGES"
+    "\020\365\003\022\017\n\nNOT_LOGGED\020\366\003\022\024\n\017BAD_CREDENTIALS\020"
+    "\367\003\022\021\n\014NO_SUCH_USER\020\370\003\022\024\n\017NO_SUCH_NETWORK"
+    "\020\371\003\022\r\n\010BAD_DATA\020\372\003", 4298);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "sp2p_protocol.proto", &protobuf_RegisterTypes);
   ClientMessage::default_instance_ = new ClientMessage();
@@ -835,6 +865,7 @@ void protobuf_AddDesc_sp2p_5fprotocol_2eproto() {
   ClientMessage_UpdateServer::default_instance_ = new ClientMessage_UpdateServer();
   ClientMessage_StopServer::default_instance_ = new ClientMessage_StopServer();
   ClientMessage_SignKey::default_instance_ = new ClientMessage_SignKey();
+  ClientMessage_ChangePassword::default_instance_ = new ClientMessage_ChangePassword();
   NodeMessage::default_instance_ = new NodeMessage();
   NodeMessage_Register::default_instance_ = new NodeMessage_Register();
   NodeMessage_Login::default_instance_ = new NodeMessage_Login();
@@ -862,6 +893,7 @@ void protobuf_AddDesc_sp2p_5fprotocol_2eproto() {
   ClientMessage_UpdateServer::default_instance_->InitAsDefaultInstance();
   ClientMessage_StopServer::default_instance_->InitAsDefaultInstance();
   ClientMessage_SignKey::default_instance_->InitAsDefaultInstance();
+  ClientMessage_ChangePassword::default_instance_->InitAsDefaultInstance();
   NodeMessage::default_instance_->InitAsDefaultInstance();
   NodeMessage_Register::default_instance_->InitAsDefaultInstance();
   NodeMessage_Login::default_instance_->InitAsDefaultInstance();
@@ -906,6 +938,7 @@ bool ClientMessage_RequestType_IsValid(int value) {
     case 12:
     case 13:
     case 14:
+    case 15:
       return true;
     default:
       return false;
@@ -928,6 +961,7 @@ const ClientMessage_RequestType ClientMessage::USER_INFO;
 const ClientMessage_RequestType ClientMessage::UPDATE_SERVER;
 const ClientMessage_RequestType ClientMessage::STOP_SERVER;
 const ClientMessage_RequestType ClientMessage::SIGN_KEY;
+const ClientMessage_RequestType ClientMessage::CHANGE_PASSWORD;
 const ClientMessage_RequestType ClientMessage::RequestType_MIN;
 const ClientMessage_RequestType ClientMessage::RequestType_MAX;
 const int ClientMessage::RequestType_ARRAYSIZE;
@@ -5590,6 +5624,346 @@ void ClientMessage_SignKey::Swap(ClientMessage_SignKey* other) {
 // -------------------------------------------------------------------
 
 #ifndef _MSC_VER
+const int ClientMessage_ChangePassword::kCookieFieldNumber;
+const int ClientMessage_ChangePassword::kOldPasswordFieldNumber;
+const int ClientMessage_ChangePassword::kNewPasswordFieldNumber;
+#endif  // !_MSC_VER
+
+ClientMessage_ChangePassword::ClientMessage_ChangePassword()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+}
+
+void ClientMessage_ChangePassword::InitAsDefaultInstance() {
+}
+
+ClientMessage_ChangePassword::ClientMessage_ChangePassword(const ClientMessage_ChangePassword& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+}
+
+void ClientMessage_ChangePassword::SharedCtor() {
+  _cached_size_ = 0;
+  cookie_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  old_password_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  new_password_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+ClientMessage_ChangePassword::~ClientMessage_ChangePassword() {
+  SharedDtor();
+}
+
+void ClientMessage_ChangePassword::SharedDtor() {
+  if (cookie_ != &::google::protobuf::internal::kEmptyString) {
+    delete cookie_;
+  }
+  if (old_password_ != &::google::protobuf::internal::kEmptyString) {
+    delete old_password_;
+  }
+  if (new_password_ != &::google::protobuf::internal::kEmptyString) {
+    delete new_password_;
+  }
+  if (this != default_instance_) {
+  }
+}
+
+void ClientMessage_ChangePassword::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* ClientMessage_ChangePassword::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return ClientMessage_ChangePassword_descriptor_;
+}
+
+const ClientMessage_ChangePassword& ClientMessage_ChangePassword::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_sp2p_5fprotocol_2eproto();
+  return *default_instance_;
+}
+
+ClientMessage_ChangePassword* ClientMessage_ChangePassword::default_instance_ = NULL;
+
+ClientMessage_ChangePassword* ClientMessage_ChangePassword::New() const {
+  return new ClientMessage_ChangePassword;
+}
+
+void ClientMessage_ChangePassword::Clear() {
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (has_cookie()) {
+      if (cookie_ != &::google::protobuf::internal::kEmptyString) {
+        cookie_->clear();
+      }
+    }
+    if (has_old_password()) {
+      if (old_password_ != &::google::protobuf::internal::kEmptyString) {
+        old_password_->clear();
+      }
+    }
+    if (has_new_password()) {
+      if (new_password_ != &::google::protobuf::internal::kEmptyString) {
+        new_password_->clear();
+      }
+    }
+  }
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool ClientMessage_ChangePassword::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) return false
+  ::google::protobuf::uint32 tag;
+  while ((tag = input->ReadTag()) != 0) {
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required string cookie = 1;
+      case 1: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_cookie()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->cookie().data(), this->cookie().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(18)) goto parse_old_password;
+        break;
+      }
+
+      // required string old_password = 2;
+      case 2: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_old_password:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_old_password()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->old_password().data(), this->old_password().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(26)) goto parse_new_password;
+        break;
+      }
+
+      // optional string new_password = 3;
+      case 3: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_new_password:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_new_password()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->new_password().data(), this->new_password().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectAtEnd()) return true;
+        break;
+      }
+
+      default: {
+      handle_uninterpreted:
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          return true;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+  return true;
+#undef DO_
+}
+
+void ClientMessage_ChangePassword::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // required string cookie = 1;
+  if (has_cookie()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->cookie().data(), this->cookie().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      1, this->cookie(), output);
+  }
+
+  // required string old_password = 2;
+  if (has_old_password()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->old_password().data(), this->old_password().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      2, this->old_password(), output);
+  }
+
+  // optional string new_password = 3;
+  if (has_new_password()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->new_password().data(), this->new_password().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      3, this->new_password(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+}
+
+::google::protobuf::uint8* ClientMessage_ChangePassword::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // required string cookie = 1;
+  if (has_cookie()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->cookie().data(), this->cookie().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        1, this->cookie(), target);
+  }
+
+  // required string old_password = 2;
+  if (has_old_password()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->old_password().data(), this->old_password().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        2, this->old_password(), target);
+  }
+
+  // optional string new_password = 3;
+  if (has_new_password()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->new_password().data(), this->new_password().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        3, this->new_password(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  return target;
+}
+
+int ClientMessage_ChangePassword::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required string cookie = 1;
+    if (has_cookie()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->cookie());
+    }
+
+    // required string old_password = 2;
+    if (has_old_password()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->old_password());
+    }
+
+    // optional string new_password = 3;
+    if (has_new_password()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->new_password());
+    }
+
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void ClientMessage_ChangePassword::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const ClientMessage_ChangePassword* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const ClientMessage_ChangePassword*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void ClientMessage_ChangePassword::MergeFrom(const ClientMessage_ChangePassword& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_cookie()) {
+      set_cookie(from.cookie());
+    }
+    if (from.has_old_password()) {
+      set_old_password(from.old_password());
+    }
+    if (from.has_new_password()) {
+      set_new_password(from.new_password());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void ClientMessage_ChangePassword::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void ClientMessage_ChangePassword::CopyFrom(const ClientMessage_ChangePassword& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ClientMessage_ChangePassword::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
+
+  return true;
+}
+
+void ClientMessage_ChangePassword::Swap(ClientMessage_ChangePassword* other) {
+  if (other != this) {
+    std::swap(cookie_, other->cookie_);
+    std::swap(old_password_, other->old_password_);
+    std::swap(new_password_, other->new_password_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata ClientMessage_ChangePassword::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = ClientMessage_ChangePassword_descriptor_;
+  metadata.reflection = ClientMessage_ChangePassword_reflection_;
+  return metadata;
+}
+
+
+// -------------------------------------------------------------------
+
+#ifndef _MSC_VER
 const int ClientMessage::kRequestFieldNumber;
 const int ClientMessage::kRegisterMessageFieldNumber;
 const int ClientMessage::kUnregisterMessageFieldNumber;
@@ -5606,6 +5980,7 @@ const int ClientMessage::kUserInfoMessageFieldNumber;
 const int ClientMessage::kUpdateServerMessageFieldNumber;
 const int ClientMessage::kStopServerMessageFieldNumber;
 const int ClientMessage::kSignKeyMessageFieldNumber;
+const int ClientMessage::kChangePasswordMessageFieldNumber;
 #endif  // !_MSC_VER
 
 ClientMessage::ClientMessage()
@@ -5629,6 +6004,7 @@ void ClientMessage::InitAsDefaultInstance() {
   update_server_message_ = const_cast< ::protocol::ClientMessage_UpdateServer*>(&::protocol::ClientMessage_UpdateServer::default_instance());
   stop_server_message_ = const_cast< ::protocol::ClientMessage_StopServer*>(&::protocol::ClientMessage_StopServer::default_instance());
   sign_key_message_ = const_cast< ::protocol::ClientMessage_SignKey*>(&::protocol::ClientMessage_SignKey::default_instance());
+  change_password_message_ = const_cast< ::protocol::ClientMessage_ChangePassword*>(&::protocol::ClientMessage_ChangePassword::default_instance());
 }
 
 ClientMessage::ClientMessage(const ClientMessage& from)
@@ -5655,6 +6031,7 @@ void ClientMessage::SharedCtor() {
   update_server_message_ = NULL;
   stop_server_message_ = NULL;
   sign_key_message_ = NULL;
+  change_password_message_ = NULL;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -5679,6 +6056,7 @@ void ClientMessage::SharedDtor() {
     delete update_server_message_;
     delete stop_server_message_;
     delete sign_key_message_;
+    delete change_password_message_;
   }
 }
 
@@ -5752,6 +6130,11 @@ void ClientMessage::Clear() {
     }
     if (has_sign_key_message()) {
       if (sign_key_message_ != NULL) sign_key_message_->::protocol::ClientMessage_SignKey::Clear();
+    }
+  }
+  if (_has_bits_[16 / 32] & (0xffu << (16 % 32))) {
+    if (has_change_password_message()) {
+      if (change_password_message_ != NULL) change_password_message_->::protocol::ClientMessage_ChangePassword::Clear();
     }
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
@@ -5990,6 +6373,20 @@ bool ClientMessage::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
+        if (input->ExpectTag(138)) goto parse_change_password_message;
+        break;
+      }
+
+      // optional .protocol.ClientMessage.ChangePassword change_password_message = 17;
+      case 17: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_change_password_message:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_change_password_message()));
+        } else {
+          goto handle_uninterpreted;
+        }
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -6106,6 +6503,12 @@ void ClientMessage::SerializeWithCachedSizes(
   if (has_sign_key_message()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       16, this->sign_key_message(), output);
+  }
+
+  // optional .protocol.ClientMessage.ChangePassword change_password_message = 17;
+  if (has_change_password_message()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      17, this->change_password_message(), output);
   }
 
   if (!unknown_fields().empty()) {
@@ -6225,6 +6628,13 @@ void ClientMessage::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         16, this->sign_key_message(), target);
+  }
+
+  // optional .protocol.ClientMessage.ChangePassword change_password_message = 17;
+  if (has_change_password_message()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        17, this->change_password_message(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -6352,6 +6762,15 @@ int ClientMessage::ByteSize() const {
     }
 
   }
+  if (_has_bits_[16 / 32] & (0xffu << (16 % 32))) {
+    // optional .protocol.ClientMessage.ChangePassword change_password_message = 17;
+    if (has_change_password_message()) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->change_password_message());
+    }
+
+  }
   if (!unknown_fields().empty()) {
     total_size +=
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
@@ -6429,6 +6848,11 @@ void ClientMessage::MergeFrom(const ClientMessage& from) {
       mutable_sign_key_message()->::protocol::ClientMessage_SignKey::MergeFrom(from.sign_key_message());
     }
   }
+  if (from._has_bits_[16 / 32] & (0xffu << (16 % 32))) {
+    if (from.has_change_password_message()) {
+      mutable_change_password_message()->::protocol::ClientMessage_ChangePassword::MergeFrom(from.change_password_message());
+    }
+  }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
@@ -6492,6 +6916,9 @@ bool ClientMessage::IsInitialized() const {
   if (has_sign_key_message()) {
     if (!this->sign_key_message().IsInitialized()) return false;
   }
+  if (has_change_password_message()) {
+    if (!this->change_password_message().IsInitialized()) return false;
+  }
   return true;
 }
 
@@ -6513,6 +6940,7 @@ void ClientMessage::Swap(ClientMessage* other) {
     std::swap(update_server_message_, other->update_server_message_);
     std::swap(stop_server_message_, other->stop_server_message_);
     std::swap(sign_key_message_, other->sign_key_message_);
+    std::swap(change_password_message_, other->change_password_message_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
@@ -8420,7 +8848,7 @@ bool NodeMessage_ListServers::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .protocol.NodeMessage.ListServers list_servers = 1;
+      // repeated .protocol.NodeMessage.ListServers.Server list_servers = 1;
       case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -8453,7 +8881,7 @@ bool NodeMessage_ListServers::MergePartialFromCodedStream(
 
 void NodeMessage_ListServers::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // repeated .protocol.NodeMessage.ListServers list_servers = 1;
+  // repeated .protocol.NodeMessage.ListServers.Server list_servers = 1;
   for (int i = 0; i < this->list_servers_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       1, this->list_servers(i), output);
@@ -8467,7 +8895,7 @@ void NodeMessage_ListServers::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* NodeMessage_ListServers::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // repeated .protocol.NodeMessage.ListServers list_servers = 1;
+  // repeated .protocol.NodeMessage.ListServers.Server list_servers = 1;
   for (int i = 0; i < this->list_servers_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
@@ -8484,7 +8912,7 @@ void NodeMessage_ListServers::SerializeWithCachedSizes(
 int NodeMessage_ListServers::ByteSize() const {
   int total_size = 0;
 
-  // repeated .protocol.NodeMessage.ListServers list_servers = 1;
+  // repeated .protocol.NodeMessage.ListServers.Server list_servers = 1;
   total_size += 1 * this->list_servers_size();
   for (int i = 0; i < this->list_servers_size(); i++) {
     total_size +=
@@ -8535,6 +8963,9 @@ void NodeMessage_ListServers::CopyFrom(const NodeMessage_ListServers& from) {
 
 bool NodeMessage_ListServers::IsInitialized() const {
 
+  for (int i = 0; i < list_servers_size(); i++) {
+    if (!this->list_servers(i).IsInitialized()) return false;
+  }
   return true;
 }
 
@@ -9780,6 +10211,9 @@ bool NodeMessage::IsInitialized() const {
   }
   if (has_list_my_networks_response()) {
     if (!this->list_my_networks_response().IsInitialized()) return false;
+  }
+  if (has_list_servers_response()) {
+    if (!this->list_servers_response().IsInitialized()) return false;
   }
   if (has_user_info_response()) {
     if (!this->user_info_response().IsInitialized()) return false;

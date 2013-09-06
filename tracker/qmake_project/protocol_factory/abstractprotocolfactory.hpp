@@ -13,7 +13,7 @@ namespace sp2p {
 namespace tracker {
 namespace protocol_factory {
 
-class AbstractProtocolFactory
+class AbstractProtocolFactory : public std::enable_shared_from_this<AbstractProtocolFactory>
 {
 public:
     virtual AbstractRequest *produceRequest() const = 0;

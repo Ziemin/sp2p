@@ -11,8 +11,8 @@ namespace protocol_factory {
 class AbstractRequest
 {
 public:
-    virtual bool parseFromIstream(const std::istream *stream) = 0;
-    virtual int getSize() = 0;
+    virtual bool parseFromIstream(std::istream *stream) = 0;
+    virtual int getSize() const = 0;
     virtual ~AbstractRequest() = default;
 };
 

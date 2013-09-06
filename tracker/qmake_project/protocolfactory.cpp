@@ -13,22 +13,22 @@ ProtocolFactory::ProtocolFactory()
 }
 
 
-sp2p::tracker::protocol_factory::AbstractRequest *ProtocolFactory::produceRequest()
+sp2p::tracker::protocol_factory::AbstractRequest *ProtocolFactory::produceRequest() const
 {
     return new Request();
 }
 
-protocol_factory::AbstractRequestHandler *ProtocolFactory::produceRequestHandler()
+protocol_factory::AbstractRequestHandler *ProtocolFactory::produceRequestHandler() const
 {
     return new RequestHandler();
 }
 
-protocol_factory::AbstractRequestParser *ProtocolFactory::produceRequestParser()
+protocol_factory::AbstractRequestParser *ProtocolFactory::produceRequestParser() const
 {
     return new RequestParser();
 }
 
-protocol_factory::AbstractResponse *ProtocolFactory::produceResponse()
+protocol_factory::AbstractResponse *ProtocolFactory::produceResponse() const
 {
     return new Response();
 }

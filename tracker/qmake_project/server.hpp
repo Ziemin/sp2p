@@ -6,6 +6,7 @@
 #include <vector>
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
+#include "types.hpp"
 #include "connection.hpp"
 #include "requesthandler.hpp"
 #include "protocol_factory/abstractprotocolfactory.hpp"
@@ -24,7 +25,7 @@ class Server
 public:
     /// Construct the server to listen on the specified TCP address and port, and
     /// serve up files from the given directory.
-    explicit Server(const protocol_factory::AbstractProtocolFactory *factory, const std::string& address, const std::string& port, std::size_t thread_pool_size);
+    explicit Server(Factory_ptr factory, const std::string& address, const std::string& port, std::size_t thread_pool_size);
 
     /// Run the server's io_service loop.
     void run();
@@ -41,7 +42,7 @@ private:
     boost::asio::ip::tcp::acceptor acceptor_;
     Connection_ptr new_connection_;
     protocol_factory::AbstractRequestHandler *requestHandler;
-    const protocol_factory::AbstractProtocolFactory *protocolFactory;
+    Factory_ptr protocolFactory;
 };
 
 } // namespace tracker
