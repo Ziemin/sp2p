@@ -12,8 +12,9 @@
 namespace sp2p {
 namespace tracker {
 
-RequestHandler::RequestHandler()
+RequestHandler::RequestHandler(SessionControler_ptr sessionControler)
 {
+    this->sessionControler = sessionControler;
 }
 
 void RequestHandler::handleRequest(const protocol_factory::AbstractRequest *req, protocol_factory::AbstractResponse *rep) const
@@ -115,72 +116,72 @@ void RequestHandler::badRequestResponse(protocol_factory::AbstractResponse *rep)
 
 }
 
-bool RequestHandler::cookieCorrect(Request *req) {
+bool RequestHandler::cookieCorrect(protocol::ClientMessage *clientMessage) {
 
 }
 
 
-void RequestHandler::handleRegister(Request *req) {
+void RequestHandler::handleRegister(protocol::ClientMessage *clientMessage) {
 
 }
 
-void RequestHandler::handleUnregister(Request *req) {
+void RequestHandler::handleUnregister(protocol::ClientMessage *clientMessage) {
 
 }
 
-void RequestHandler::handleLogin(Request *req) {
+void RequestHandler::handleLogin(protocol::ClientMessage *clientMessage) {
 
 }
 
-void RequestHandler::handleLogout(Request *req) {
+void RequestHandler::handleLogout(protocol::ClientMessage *clientMessage) {
 
 }
 
-void RequestHandler::handleList_networks(Request *req) {
+void RequestHandler::handleList_networks(protocol::ClientMessage *clientMessage) {
 
 }
 
-void RequestHandler::handleList_my_networks(Request *req) {
+void RequestHandler::handleList_my_networks(protocol::ClientMessage *clientMessage) {
 
 }
 
-void RequestHandler::handleList_servers(Request *req) {
+void RequestHandler::handleList_servers(protocol::ClientMessage *clientMessage) {
 
 }
 
-void RequestHandler::handleCreate_network(Request *req) {
+void RequestHandler::handleCreate_network(protocol::ClientMessage *clientMessage) {
 
 }
 
-void RequestHandler::handleDelete_network(Request *req) {
+void RequestHandler::handleDelete_network(protocol::ClientMessage *clientMessage) {
 
 }
 
-void RequestHandler::handleInvite_user(Request *req) {
+void RequestHandler::handleInvite_user(protocol::ClientMessage *clientMessage) {
 
 }
 
-void RequestHandler::handleRemove_user(Request *req) {
+void RequestHandler::handleRemove_user(protocol::ClientMessage *clientMessage) {
 
 }
 
-void RequestHandler::handleUser_info(Request *req) {
+void RequestHandler::handleUser_info(protocol::ClientMessage *clientMessage) {
 
 }
 
-void RequestHandler::handleUpdate_server(Request *req) {
+void RequestHandler::handleUpdate_server(protocol::ClientMessage *clientMessage) {
 
 }
 
-void RequestHandler::handleStop_server(Request *req) {
+void RequestHandler::handleStop_server(protocol::ClientMessage *clientMessage) {
 
 }
 
-void RequestHandler::handleSign_key(Request *req) {
+void RequestHandler::handleSign_key(protocol::ClientMessage *clientMessage) {
 
 }
 
-void RequestHandler::handleChange_password(Request *req) {
+void RequestHandler::handleChange_password(protocol::ClientMessage *clientMessage) {
 
 }
 

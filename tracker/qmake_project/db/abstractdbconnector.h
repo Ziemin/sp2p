@@ -5,6 +5,10 @@
 
 #include "dbresponse.h"
 
+namespace sp2p {
+namespace tracker {
+namespace db {
+
 class AbstractDBConnector {
 public:
 
@@ -27,5 +31,9 @@ public:
     virtual DB_Response deleteServer(std::string &network, std::string& user)=0;
 
 };
+
+} // namespace db
+} // namespace tracker
+} // namespace sp2p
 
 #endif // DATABASECONNECTOR_H

@@ -8,6 +8,8 @@
 #include "protocol_factory/abstractrequesthandler.hpp"
 #include "protocol_factory/abstractrequestparser.hpp"
 #include "protocol_factory/abstractresponse.hpp"
+#include "protocol_factory/abstractsessioncontroler.hpp"
+#include "db/abstractdbconnector.h"
 
 
 typedef std::shared_ptr<protocol::ClientMessage> ClientMessage_ptr;
@@ -17,6 +19,8 @@ typedef std::shared_ptr<sp2p::tracker::protocol_factory::AbstractResponse> Respo
 typedef std::shared_ptr<sp2p::tracker::protocol_factory::AbstractRequestParser> RequestParser_ptr;
 typedef std::shared_ptr<sp2p::tracker::protocol_factory::AbstractRequestHandler> RequestHandler_ptr;
 typedef std::shared_ptr<sp2p::tracker::protocol_factory::AbstractProtocolFactory> Factory_ptr;
+typedef std::shared_ptr<sp2p::tracker::protocol_factory::AbstractSessionControler> SessionControler_ptr;
+typedef std::shared_ptr<sp2p::tracker::db::AbstractDBConnector> DBConnector_ptr;
 
 
 #endif // TYPES_HPP

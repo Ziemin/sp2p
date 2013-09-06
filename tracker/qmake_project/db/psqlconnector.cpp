@@ -7,6 +7,10 @@
 #include <pqxx/transactor>
 #include <iostream>
 
+namespace sp2p {
+namespace tracker {
+namespace db {
+
 PsqlConnector::PsqlConnector(std::string dbName, std::string dbUser, std::string dbPassword, \
                              std::string dbAdress, std::string dbPort) :
     AbstractDBConnector(),
@@ -178,7 +182,9 @@ DB_Response PsqlConnector::deleteServer(std::string& network, std::string& user)
     return DB_Response::OK;
 }
 
-
+} // namespace db
+} // namespace tracker
+} // namespace sp2p
 
 
 
