@@ -8,23 +8,21 @@ find_package(Protobuf REQUIRED)
 add_definitions(-BOOST_ASIO_ENABLE_HANDLER_TRACKING)
 ADD_DEFINITIONS(-DBOOST_ALL_DYN_LINK)
 
-add_library(Sercli STATIC
-	user.cpp
-	node.cpp
-	sp2p_protocol.pb.cc
-	nodemessage.cpp
-	parser.cpp
-	handler.cpp
-	globals.cpp
-	manager.cpp
-	nodeconnection.cpp
-	message_factory.cpp
-	network.cpp
-	parser_factory.cpp
-	data.cpp
-	logging.cpp
-	sp2p_types.cpp
+SET(SERCLI_LIB_PATH ${node_client_SOURCE_DIR}/../sercli/lib)
+
+add_library(nodeClientLib STATIC
+    #empty 
 )
+
+add_executable(nodeClient main.cpp)
+
+target_link_libraries (nodeClient ${Boost_LIBRARIES})
+target_link_libraries (nodeClient ${Boost_SYSTEM_LIBRARY})
+target_link_libraries (nodeClient ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries (nodeClient ${BOTAN_LIBRARIES})
+target_link_libraries (nodeClient ${PROTOBUF_LIBRARY})
+target_link_libraries (nodeClient ${SERCLI_LIB_PATH}/libSercli.a)
+target_link_libraries (nodeClient nodeClientLib)
 
 set(LOG OFF CACHE BOOL "Enable logging")
 

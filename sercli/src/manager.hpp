@@ -13,6 +13,10 @@
 #include "network.hpp"
 #include "connection_manager.hpp"
 
+#ifdef LOGGING_ENABLED
+#include "logging.hpp"
+#endif
+
 namespace sp2p {
 	namespace sercli {
 
@@ -85,6 +89,8 @@ namespace sp2p {
 				std::vector<std::shared_ptr<std::thread>> thread_pool;
 
 				ConnectionManager<NodeRequest, NodeResponse> connection_manager;
+
+				logging::Logger lg = logging::sp2p_lg::get();
 		};
 
 	} /* namespace sercli */

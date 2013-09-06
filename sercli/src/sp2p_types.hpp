@@ -47,6 +47,9 @@ namespace sp2p {
 
 				// serialization
 				private: 
+
+					friend std::ostream& operator<<(std::ostream& os, const ServerDescription& server_desc);
+
 					friend class boost::serialization::access;
 
 					template<class Archive> void save(Archive& ar, const unsigned int /* version */) const {
@@ -88,6 +91,8 @@ namespace sp2p {
 
 				// serialization
 				private: 
+					friend std::ostream& operator<<(std::ostream& os, const NetworkDescription& net_desc);
+
 					friend class boost::serialization::access;
 					template<class Archive> void serialize(Archive& ar, const unsigned int /* version */) {
 						ar & access_rights & visability & participation_rights;
@@ -108,6 +113,8 @@ namespace sp2p {
 
 				// serialization
 				private: 
+					friend std::ostream& operator<<(std::ostream& os, const NodeDescription& node_desc);
+
 					friend class boost::serialization::access;
 
 					template<class Archive> void save(Archive& ar, const unsigned int /* version */) const {

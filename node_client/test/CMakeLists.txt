@@ -21,7 +21,7 @@ endif(LOG_TEST)
 link_directories( ${Boost_LIBRARY_DIRS} )
 include_directories( ${Boost_INCLUDE_DIRS} ${BOTAN_INCLUDE_DIR} ${PROTOBUF_INCLUDE_DIR})
 
-SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${sp2p_SOURCE_DIR}/build/tests)
+SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${node_client_SOURCE_DIR}/build/tests)
 
 SET(TEST_PROPS -log_level=all)
 
@@ -41,7 +41,8 @@ foreach(file ${TEST_FILES})
     target_link_libraries (${base_name} ${BOTAN_LIBRARIES})
     target_link_libraries (${base_name} ${PROTOBUF_LIBRARY})
 
-    target_link_libraries (${base_name} ${LIBRARY_OUTPUT_PATH}/libSercli.a)
+    target_link_libraries (${base_name} ${LIBRARY_OUTPUT_PATH}/libnodeClientLib.a)
+    target_link_libraries (${base_name} ${SERCLI_LIB_PATH}/libSercli.a)
 
     add_test(NAME ${base_name} COMMAND ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${base_name} ${TEST_PROPS})
     set_tests_properties(${base_name} PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/resources)
@@ -55,4 +56,4 @@ foreach(test ${TEST_NAMES})
     message("--    "${test})
 endforeach()
 
-ADD_CUSTOM_TARGET(check COMMAND ${CMAKE_CTEST_COMMAND} DEPENDS ${TEST_NAMES})
+ADD_CUSTOM_TARGET(test COMMAND ${CMAKE_CTEST_COMMAND} DEPENDS ${TEST_NAMES})

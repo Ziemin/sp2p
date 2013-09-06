@@ -6,6 +6,7 @@
 #include "connection.hpp"
 #include "message.hpp"
 #include "nodemessage.hpp"
+#include "logging.hpp"
 
 namespace sp2p {
 	namespace sercli {
@@ -43,6 +44,11 @@ namespace sp2p {
 					virtual void handleReadError(Connection<NodeRequest, NodeResponse>& connection);
 
 					virtual void handleParseError(Connection<NodeRequest, NodeResponse>& connection);
+
+				private:
+
+					logging::Logger lg = logging::sp2p_lg::get();
+
 			};
 
 	} /* namespace sercli */

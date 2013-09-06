@@ -4,12 +4,16 @@
 #include <exception>
 #include <functional>
 
+#include <boost/log/core.hpp>
+
 #include "connection.hpp"
 
 namespace pl = std::placeholders;
 
 namespace sp2p {
     namespace sercli {
+
+    using namespace boost::log::trivial;
 
         template <typename Request, typename Response>
            Connection<Request, Response>::Connection(
@@ -28,11 +32,12 @@ namespace sp2p {
            starter_function(starter)
            {
                is_active = true;
+               BOOST_LOG_SEV(lg, trace) << "Created connection with: " << socket_.remote_endpoint().address().to_string();
            }
 
         template <typename Request, typename Response>
             void Connection<Request, Response>::go() {
-
+                BOOST_LOG_SEV(lg, trace) << "Started connection with: " << socket_.remote_endpoint().address().to_string();
                 starter_function();
             }
 
@@ -45,6 +50,7 @@ namespace sp2p {
         template <typename Request, typename Response>
             void Connection<Request, Response>::stop() {
 
+                BOOST_LOG_SEV(lg, trace) << "Stopping connection with: " << socket_.remote_endpoint().address().to_string();
                 strand.post([this]()
                 { 
                     if(!this->socket_.is_open()) {
@@ -57,6 +63,7 @@ namespace sp2p {
         template <typename Request, typename Response>
             void Connection<Request, Response>::gracefulStop() {
 
+                BOOST_LOG_SEV(lg, trace) << "Gracefully stopping connection with: " << socket_.remote_endpoint().address().to_string();
                 strand.post([this]()
                 { 
                     if(!this->socket_.is_open()) {
@@ -70,6 +77,8 @@ namespace sp2p {
 
         template <typename Request, typename Response>
             std::future<std::shared_ptr<Response>> Connection<Request, Response>::sendRequest(std::shared_ptr<Request> request) {
+
+                BOOST_LOG_SEV(lg, trace) << "Sync-Sending request to: " << socket_.remote_endpoint().address().to_string();
 
                 std::shared_ptr<std::promise<std::shared_ptr<Response>>> pr(new std::promise<std::shared_ptr<Response>>());
                 std::future<std::shared_ptr<Response>> response = pr->get_future();
@@ -86,6 +95,7 @@ namespace sp2p {
         template <typename Request, typename Response>
             template <typename SendHandler>
             void Connection<Request, Response>::sendMessage(std::shared_ptr<Request> request, SendHandler sendHandler) {
+                BOOST_LOG_SEV(lg, trace) << "Send message to: " << socket_.remote_endpoint().address().to_string();
 
                 strand.post([this, request, sendHandler]()
                         -> void {
@@ -116,11 +126,14 @@ namespace sp2p {
             template <typename ReadHandler>
             void Connection<Request, Response>::readMessage(ReadHandler readHandler) {
                 
+                BOOST_LOG_SEV(lg, trace) << "Reading message from: " << socket_.remote_endpoint().address().to_string();
                 auto self(this->shared_from_this());
                 socket_.async_read_some(
                         boost::asio::buffer(recv_buf), strand.wrap(
                         [this, self, &readHandler] (boost::system::error_code ec, std::size_t length) 
                         {
+                            BOOST_LOG_SEV(lg, debug) << "Read " << length << 
+                                " bytes from: " << socket_.remote_endpoint().address().to_string();
                             std::shared_ptr<Response> response_ptr;
                             if(!ec) {
                                 response_ptr.reset(new Response());
@@ -148,6 +161,7 @@ namespace sp2p {
         template <typename Request, typename Response> 
                 void Connection<Request, Response>::sendHandler(boost::system::error_code ec, 
                         std::shared_ptr<std::promise<std::shared_ptr<Response>>> prom) {
+                    BOOST_LOG_SEV(lg, debug) << "Send handler";
                     readMessage(
                         std::bind(&Connection<Request, Response>::readHandler, this->shared_from_this(),
                             pl::_1, 
@@ -159,6 +173,7 @@ namespace sp2p {
             void Connection<Request, Response>::readHandler(std::shared_ptr<Response> resp_ptr, boost::system::error_code ec, 
                     std::shared_ptr<std::promise<std::shared_ptr<Response>>> pr) {
 
+                BOOST_LOG_SEV(lg, debug) << "Read handler";
                 if(ec) pr->set_exception(std::make_exception_ptr(SendException()));
                 else pr->set_value(resp_ptr);
             }

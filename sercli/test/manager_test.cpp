@@ -10,6 +10,9 @@ struct InitDestroyTest {
     InitDestroyTest() {
         global::init(5);
     }
+    ~InitDestroyTest() {
+        global::destroyAll();
+    }
 };
 
 
