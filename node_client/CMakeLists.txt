@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.6)
-project(sp2p)
+project(node_client)
 
 include(FindProtobuf)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/modules )
@@ -21,8 +21,8 @@ SET (CMAKE_LINKER  "/usr/bin/llvm-ld")
 
 add_definitions(-BOOST_ASIO_ENABLE_HANDLER_TRACKING)
 
-SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${sp2p_SOURCE_DIR}/build)
-set(LIBRARY_OUTPUT_PATH ${sp2p_SOURCE_DIR}/lib)
+SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${node_client_SOURCE_DIR}/build)
+set(LIBRARY_OUTPUT_PATH ${node_client_SOURCE_DIR}/lib)
 
 # SOURCES
 add_subdirectory(src)
