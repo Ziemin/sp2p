@@ -13,10 +13,14 @@
 
 #include <boost/serialization/utility.hpp>
 #include <boost/serialization/string.hpp>
+#include <boost/log/core.hpp>
+#include <boost/log/trivial.hpp>
+#include <boost/log/sinks/text_ostream_backend.hpp>
 
 #include "user.hpp"
 #include "nodeconnection.hpp"
 #include "sp2p_types.hpp"
+#include "logging.hpp"
 
 using namespace sp2p::sercli::types;
 
@@ -97,6 +101,8 @@ namespace sp2p {
                 NodeConnection node_connection;
                 std::vector<Botan::X509_CA> ca_list;
                 std::vector<Botan::X509_Certificate> user_certificates;
+
+                logging::Logger lg = logging::sp2p_lg::get();
 
             // serialization
             private:

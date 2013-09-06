@@ -1,4 +1,5 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/log/core.hpp>
 #include <memory>
 
 #include "nodeconnection.hpp"
@@ -6,11 +7,13 @@
 #include "parser.hpp"
 #include "sp2p_types.hpp"
 
-using namespace boost::asio::ip;
-using namespace sp2p::sercli::types;
 
 namespace sp2p {
 	namespace sercli {
+
+		using namespace boost::asio::ip;
+		using namespace sp2p::sercli::types;
+		using namespace boost::log::trivial;
 
 		NodeConnection::NodeConnection(ConnectionManager<NodeRequest, NodeResponse>& connection_manager) 
 			: timer(*global::io_s),
@@ -34,7 +37,10 @@ namespace sp2p {
 			   boost::system::error_code ec;
 			   boost::asio::connect(socket, endpoint_iterator, ec);
 
-			   if(ec) throw NodeError::NO_CONNECTION;
+			   throw NodeError::NO_CONNECTION;
+
+			   BOOST_LOG_SEV(lg, info) << "Connected to " << node_desc.ip_address.to_string() 
+				   << " on port: " << node_desc.port;
 
 			   std::shared_ptr<NodeResponseParser> parser(new NodeResponseParser);
 			   std::shared_ptr<Sp2pHandler> handler(global::sp2p_handler);
@@ -66,6 +72,9 @@ namespace sp2p {
 									std::shared_ptr<NodeResponseParser> parser(new NodeResponseParser);
 									std::shared_ptr<Sp2pHandler> handler(global::sp2p_handler);
 
+								   BOOST_LOG_SEV(lg, info) << "Connected to " << node_desc.ip_address.to_string() 
+									   << " on port: " << node_desc.port;
+
 									connection.reset(
 										new Connection<NodeRequest, NodeResponse>(
 											*global::io_s,
@@ -85,6 +94,8 @@ namespace sp2p {
 		   }
 
 	   void NodeConnection::disconnect() {
+		   BOOST_LOG_SEV(lg, debug) << "Disconnecting from node: " << socket.remote_endpoint().address().to_string();
+
 		   auto self(shared_from_this());
 		   strand.post([&, self]() { connection_manager.stop(connection); });
 	   }
@@ -92,6 +103,9 @@ namespace sp2p {
 
 	   void NodeConnection::closeConnection() {
 		   if(isActive()) {
+			   BOOST_LOG_SEV(lg, debug) << "Closing connection with node: " 
+				   << socket.remote_endpoint().address().to_string();
+
 			   connection_manager.gracefulStop(connection);
 			   is_logged = false;
 		   }
@@ -102,6 +116,7 @@ namespace sp2p {
 	   }
 
 	   void NodeConnection::resetDeadlineTimer(std::uint64_t seconds) {
+		   BOOST_LOG_SEV(lg, debug) << "Reseting deadline timer";
 		   auto self(shared_from_this());
 		   strand.post([&, self]() { 
 					   timer.expires_at(timer.expires_at() + boost::posix_time::seconds(seconds)); 
@@ -111,6 +126,7 @@ namespace sp2p {
 	   }
 
 	   void NodeConnection::stopDeadlineTimer() {
+		   BOOST_LOG_SEV(lg, debug) << "Stopping deadline timer";
 		   auto self(shared_from_this());
 		   strand.post([&, self]() { timer.cancel(); });
 	   }

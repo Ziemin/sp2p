@@ -1,13 +1,21 @@
+#include "manager.hpp"
+
 #include <thread>
 #include <boost/asio.hpp>
 #include <vector>
+#include <boost/log/core.hpp>
+#include <boost/log/trivial.hpp>
+#include <boost/log/sinks/text_ostream_backend.hpp>
 
-#include "manager.hpp"
-#include "globals.hpp"
-
+/*
+ * TODO - problems with logging - no member function WTF!
+ */
 
 namespace sp2p {
 	namespace sercli {
+
+		using namespace boost::log;
+		namespace keywords = boost::log::keywords;
 
 		Manager::Manager(DataManager& dataManager) : data_manager(dataManager) { }
 
@@ -22,6 +30,8 @@ namespace sp2p {
 			node_ptr node(new Node(node_desc, connection_manager));
 			nodes_map[node_desc] = node;
 
+			BOOST_LOG_SEV(lg, trivial::debug) << "Creating new node - " << node_desc;
+
 			return node;
 		}
 
@@ -31,13 +41,20 @@ namespace sp2p {
 
 			node_ptr node(new Node(node_desc, connection_manager, user));
 			nodes_map[node_desc] = node;
+
+			BOOST_LOG_SEV(lg, trivial::debug) << "Creating new node - " << node_desc
+			<< " with " << user;
+
 			return node;
 		}
 
 		node_ptr Manager::getNode(const NodeDescription& node_desc) const{
 			auto node = nodes_map.find(node_desc);
-			if(node == nodes_map.end())
+			if(node == nodes_map.end()) {
+
+				//BOOST_LOG_SEV(lg, trivial::debug) << "No such node - " << node_desc;
 			   	throw NodeException("No such node");
+			}
 
 			return node->second;
 		}
@@ -46,6 +63,7 @@ namespace sp2p {
 			for(auto node_pair: nodes_map) 
 				if(node_pair.first.node_name == node_name) return node_pair.second;
 
+			//BOOST_LOG_SEV(lg, trivial::debug) << "No such node - " << node_name;
 			throw NodeException("No such node");
 		}
 
@@ -59,8 +77,12 @@ namespace sp2p {
 
 		void Manager::removeNode(const NodeDescription& node_desc) {
         	auto node = nodes_map.find(node_desc);
-			if(node == nodes_map.end()) 
+			if(node == nodes_map.end()) {
+				BOOST_LOG_SEV(lg, trivial::debug) << "No such node to remove - " << node_desc;
+
 				throw NodeException("No such node");
+			}
+			BOOST_LOG_SEV(lg, trivial::debug) << "Removed " << node_desc;
 			nodes_map.erase(node);
 		}
 
@@ -68,27 +90,34 @@ namespace sp2p {
 			for(auto node_pair: nodes_map) 
 				if(node_pair.first.node_name == node_name) {
                 	nodes_map.erase(node_pair.first);
+					BOOST_LOG_SEV(lg, trivial::debug) << "Removed " << node_pair.first;
 					break;
 				}
 
+			BOOST_LOG_SEV(lg, trivial::debug) << "No such node to remove: " << node_name;
 			throw NodeException("No such node");
 		}
 
 
 		network_ptr Manager::createNetwork(const NetworkDescription& network_desc) {
-			if(networks_map.find(network_desc) != networks_map.end())
+			if(networks_map.find(network_desc) != networks_map.end()) {
+				BOOST_LOG_SEV(lg, trivial::debug) << "Network already exists " << network_desc;
 				throw NetworkException("Network with such description already exists");
+			}
 
 			network_ptr network(new Network(network_desc));
 			networks_map[network_desc] = network;
 
+			BOOST_LOG_SEV(lg, trivial::debug) << "Createed " << network_desc;
 			return network;
 		}
 
 		network_ptr Manager::getNetwork(const NetworkDescription& network_desc) const {
 			auto network = networks_map.find(network_desc);
-			if(network == networks_map.end())
+			if(network == networks_map.end()) {
+				//BOOST_LOG_SEV(lg, trivial::debug) << "No such network - " << network_desc;
 			   	throw NetworkException("No such network");
+			}
 
 			return network->second;
 		}
@@ -96,7 +125,8 @@ namespace sp2p {
 		network_ptr Manager::getNetwork(const std::string& network_name) const {
 			for(auto network_pair: networks_map) 
 				if(network_pair.first.network_name == network_name) return network_pair.second;
-
+			
+			//BOOST_LOG_SEV(lg, trivial::debug) << "No such network - " << network_name;
 			throw NodeException("No such network");
 		}
 
@@ -110,18 +140,23 @@ namespace sp2p {
 
 		void Manager::removeNetwork(const NetworkDescription& network_desc) {
         	auto network = networks_map.find(network_desc);
-			if(network == networks_map.end()) 
+			if(network == networks_map.end()) {
+				BOOST_LOG_SEV(lg, trivial::debug) << "No such network to remove - " << network_desc;
 				throw NetworkException("No such network");
+			}
 			networks_map.erase(network);
+			BOOST_LOG_SEV(lg, trivial::debug) << "Removed " << network_desc;
 		}
 
 		void Manager::removeNetwork(const std::string& network_name) {
 			for(auto network_pair: networks_map) 
 				if(network_pair.first.network_name == network_name) {
 					networks_map.erase(network_pair.first);
+					BOOST_LOG_SEV(lg, trivial::debug) << "Removed " << network_pair.first;
 					break;
 				}
 
+			BOOST_LOG_SEV(lg, trivial::debug) << "No such network to remove - " << network_name;
 			throw NetworkException("No such network");
 		}
 
@@ -151,9 +186,11 @@ namespace sp2p {
 					related_nodes.clear();
 				}
 			} catch(serialization::DataException& de) {
+				BOOST_LOG_SEV(lg, trivial::error) << "Could not serialize manager class - " << de.what();
 				throw de;
 			}
 			catch(std::exception& e) {
+				BOOST_LOG_SEV(lg, trivial::error) << "Could not serialize manager class - " << e.what();
 				throw serialization::DataException("Could not save object");
 			}
 		}
@@ -202,8 +239,10 @@ namespace sp2p {
 					}
 				}
 			} catch(serialization::DataException& de) {
+				BOOST_LOG_SEV(lg, trivial::error) << "Could not deserialize manager class - " << de.what();
 				throw de;
 			} catch(std::exception& e) {
+				BOOST_LOG_SEV(lg, trivial::error) << "Could not deserialize manager class - " << e.what();
 				throw serialization::DataException("Could not load object");
 			}
 		}
@@ -214,6 +253,7 @@ namespace sp2p {
 		}
 
 		void Manager::clear() {
+			BOOST_LOG_SEV(lg, trivial::trace) << "Clearing manager";
 			nodes_map.clear();
 			networks_map.clear();
 		}

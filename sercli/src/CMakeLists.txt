@@ -1,14 +1,12 @@
-include(FindProtobuf)
-find_package(Boost COMPONENTS system REQUIRED)
-find_package(Boost COMPONENTS thread)
-find_package(Boost COMPONENTS date_time)
-find_package(Boost COMPONENTS serialization)
-find_package(Threads)
+link_directories( ${Boost_LIBRARY_DIRS} )
+include_directories( ${Boost_INCLUDE_DIRS} ${BOTAN_INCLUDE_DIR} ${PROTOBUF_INCLUDE_DIR})
+find_package(Boost COMPONENTS system thread date_time serialization unit_test_framework log log_setup REQUIRED)
+find_package(Threads REQUIRED)
 find_package(Botan REQUIRED)
 find_package(Protobuf REQUIRED)
 
-link_directories( ${Boost_LIBRARY_DIRS} )
-include_directories( ${Boost_INCLUDE_DIRS} ${BOTAN_INCLUDE_DIR} ${PROTOBUF_INCLUDE_DIR})
+add_definitions(-BOOST_ASIO_ENABLE_HANDLER_TRACKING)
+ADD_DEFINITIONS(-DBOOST_ALL_DYN_LINK)
 
 add_library(Sercli STATIC
 	user.cpp
@@ -24,9 +22,9 @@ add_library(Sercli STATIC
 	network.cpp
 	parser_factory.cpp
 	data.cpp
+	logging.cpp
+	sp2p_types.cpp
 )
-
-add_definitions(-BOOST_ASIO_ENABLE_HANDLER_TRACKING)
 
 set(LOG OFF CACHE BOOL "Enable logging")
 

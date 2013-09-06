@@ -16,6 +16,7 @@
 #include "handler.hpp"
 #include "parser.hpp"
 #include "message.hpp"
+#include "logging.hpp"
 
 namespace sp2p {
 	namespace sercli {
@@ -108,6 +109,8 @@ namespace sp2p {
 					handler_ptr<Request, Response> handler;
 
 					std::function<void()> starter_function;
+
+					logging::Logger lg = logging::sp2p_lg::get();
 
 			};
 

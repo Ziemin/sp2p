@@ -1,6 +1,7 @@
 #ifndef USER_H
 #define USER_H
 
+#include <iostream>
 #include <string>
 #include <boost/serialization/utility.hpp>
 #include <boost/serialization/base_object.hpp>
@@ -17,6 +18,9 @@ namespace sp2p {
 			std::string username, email;
 			// TODO public_key
 			private:
+
+				friend std::ostream& operator<<(std::ostream& os, const User& user);
+
 				friend class boost::serialization::access;
 
 				template<class Archive> void serialize(Archive& ar, const unsigned int /* version */) {
@@ -37,6 +41,9 @@ namespace sp2p {
 			bool is_registered;
 
 			private:
+
+				friend std::ostream& operator<<(std::ostream& os, const MyUser& user);
+
 				friend class boost::serialization::access;
 
 				template<class Archive> void serialize(Archive& ar, const unsigned int /* version */) {

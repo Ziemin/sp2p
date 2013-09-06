@@ -6,11 +6,15 @@
 #include <atomic>
 #include <boost/noncopyable.hpp>
 #include <boost/asio.hpp>
+#include <boost/log/core.hpp>
+#include <boost/log/trivial.hpp>
+#include <boost/log/sinks/text_ostream_backend.hpp>
 
 #include "nodemessage.hpp"
 #include "connection.hpp"
 #include "sp2p_types.hpp"
 #include "globals.hpp"
+#include "logging.hpp"
 
 namespace sp2p {
     namespace sercli {
@@ -62,6 +66,7 @@ namespace sp2p {
                 ConnectionManager<NodeRequest, NodeResponse>& connection_manager;
                 connection_ptr<NodeRequest, NodeResponse> connection;
 
+                logging::Logger lg = logging::sp2p_lg::get();
         };
 
         typedef std::shared_ptr<NodeConnection> node_con_ptr;

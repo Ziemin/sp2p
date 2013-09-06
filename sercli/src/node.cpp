@@ -4,14 +4,54 @@
 #include <botan/dsa.h>
 #include <botan/rsa.h>
 #include <botan/data_src.h>
+#include <boost/log/core.hpp>
+#include <boost/log/trivial.hpp>
+#include <boost/log/sinks/text_ostream_backend.hpp>
 
 #include "message_factory.hpp"
 
 using namespace sp2p::sercli::types;
+using namespace boost::log::trivial;
 
 namespace sp2p {
     namespace sercli {
 
+        // utilis
+
+        std::ostream& operator<<(std::ostream& os, const protocol::NodeMessage::ResponseType& resp_type) {
+            switch(resp_type) {
+                case protocol::NodeMessage::OK:
+                    os << "OK";
+                    break;
+                case protocol::NodeMessage::INTERNAL_SERVER_ERROR:
+                    os << "INTERNAL SERVER ERROR";
+                    break;
+                case protocol::NodeMessage::BAD_REQUEST:
+                    os << "BAD REQUEST";
+                    break;
+                case protocol::NodeMessage::NO_PRIVILAGES:
+                    os << "NO PRIVILAGES";
+                    break;
+                case protocol::NodeMessage::NOT_LOGGED:
+                    os << "NOT LOGGED";
+                    break;
+                case protocol::NodeMessage::BAD_CREDENTIALS:
+                    os << "BAD CREDENTIALS";
+                    break;
+                case protocol::NodeMessage::NO_SUCH_NETWORK:
+                    os << "NO SUCH NETWORK";
+                    break;
+                case protocol::NodeMessage::NO_SUCH_USER:
+                    os << "NO SUCH USER";
+                    break;
+                case protocol::NodeMessage::BAD_DATA:
+                    os << "BAD DATA";
+                    break;
+            }
+            return os;
+        }
+
+        // --------- Node --------------------------
 
         Node::Node(NodeDescription node_desc, 
                 ConnectionManager<NodeRequest, NodeResponse>& connection_manager) 
@@ -40,8 +80,10 @@ namespace sp2p {
         }
 
         void Node::setNewDescription(NodeDescription node_desc) {
-            if(this->isActive()) 
+            if(this->isActive()) {
+                BOOST_LOG_SEV(lg, error) << "Setting new description to active node";
                 throw NodeException("Node is active at the moment");
+            }
 
             this->node_desc = node_desc;
         }
@@ -66,6 +108,7 @@ namespace sp2p {
 
         NodeError Node::logIn() {
 
+            BOOST_LOG_SEV(lg, trace) << "Logging to " << node_desc;
             NodeError result = NodeError::OK;
 
             if(!node_connection.is_logged) {
@@ -84,6 +127,8 @@ namespace sp2p {
                     std::shared_ptr<NodeResponse> nodeResponse = con->sendRequest(loginMessage).get();
                     protocol::NodeMessage& response = nodeResponse->getResponse();
 
+                    BOOST_LOG_SEV(lg, info) << "Response from " << node_desc <<
+                        " -> " << response.response_type();
                     switch(response.response_type()) {
 
                         case protocol::NodeMessage::OK:
@@ -116,6 +161,7 @@ namespace sp2p {
 
         NodeError Node::logOut() {
 
+            BOOST_LOG_SEV(lg, trace) << "Logging out from " << node_desc;
             NodeError result = beforeMessage();
             if(any(result)) return result;
 
@@ -126,6 +172,8 @@ namespace sp2p {
                 std::shared_ptr<NodeResponse> nodeResponse = con->sendRequest(logoutMessage).get();
                 protocol::NodeMessage response = nodeResponse->getResponse();
 
+                BOOST_LOG_SEV(lg, info) << "Response from " << node_desc <<
+                    " -> " << response.response_type();
                 switch(response.response_type()) {
                     case protocol::NodeMessage::OK:
                         node_connection.is_logged = false;
@@ -147,8 +195,9 @@ namespace sp2p {
         }
 
         NodeError Node::registerUser() {
-
             if(my_user.is_registered) return NodeError::OK;
+
+            BOOST_LOG_SEV(lg, trace) << "Registering user to " << node_desc;
 
             NodeError result = beforeMessage();
             if(any(result)) return result;
@@ -160,6 +209,8 @@ namespace sp2p {
                 std::shared_ptr<NodeResponse> nodeResponse = con->sendRequest(registerUserMessage).get();
                 protocol::NodeMessage response = nodeResponse->getResponse();
 
+                BOOST_LOG_SEV(lg, info) << "Response from " << node_desc <<
+                    " -> " << response.response_type();
                 switch(response.response_type()) {
                     case protocol::NodeMessage::OK:
                         my_user.is_registered = true;
@@ -181,6 +232,7 @@ namespace sp2p {
         }
 
         NodeError Node::changePassword(const std::string& new_password) {
+            BOOST_LOG_SEV(lg, trace) << "Changing password on " << node_desc;
 
             NodeError result = beforeMessage();
             if(any(result)) return result;
@@ -193,6 +245,8 @@ namespace sp2p {
                 std::shared_ptr<NodeResponse> nodeResponse = con->sendRequest(changePasswordMessage).get();
                 protocol::NodeMessage response = nodeResponse->getResponse();
 
+                BOOST_LOG_SEV(lg, info) << "Response from " << node_desc <<
+                    " -> " << response.response_type();
                 switch(response.response_type()) {
                     case protocol::NodeMessage::OK:
                         my_user.password = new_password;
@@ -215,6 +269,7 @@ namespace sp2p {
 
         std::tuple<NodeError, User> Node::getUserInfo(const NetworkDescription& network_desc, const std::string& username) {
 
+            BOOST_LOG_SEV(lg, trace) << "Getting user info from " << node_desc;
             std::tuple<NodeError, User> resultTuple;
 
             NodeError error = beforeMessage();
@@ -231,6 +286,8 @@ namespace sp2p {
                 std::shared_ptr<NodeResponse> nodeResponse = con->sendRequest(userInfoMessage).get();
                 protocol::NodeMessage response = nodeResponse->getResponse();
 
+                BOOST_LOG_SEV(lg, info) << "Response from " << node_desc <<
+                    " -> " << response.response_type();
                 switch(response.response_type()) {
                     case protocol::NodeMessage::OK:
                         std::get<1>(resultTuple) = { username, "" }; //TODO public key
@@ -252,6 +309,7 @@ namespace sp2p {
         
         std::tuple<NodeError, std::vector<NetworkDescription>> Node::getNetworksList() {
 
+            BOOST_LOG_SEV(lg, trace) << "Getting network list from " << node_desc;
             std::tuple<NodeError, std::vector<NetworkDescription>> resultTuple;
 
             NodeError error = beforeMessage();
@@ -268,6 +326,8 @@ namespace sp2p {
                 std::shared_ptr<NodeResponse> nodeResponse = con->sendRequest(listNetworksMessage).get();
                 protocol::NodeMessage response = nodeResponse->getResponse();
 
+                BOOST_LOG_SEV(lg, info) << "Response from " << node_desc <<
+                    " -> " << response.response_type();
                 switch(response.response_type()) {
                     case protocol::NodeMessage::OK:
                         {
@@ -299,6 +359,7 @@ namespace sp2p {
 
         std::tuple<NodeError, std::vector<NetworkDescription>> Node::getMyNetworks() {
 
+            BOOST_LOG_SEV(lg, trace) << "Getting my networks from " << node_desc;
             std::tuple<NodeError, std::vector<NetworkDescription>> resultTuple;
 
             NodeError error = beforeMessage();
@@ -315,6 +376,8 @@ namespace sp2p {
                 std::shared_ptr<NodeResponse> nodeResponse = con->sendRequest(listMyNetworksMessage).get();
                 protocol::NodeMessage response = nodeResponse->getResponse();
 
+                BOOST_LOG_SEV(lg, info) << "Response from " << node_desc <<
+                    " -> " << response.response_type();
                 switch(response.response_type()) {
                     case protocol::NodeMessage::OK:
                         {
@@ -346,6 +409,7 @@ namespace sp2p {
 
         std::tuple<NodeError, std::vector<ServerDescription>> Node::getServersList(const NetworkDescription& network_desc) {
 
+            BOOST_LOG_SEV(lg, trace) << "Getting server list from " << node_desc << " -> " << network_desc;
             std::tuple<NodeError, std::vector<ServerDescription>> resultTuple;
 
             NodeError error = beforeMessage();
@@ -362,6 +426,8 @@ namespace sp2p {
                 std::shared_ptr<NodeResponse> nodeResponse = con->sendRequest(listServersMessage).get();
                 protocol::NodeMessage response = nodeResponse->getResponse();
 
+                BOOST_LOG_SEV(lg, info) << "Response from " << node_desc <<
+                    " -> " << response.response_type();
                 switch(response.response_type()) {
                     case protocol::NodeMessage::OK:
                         {
@@ -393,6 +459,7 @@ namespace sp2p {
 
         NodeError Node::registerNetwork(const NetworkDescription& network_desc) {
 
+            BOOST_LOG_SEV(lg, trace) << "Registering network on " << node_desc << " -> " << network_desc;
             NodeError error = beforeMessage();
             if(any(error)) return error;
 
@@ -404,6 +471,8 @@ namespace sp2p {
                 std::shared_ptr<NodeResponse> nodeResponse = con->sendRequest(createNetworkMessage).get();
                 protocol::NodeMessage response = nodeResponse->getResponse();
 
+                BOOST_LOG_SEV(lg, info) << "Response from " << node_desc <<
+                    " -> " << response.response_type();
                 switch(response.response_type()) {
                     case protocol::NodeMessage::OK:
                         error = NodeError::OK;
@@ -424,6 +493,7 @@ namespace sp2p {
 
         NodeError Node::deleteNetwork(const NetworkDescription& network_desc) {
 
+            BOOST_LOG_SEV(lg, trace) << "Removing network from " << node_desc << " -> " << network_desc;
             NodeError error = beforeMessage();
             if(any(error)) return error;
 
@@ -435,6 +505,8 @@ namespace sp2p {
                 std::shared_ptr<NodeResponse> nodeResponse = con->sendRequest(unregisterNetworkMessage).get();
                 protocol::NodeMessage response = nodeResponse->getResponse();
 
+                BOOST_LOG_SEV(lg, info) << "Response from " << node_desc <<
+                    " -> " << response.response_type();
                 switch(response.response_type()) {
                     case protocol::NodeMessage::OK:
                         error = NodeError::OK;
@@ -458,6 +530,7 @@ namespace sp2p {
         std::tuple<NodeError, std::int32_t> Node::updateServer(const NetworkDescription& network_desc,
                const std::int32_t port) {
 
+            BOOST_LOG_SEV(lg, trace) << "Updating server on " << node_desc << " and port " << port;
             std::tuple<NodeError, std::int32_t> resultTuple;
             NodeError error = beforeMessage();
             if(any(error)) {
@@ -473,6 +546,8 @@ namespace sp2p {
                 std::shared_ptr<NodeResponse> nodeResponse = con->sendRequest(updateServerMessage).get();
                 protocol::NodeMessage response = nodeResponse->getResponse();
 
+                BOOST_LOG_SEV(lg, info) << "Response from " << node_desc <<
+                    " -> " << response.response_type();
                 switch(response.response_type()) {
                     case protocol::NodeMessage::OK:
                         error = NodeError::OK;
@@ -496,6 +571,9 @@ namespace sp2p {
         template<typename UpdateHandler>
             void Node::asyncUpdateServer(const NetworkDescription& network_desc, const std::int32_t port, UpdateHandler updateHandler) {
                 // TODO implementation change completely to be more asynchronous
+
+                BOOST_LOG_SEV(lg, trace) << "Async updating server on " << node_desc << " - > " 
+                    <<  network_desc << " and port " << port;
                 NodeError error = beforeMessage();
                 if(any(error)) {
                     updateHandler(nullptr, error);
@@ -526,6 +604,7 @@ namespace sp2p {
 
         NodeError Node::stopServer(const NetworkDescription& network_desc) {
 
+            BOOST_LOG_SEV(lg, trace) << "Stopping server on on " << node_desc << " -> " << network_desc;
             NodeError error = beforeMessage();
             if(any(error)) return error;
 
@@ -537,6 +616,8 @@ namespace sp2p {
                 std::shared_ptr<NodeResponse> nodeResponse = con->sendRequest(stopServerMessage).get();
                 protocol::NodeMessage response = nodeResponse->getResponse();
 
+                BOOST_LOG_SEV(lg, info) << "Response from " << node_desc <<
+                    " -> " << response.response_type();
                 switch(response.response_type()) {
                     case protocol::NodeMessage::OK:
                         error = NodeError::OK;
@@ -558,6 +639,9 @@ namespace sp2p {
         std::tuple<NodeError, Botan::X509_Certificate*> Node::signKey(const Botan::Public_Key& public_key, 
                 const NetworkDescription* network_desc) {
 
+            BOOST_LOG_SEV(lg, trace) << "Signing key on " << node_desc;
+            if(network_desc != nullptr) BOOST_LOG_SEV(lg, trace) << " - > " << *network_desc;
+
             std::tuple<NodeError, Botan::X509_Certificate*> resultTuple;
             NodeError error = beforeMessage();
             if(any(error)) {
@@ -573,6 +657,8 @@ namespace sp2p {
                 std::shared_ptr<NodeResponse> nodeResponse = con->sendRequest(signKeyMessage).get();
                 protocol::NodeMessage response = nodeResponse->getResponse();
 
+                BOOST_LOG_SEV(lg, info) << "Response from " << node_desc <<
+                    " -> " << response.response_type();
                 switch(response.response_type()) {
                     case protocol::NodeMessage::OK:
                         {
@@ -598,6 +684,7 @@ namespace sp2p {
         }
 
         void Node::stopConnections() {
+            BOOST_LOG_SEV(lg, trace) << "Stopping all connections";
             node_connection.disconnect();
         }
 

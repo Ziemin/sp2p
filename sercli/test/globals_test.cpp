@@ -3,6 +3,7 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/asio.hpp>
 #include "../src/sp2p.hpp"
+#include <boost/log/core.hpp>
 
 using namespace sp2p::sercli;
 

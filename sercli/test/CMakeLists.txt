@@ -1,9 +1,10 @@
 include(FindProtobuf)
-find_package(Boost COMPONENTS system thread date_time serialization unit_test_framework REQUIRED)
+find_package(Boost COMPONENTS log log_setup thread system date_time serialization unit_test_framework REQUIRED)
 find_package(Threads REQUIRED)
 find_package(Botan REQUIRED)
 find_package(Protobuf REQUIRED)
 
+ADD_DEFINITIONS(-DBOOST_ALL_DYN_LINK)
 ADD_DEFINITIONS(-DBOOST_TEST_DYN_LINK)
 
 ENABLE_TESTING()
@@ -27,8 +28,6 @@ SET(TEST_PROPS -log_level=all)
 message("-- Adding test files:")
 file(GLOB TEST_FILES "*.cpp")
 set(TEST_NAMES "")
-message(${Boost_LIBRARIES})
-message(${Boost_INCLUDE_DIRS})
 foreach(file ${TEST_FILES})
 
     get_filename_component(base_name ${file} NAME_WE)
