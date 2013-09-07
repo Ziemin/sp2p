@@ -1,18 +1,18 @@
 link_directories( ${Boost_LIBRARY_DIRS} )
 include_directories( ${Boost_INCLUDE_DIRS} ${BOTAN_INCLUDE_DIR} ${PROTOBUF_INCLUDE_DIR})
-find_package(Boost COMPONENTS system thread date_time serialization unit_test_framework log log_setup REQUIRED)
+find_package(Boost COMPONENTS log log_setup system thread date_time serialization unit_test_framework program_options REQUIRED)
 find_package(Threads REQUIRED)
 find_package(Botan REQUIRED)
 find_package(Protobuf REQUIRED)
 
-add_definitions(-BOOST_ASIO_ENABLE_HANDLER_TRACKING)
+#add_definitions(-BOOST_ASIO_ENABLE_HANDLER_TRACKING)
 ADD_DEFINITIONS(-DBOOST_ALL_DYN_LINK)
 
 SET(SERCLI_LIB_PATH ${node_client_SOURCE_DIR}/../sercli/lib)
 
-add_library(nodeClientLib STATIC
-    #empty 
-)
+#add_library(nodeClientLib STATIC
+    ##empty 
+#)
 
 add_executable(nodeClient main.cpp)
 
@@ -22,7 +22,7 @@ target_link_libraries (nodeClient ${CMAKE_THREAD_LIBS_INIT})
 target_link_libraries (nodeClient ${BOTAN_LIBRARIES})
 target_link_libraries (nodeClient ${PROTOBUF_LIBRARY})
 target_link_libraries (nodeClient ${SERCLI_LIB_PATH}/libSercli.a)
-target_link_libraries (nodeClient nodeClientLib)
+#target_link_libraries (nodeClient nodeClientLib)
 
 set(LOG OFF CACHE BOOL "Enable logging")
 
@@ -32,3 +32,5 @@ if(LOG)
 else(LOG)
 	message("-- Logging disabled")
 endif(LOG)
+
+ADD_CUSTOM_TARGET(run COMMAND nodeClient DEPENDS ${nodeClient})

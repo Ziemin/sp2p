@@ -158,6 +158,7 @@ message NodeMessage {
         NO_SUCH_USER = 504;
         NO_SUCH_NETWORK = 505;
         BAD_DATA = 506;
+        ALREADY_EXISTS = 507;
     }
     required ResponseType response_type = 1;
 
