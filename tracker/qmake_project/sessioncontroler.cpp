@@ -1,4 +1,4 @@
-#include "logincontroler.hpp"
+#include "sessioncontroler.hpp"
 
 #include "utils/util_functions.h"
 
@@ -6,31 +6,31 @@
 namespace sp2p {
 namespace tracker {
 
-LoginControler::LoginControler()
+SessionControler::SessionControler()
 {
 }
 
 
-bool LoginControler::startDaemon(const long long refresheRate, const long long ttl)
+bool SessionControler::startDaemon(const long long refresheRate, const long long ttl)
 {
-    boost::thread(boost::bind(&LoginControler::daemonFunction, this, refresheRate, ttl));
+    boost::thread(boost::bind(&SessionControler::daemonFunction, this, refresheRate, ttl));
     isDaemonRunning = true;
     return true;
 }
 
-bool LoginControler::stopDaemon()
+bool SessionControler::stopDaemon()
 {
     daemon.interrupt();
     isDaemonRunning = false;
     return true;
 }
 
-bool LoginControler::daemonRunning() const
+bool SessionControler::daemonRunning() const
 {
     return this->isDaemonRunning;
 }
 
-bool LoginControler::isLogged(const std::string &cookie)
+bool SessionControler::isLogged(const std::string &cookie)
 {
     mutex_.lock();
     bool ret = cookieToTime.count(cookie) > 0;
@@ -38,7 +38,7 @@ bool LoginControler::isLogged(const std::string &cookie)
     return ret;
 }
 
-std::string LoginControler::login(const std::string &login)
+std::string SessionControler::login(const std::string &login)
 {
     mutex_.lock();
     std::string currCookie = utils::getRandomString(COOKIE_LEN);
@@ -48,7 +48,7 @@ std::string LoginControler::login(const std::string &login)
     return currCookie;
 }
 
-std::string LoginControler::getLogin(const std::string &cookie)
+std::string SessionControler::getLogin(const std::string &cookie)
 {
     mutex_.lock();
     std::string ret = "";
@@ -59,7 +59,7 @@ std::string LoginControler::getLogin(const std::string &cookie)
     return ret;
 }
 
-void LoginControler::refresh(const std::string &cookie)
+void SessionControler::refresh(const std::string &cookie)
 {
     mutex_.lock();
     if(cookieToTime.count(cookie) > 0) {
@@ -68,7 +68,7 @@ void LoginControler::refresh(const std::string &cookie)
     mutex_.unlock();
 }
 
-void LoginControler::cleanAll()
+void SessionControler::cleanAll()
 {
     mutex_.lock();
     cookieToLogin.clear();
@@ -76,7 +76,7 @@ void LoginControler::cleanAll()
     mutex_.unlock();
 }
 
-void LoginControler::cleanSome(const long long ttl)
+void SessionControler::cleanSome(const long long ttl)
 {
     mutex_.lock();
     for(auto it = cookieToTime.begin(); it != cookieToTime.end(); ++it) {
@@ -89,7 +89,7 @@ void LoginControler::cleanSome(const long long ttl)
     mutex_.unlock();
 }
 
-void LoginControler::daemonFunction(const long long refresheRate, const long long ttl) {
+void SessionControler::daemonFunction(const long long refresheRate, const long long ttl) {
     while(true) {
         try {
             boost::this_thread::sleep_for(boost::chrono::milliseconds(refresheRate));

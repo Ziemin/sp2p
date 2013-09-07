@@ -7,6 +7,10 @@
 #include "abstractdbconnector.h"
 #include "dbresponse.h"
 
+namespace sp2p {
+namespace tracker {
+namespace db {
+
 class PsqlConnector : public AbstractDBConnector
 {
 public:
@@ -41,5 +45,9 @@ private:
     pqxx::connection* connection;
 
 };
+
+} // namespace db
+} // namespace tracker
+} // namespace sp2p
 
 #endif // PSQLCONNECTOR_H

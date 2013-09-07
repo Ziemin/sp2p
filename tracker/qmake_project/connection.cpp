@@ -101,10 +101,6 @@ void Connection::handle_write(const boost::system::error_code& e)
         socket_.shutdown(boost::asio::ip::tcp::socket::shutdown_both, ignored_ec);
     }
 
-    // No new asynchronous operations are started. This means that all shared_ptr
-    // references to the connection object will disappear and the object will be
-    // destroyed automatically after this handler returns. The connection class's
-    // destructor closes the socket.
 }
 
 } // namespace tracker

@@ -1,5 +1,5 @@
-#ifndef LOGINCONTROLER_HPP
-#define LOGINCONTROLER_HPP
+#ifndef SESSIONCONTROLER_HPP
+#define SESSIONCONTROLER_HPP
 
 #include <string>
 #include <map>
@@ -7,15 +7,15 @@
 #include <boost/thread/mutex.hpp>
 #include <boost/thread.hpp>
 
-#include "protocol_factory/abstractlogincontroler.hpp"
+#include "protocol_factory/abstractsessioncontroler.hpp"
 
 namespace sp2p {
 namespace tracker {
 
-class LoginControler : public protocol_factory::AbstractLoginControler
+class SessionControler : public protocol_factory::AbstractSessionControler
 {
 public:
-    LoginControler();
+    SessionControler();
 
 public:
     bool startDaemon(const long long refresheRate, const long long ttl);
@@ -43,4 +43,4 @@ private:
 } // namespace tracker
 } // namespace sp2p
 
-#endif // LOGINCONTROLER_HPP
+#endif // SESSIONCONTROLER_HPP

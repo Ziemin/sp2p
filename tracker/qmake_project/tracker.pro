@@ -19,8 +19,8 @@ SOURCES += main.cpp \
     request.cpp \
     response.cpp \
     protocolfactory.cpp \
-    logincontroler.cpp \
-    logger.cpp
+    logger.cpp \
+    sessioncontroler.cpp
 
 
 HEADERS += \
@@ -48,9 +48,9 @@ HEADERS += \
     protocol_factory/abstractrequestparser.hpp \
     protocol_factory/abstractrequesthandler.hpp \
     protocolfactory.hpp \
-    logincontroler.hpp \
-    protocol_factory/abstractlogincontroler.hpp \
-    logger.hpp
+    logger.hpp \
+    sessioncontroler.hpp \
+    protocol_factory/abstractsessioncontroler.hpp
 
 QMAKE_CXXFLAGS = -std=c++11
 

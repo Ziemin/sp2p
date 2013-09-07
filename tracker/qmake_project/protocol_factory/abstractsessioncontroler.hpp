@@ -1,5 +1,5 @@
-#ifndef ABSTRACTLOGINCONTROLER_HPP
-#define ABSTRACTLOGINCONTROLER_HPP
+#ifndef ABSTRACTSESSIONCONTROLER_HPP
+#define ABSTRACTSESSIONCONTROLER_HPP
 
 #include <string>
 
@@ -7,10 +7,10 @@ namespace sp2p {
 namespace tracker {
 namespace protocol_factory {
 
-class AbstractLoginControler
+class AbstractSessionControler
 {
 public:
-    virtual ~AbstractLoginControler() = default;
+    virtual ~AbstractSessionControler() = default;
     virtual bool startDaemon(const long long refresheRate, const long long ttl) = 0;
     virtual bool stopDaemon() = 0;
     virtual bool daemonRunning() const = 0;
@@ -26,4 +26,4 @@ public:
 } // namespace tracker
 } // namespace sp2p
 
-#endif // ABSTRACTLOGINCONTROLER_HPP
+#endif // ABSTRACTSESSIONCONTROLER_HPP

@@ -1,5 +1,6 @@
 #include "protocolfactory.hpp"
 
+#include "types.hpp"
 #include "request.hpp"
 #include "response.hpp"
 #include "requesthandler.hpp"
@@ -8,19 +9,21 @@
 namespace sp2p {
 namespace tracker {
 
-ProtocolFactory::ProtocolFactory()
+ProtocolFactory::ProtocolFactory(SessionControler_ptr sessionControler) :
+    AbstractProtocolFactory()
 {
+    this->sessionControler = sessionControler;
 }
 
 
-sp2p::tracker::protocol_factory::AbstractRequest *ProtocolFactory::produceRequest() const
+protocol_factory::AbstractRequest *ProtocolFactory::produceRequest() const
 {
     return new Request();
 }
 
 protocol_factory::AbstractRequestHandler *ProtocolFactory::produceRequestHandler() const
 {
-    return new RequestHandler();
+    return new RequestHandler(sessionControler);
 }
 
 protocol_factory::AbstractRequestParser *ProtocolFactory::produceRequestParser() const
@@ -32,6 +35,17 @@ protocol_factory::AbstractResponse *ProtocolFactory::produceResponse() const
 {
     return new Response();
 }
+
+SessionControler_ptr ProtocolFactory::getSessionControler() const
+{
+    return sessionControler;
+}
+
+void ProtocolFactory::setSessionControler(const SessionControler_ptr &value)
+{
+    sessionControler = value;
+}
+
 
 
 } // namespace tracker
