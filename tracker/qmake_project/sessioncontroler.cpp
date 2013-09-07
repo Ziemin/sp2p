@@ -48,6 +48,19 @@ std::string SessionControler::login(const std::string &login)
     return currCookie;
 }
 
+bool SessionControler::logout(const std::string &cookie)
+{
+    bool ret = false;
+    mutex_.lock();
+    if(cookieToTime.find(cookie) != cookieToTime.end()) {
+        ret = true;
+        cookieToLogin.erase(cookieToLogin.find(cookie));
+        cookieToTime.erase(cookieToTime.find(cookie));
+    }
+    mutex_.unlock();
+    return ret;
+}
+
 std::string SessionControler::getLogin(const std::string &cookie)
 {
     mutex_.lock();

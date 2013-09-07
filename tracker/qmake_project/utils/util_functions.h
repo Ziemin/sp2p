@@ -2,6 +2,7 @@
 #define UTILS_H
 
 #include <string>
+#include <pqxx/result>
 #include <boost/asio/streambuf.hpp>
 
 namespace sp2p{
@@ -24,6 +25,11 @@ std::int64_t getNumFromBuff(boost::array<char, N> &buff, int numSize)
     }
     return ret;
 }
+
+std::string toString(pqxx::tuple::reference);
+bool toBool(pqxx::tuple::reference);
+int toInt(pqxx::tuple::reference);
+
 
 } // namespace utils
 } // namespace tracker

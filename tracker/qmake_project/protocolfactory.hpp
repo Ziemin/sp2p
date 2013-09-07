@@ -14,7 +14,7 @@ namespace tracker {
 class ProtocolFactory : public protocol_factory::AbstractProtocolFactory
 {
 public:
-    ProtocolFactory(SessionControler_ptr);
+    ProtocolFactory(SessionControler_ptr, DBConnector_ptr);
     protocol_factory::AbstractRequest *produceRequest()const;
     protocol_factory::AbstractRequestHandler *produceRequestHandler() const;
     protocol_factory::AbstractRequestParser *produceRequestParser() const;
@@ -23,8 +23,12 @@ public:
     SessionControler_ptr getSessionControler() const;
     void setSessionControler(const SessionControler_ptr &value);
 
+    DBConnector_ptr DBConnector() const;
+    void setDBConnector(const DBConnector_ptr &DBConnector);
+
 private:
     SessionControler_ptr sessionControler;
+    DBConnector_ptr DBConnector_;
 };
 
 } // namespace tracker

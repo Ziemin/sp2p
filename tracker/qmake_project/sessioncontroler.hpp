@@ -23,6 +23,7 @@ public:
     bool daemonRunning() const;
     bool isLogged(const std::string &cookie);
     std::string login(const std::string &login);
+    bool logout(const std::string &cookie);
     std::string getLogin(const std::string &cookie);
     void refresh(const std::string &cookie);
     void cleanAll();

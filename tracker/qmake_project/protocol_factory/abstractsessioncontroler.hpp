@@ -16,6 +16,7 @@ public:
     virtual bool daemonRunning() const = 0;
     virtual bool isLogged(const std::string &cookie) = 0;
     virtual std::string login(const std::string &login) = 0;
+    virtual bool logout(const std::string &cookie) = 0;
     virtual std::string getLogin(const std::string &cookie) = 0;
     virtual void refresh(const std::string &cookie) = 0;
     virtual void cleanAll() = 0;

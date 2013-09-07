@@ -29,6 +29,28 @@ long long currTimeInMS()
     return time_t(0)*1000;
 }
 
+std::string toString(pqxx::tuple::reference ref)
+{
+    std::stringstream stream;
+    stream << ref;
+    std::string ret;
+    stream >> ret;
+    return ret;
+}
+
+bool toBool(pqxx::tuple::reference ref)
+{
+    std::string s = toString(ref);
+    if(s == "t") return true;
+    return false;
+}
+
+int toInt(pqxx::tuple::reference ref)
+{
+    std::string s = toString(ref);
+    return std::stoi(s);
+}
+
 } // namespace utils
 } // namespace tracker
 } // namespace sp2p

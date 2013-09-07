@@ -15,7 +15,7 @@ public:
     Request();
     bool parseFromIstream(std::istream *stream);
     int getSize() const;
-    protocol::ClientMessage *getMessage() const;
+    protocol::ClientMessage *getMessage();
     void setMessage(protocol::ClientMessage *value);
 
 private:

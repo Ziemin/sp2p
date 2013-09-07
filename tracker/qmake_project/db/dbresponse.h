@@ -9,7 +9,8 @@ enum DB_Response {
     OK,
     INTERNAL_ERROR,
     NOT_UNIQUE,
-    NOT_FOUND
+    NOT_FOUND,
+    NOT_PERMITED
 };
 
 } // namespace db

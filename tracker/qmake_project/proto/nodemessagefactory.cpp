@@ -1,5 +1,8 @@
 #include "nodemessagefactory.h"
 
+namespace sp2p {
+namespace tracker {
+namespace NodeMessageFactory {
 
 using namespace std;
 using namespace protocol;
@@ -8,6 +11,10 @@ shared_ptr<NodeMessage> errorMesage(NodeMessage_ResponseType resp) {
     shared_ptr<NodeMessage> request(new NodeMessage());
     request->set_response_type(resp);
     return request;
+}
+
+NodeMessage_ptr badRequestMessage() {
+    return errorMesage(NodeMessage::BAD_REQUEST);
 }
 
 shared_ptr<NodeMessage> registerResponse(string& userCertificate, string& nodeCertificate) {
@@ -85,19 +92,16 @@ shared_ptr<NodeMessage> signKeyResponse(string& userCertificate) {
     return request;
 }
 
-shared_ptr<NodeMessage> listNetworksResponse() {
+shared_ptr<NodeMessage> listNetworksResponse(shared_ptr<list<utils::ProtoNetwork> > L) {
 
 }
 
-shared_ptr<NodeMessage> listServersResponse() {
-
-}
-
-
-std::vector<boost::int8_t> sp2p::NodeMessageFactory::packNodeMessage(NodeMessage_ptr message)
-{
+shared_ptr<NodeMessage> listServersResponse(shared_ptr<list<utils::ProtoServer> > L) {
 
 }
 
 
 
+} // namespace NodeMessageFactory
+} // namespace tracker
+} // namespace sp2p

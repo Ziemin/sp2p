@@ -2,8 +2,10 @@
 #define DATABASECONNECTOR_H
 
 #include <string>
+#include <list>
 
 #include "dbresponse.h"
+#include "utils/proto_network.hpp"
 
 namespace sp2p {
 namespace tracker {
@@ -17,6 +19,9 @@ public:
     virtual DB_Response createUser(std::string& login, std::string& password)=0;
     virtual DB_Response removeUser(std::string& login)=0;
     virtual DB_Response removeUser(int id)=0;
+    virtual bool isUser(std::string& login, std::string& password)=0;
+    virtual DB_Response changeUserPassword(std::string& login, std::string& newPassword)=0;
+
 
     virtual DB_Response createInvitation(std::string& login, std::string& networkName)=0;
     virtual DB_Response deleteInvitation(std::string& login, std::string& networkName)=0;
@@ -24,7 +29,9 @@ public:
     virtual DB_Response createNetwork(std::string& networkName, std::string& ownerLogin, bool publicity, \
                                       bool visible, bool participable, std::string& creatorMail, \
                                       std::string& protocolName)=0;
-    virtual DB_Response deleteNetwork(std::string& name)=0;
+    virtual DB_Response deleteNetwork(std::string &login, std::string& name)=0;
+    virtual std::shared_ptr<std::list<utils::ProtoNetwork>> getAllNetworks(std::string &login)=0;
+    virtual std::shared_ptr<std::list<utils::ProtoNetwork>> getUserNetworks(std::string &login)=0;
 
     virtual DB_Response updateServer(std::string &network, std::string &user, std::string& ip, \
                                      int port, int ttl)=0;

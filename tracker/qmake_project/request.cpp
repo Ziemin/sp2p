@@ -24,7 +24,7 @@ void Request::setMessage(protocol::ClientMessage *value)
 }
 
 
-protocol::ClientMessage *Request::getMessage() const
+protocol::ClientMessage *Request::getMessage()
 {
     return message;
 }
