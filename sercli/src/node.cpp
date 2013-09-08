@@ -148,6 +148,7 @@ namespace sp2p {
                                 const protocol::NodeMessage::Login& loginResponse = response.login_response();
                                 if(loginResponse.has_cookie()) {
                                     result = NodeError::OK;
+                                    BOOST_LOG_SEV(lg, info) << "Cookie from: " << node_desc << " = " << loginResponse.cookie();
                                     node_connection.setCookie(loginResponse.cookie());
                                     node_connection.is_logged = true;
                                     break;

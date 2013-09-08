@@ -32,20 +32,26 @@ namespace sp2p {
             if(message_size <= (int) sb.size() && message_size != -1) {
 
                 std::istream is(&sb);
-                if(message.ParseFromIstream(&is)) {
-                    result = parse_result::GOOD;
-                    message_size = -1;
-                }
-                else {
-                    reset();
-                    result = parse_result::BAD;
-                }
+				try {
+					if(message.ParseFromIstream(&is)) {
+						result = parse_result::GOOD;
+						message_size = -1;
+					}
+					else {
+						reset();
+						result = parse_result::BAD;
+					}
 
-            }
-            else result = parse_result::INDETERMINATE;
+				} catch(...) {
+					reset();
+					result = parse_result::BAD;
+				}
 
-            return result;
-        }
+			}
+			else result = parse_result::INDETERMINATE;
 
-    } /* namespace sercli */
+			return result;
+		}
+
+	} /* namespace sercli */
 } /* namespace sp2p */

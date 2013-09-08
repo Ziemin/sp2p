@@ -148,8 +148,7 @@ namespace sp2p {
                                     readHandler(response_ptr, ec);
                                 }
                                 else if(result == parse_result::BAD) {
-                                    BOOST_LOG_SEV(lg, trace) << "Could not parse message from: " 
-                                                             << peer_ip;
+                                    BOOST_LOG_SEV(lg, trace) << "Could not parse message from: " << peer_ip;
 
                                     handler->handleParseError(*this);
                                     boost::system::error_code error;
