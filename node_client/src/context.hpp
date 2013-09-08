@@ -3,6 +3,7 @@
 
 #include "../../sercli/src/sp2p.hpp"
 #include <boost/program_options.hpp>
+#include <boost/log/core.hpp>
 #include <exception>
 #include <map>
 #include <functional>
@@ -95,6 +96,11 @@ class Context {
                 handlers["help"] = [this](int, const char *argv[]) -> void {
                     help_message();
                 };
+
+                // flushing logs
+                handlers["flush"] = [this](int, const char *argv[]) -> void {
+                    boost::log::core::get()->flush();
+                };
         } // ~ Constructors
 
     public:
@@ -129,6 +135,7 @@ class Context {
             cout << "children"      << "\t - Prints all children contexts" << endl;
             cout << "exit"          << "\t\t - Exits application" << endl;
             cout << "print"         << "\t\t - Prints all avaialable commands within current context" << endl;
+            cout << "flush"         << "\t\t - Flushes logs to file" << endl;
         }
 
     public:
