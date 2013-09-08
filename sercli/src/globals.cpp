@@ -19,7 +19,7 @@ namespace sp2p {
 		namespace global {
 
 			boost::asio::io_service* io_s = nullptr;
-			Sp2pHandler* sp2p_handler = nullptr;
+			handler_ptr<NodeRequest, NodeResponse> sp2p_handler;
 
 			std::uint64_t node_timeout_seconds = 20;  // for a while
 			std::uint32_t max_buffer_size = std::numeric_limits<std::uint32_t>::max();
@@ -34,8 +34,9 @@ namespace sp2p {
 
 				if(io_s == nullptr) global::io_s = new boost::asio::io_service();
 				else global::io_s = io_s;
+				work = new boost::asio::io_service::work(*global::io_s);
 
-				sp2p_handler = new Sp2pHandler();
+				sp2p_handler.reset(new Sp2pHandler());
 
 
 				for(int i = 0; i < thread_count; i++) {
@@ -52,9 +53,10 @@ namespace sp2p {
 
 				io_s->stop();
 				for(auto tr: thread_pool) tr->join();
-				delete sp2p_handler;
+				sp2p_handler.reset();
 				delete io_s;
-				//blg_lg::core::get()->remove_all_sinks(); 
+				delete work;
+				blg_lg::core::get()->remove_all_sinks(); 
 			}
 
 

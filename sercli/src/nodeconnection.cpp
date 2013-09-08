@@ -16,7 +16,8 @@ namespace sp2p {
 		using namespace boost::log::trivial;
 
 		NodeConnection::NodeConnection(ConnectionManager<NodeRequest, NodeResponse>& connection_manager) 
-			: timer(*global::io_s),
+			: is_logged(false),
+			timer(*global::io_s),
 		   	strand(*global::io_s),
 			socket(*global::io_s),
 			connection_manager(connection_manager),
@@ -32,30 +33,46 @@ namespace sp2p {
 	   void NodeConnection::connect(const NodeDescription& node_desc) {
 		   
 		   if(!isActive()) {
-			   tcp::resolver resolver(*global::io_s);
-			   auto endpoint_iterator = resolver.resolve({ node_desc.ip_address, node_desc.port });
-
-			   boost::system::error_code ec;
-			   boost::asio::connect(socket, endpoint_iterator, ec);
-
-			   throw NodeError::NO_CONNECTION;
-
-			   BOOST_LOG_SEV(lg, info) << "Connected to " << node_desc.ip_address.to_string() 
+			   BOOST_LOG_SEV(lg, info) << "Connecting to " << node_desc.ip_address.to_string() 
 				   << " on port: " << node_desc.port;
 
-			   std::shared_ptr<NodeResponseParser> parser(new NodeResponseParser);
-			   std::shared_ptr<Sp2pHandler> handler(global::sp2p_handler);
+			   boost::system::error_code ec;                                    
+			   tcp::resolver resolver(*global::io_s);
+			   auto endpoint_iterator = resolver.resolve({ node_desc.ip_address, node_desc.port }, ec);
+			   if(ec) {
+				   BOOST_LOG_SEV(lg, error) << "Could not resolve endpoint to " << node_desc.ip_address.to_string() 
+					   << " on port: " << node_desc.port << " error: " << ec.message();
+				   throw NodeError::NO_CONNECTION;
+			   }
+
+			   boost::asio::connect(socket, endpoint_iterator, ec);
+			   if(ec) {
+				   BOOST_LOG_SEV(lg, error) << "Could not connect to to " << node_desc.ip_address.to_string() 
+					   << " on port: " << node_desc.port << " error: " << ec.message();
+				   throw NodeError::NO_CONNECTION;
+			   }
+			   else {
+				   BOOST_LOG_SEV(lg, info) << "Connected to " << node_desc.ip_address.to_string() 
+					   << " on port: " << node_desc.port;
+			   }
+
+
+			   std::shared_ptr<Parser<NodeResponse>> parser(new NodeResponseParser);
 			   connection.reset(
 					   new Connection<NodeRequest, NodeResponse>(
 						   *global::io_s,
 						   std::move(socket),
 						   connection_manager,
-						   std::dynamic_pointer_cast<Parser<NodeResponse>>(parser),
-						   std::dynamic_pointer_cast<Handler<NodeRequest, NodeResponse>>(handler)));
+						   parser,
+						   global::sp2p_handler));
 
 			   connection_manager.start(connection);
 
-			   timer.async_wait(std::bind(&NodeConnection::closeConnection, shared_from_this()));
+			   BOOST_LOG_SEV(lg, debug) << "End of NodeConnection::connect to " << node_desc.ip_address.to_string() 
+				   << " on port: " << node_desc.port;
+
+			   timer.expires_from_now(boost::posix_time::seconds(global::node_timeout_seconds));
+			   timer.async_wait(std::bind(&NodeConnection::closeConnection, this));
 		   }
 	   }
 
@@ -65,24 +82,21 @@ namespace sp2p {
 				   boost::asio::ip::tcp::resolver resolver(*global::io_s);
 				   auto endpoint_iterator = resolver.resolve({ node_desc.ip_address, node_desc.port });
 
-				   auto self(shared_from_this());
 				   boost::asio::async_connect(socket, endpoint_iterator, 
-						   [&, self] (const boost::system::error_code& ec, tcp::resolver::iterator it) 
+						   [this] (const boost::system::error_code& ec, tcp::resolver::iterator it) 
 						   {
 						   		if(!ec) {
-									std::shared_ptr<NodeResponseParser> parser(new NodeResponseParser);
-									std::shared_ptr<Sp2pHandler> handler(global::sp2p_handler);
-
-								   BOOST_LOG_SEV(lg, info) << "Connected to " << node_desc.ip_address.to_string() 
+									BOOST_LOG_SEV(lg, info) << "Connected to " << node_desc.ip_address.to_string() 
 									   << " on port: " << node_desc.port;
 
+									std::shared_ptr<Parser<NodeResponse>> parser(new NodeResponseParser);
 									connection.reset(
 										new Connection<NodeRequest, NodeResponse>(
 											*global::io_s,
 											std::move(socket),
 											connection_manager,
-											std::dynamic_pointer_cast<Parser<NodeResponse>>(parser),
-											std::dynamic_pointer_cast<Handler<NodeRequest, NodeResponse>>(handler)
+											parser,
+											global::sp2p_handler
 										));
 									connection_manager.start(connection);
 								} else {
@@ -90,25 +104,28 @@ namespace sp2p {
 								}
 						   });
 
-				   timer.async_wait(std::bind(&NodeConnection::closeConnection, shared_from_this()));
+				   timer.expires_from_now(boost::posix_time::seconds(global::node_timeout_seconds));
+				   timer.async_wait(std::bind(&NodeConnection::closeConnection, this));
 			   }
 		   }
 
 	   void NodeConnection::disconnect() {
 		   BOOST_LOG_SEV(lg, debug) << "Disconnecting from node: " << socket.remote_endpoint().address().to_string();
 
-		   auto self(shared_from_this());
-		   strand.post([&, self]() { connection_manager.stop(connection); });
+		   strand.post([this](){ connection_manager.stop(connection); });
+		   connection.reset();
+		   stopDeadlineTimer();
 	   }
 
 
 	   void NodeConnection::closeConnection() {
 		   if(isActive()) {
-			   BOOST_LOG_SEV(lg, debug) << "Closing connection with node: " 
-				   << socket.remote_endpoint().address().to_string();
+			   BOOST_LOG_SEV(lg, debug) << "Closing connection with node";
 
 			   connection_manager.gracefulStop(connection);
 			   is_logged = false;
+			   stopDeadlineTimer();
+			   connection.reset();
 		   }
 	   }
 
@@ -118,18 +135,16 @@ namespace sp2p {
 
 	   void NodeConnection::resetDeadlineTimer(std::uint64_t seconds) {
 		   BOOST_LOG_SEV(lg, debug) << "Reseting deadline timer";
-		   auto self(shared_from_this());
-		   strand.post([&, self]() { 
-					   timer.expires_at(timer.expires_at() + boost::posix_time::seconds(seconds)); 
+		   strand.post([this, seconds]() { 
+					   timer.expires_from_now(boost::posix_time::seconds(seconds));
 					   timer.async_wait(std::bind(
-							   &NodeConnection::closeConnection, shared_from_this()));
+							   &NodeConnection::closeConnection, this));
 				   });
 	   }
 
 	   void NodeConnection::stopDeadlineTimer() {
 		   BOOST_LOG_SEV(lg, debug) << "Stopping deadline timer";
-		   auto self(shared_from_this());
-		   strand.post([&, self]() { timer.cancel(); });
+		   strand.post([this]() { timer.cancel(); });
 	   }
 
 

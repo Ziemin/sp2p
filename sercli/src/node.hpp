@@ -101,7 +101,7 @@ namespace sp2p {
                 std::vector<Botan::X509_CA> ca_list;
                 std::vector<Botan::X509_Certificate> user_certificates;
 
-                logging::Logger lg = logging::sp2p_lg::get();
+                logging::Logger& lg = logging::sp2p_lg::get();
 
             // serialization
             private:

@@ -41,7 +41,7 @@ namespace sp2p {
         template<typename Request, typename Response> 
             void Server<Request, Response>::start_acceptor() {
 
-                acceptor_.open(endpoint_.protocol);
+                acceptor_.open(endpoint_.protocol());
                 acceptor_.set_option(tcp::acceptor::reuse_address(true));
                 acceptor_.bind(endpoint_);
                 acceptor_.listen();
@@ -126,17 +126,18 @@ namespace sp2p {
         template<typename Request, typename Response>
             void Server<Request, Response>::updateState() {
 
+                auto fun = std::bind(Server<Request, Response>::updateState(), 
+                        this->shared_from_this(), _1, _2, _3);
                 for(auto node_it: network->getAssociatedNodes()) {
-                    std::shared_ptr<Node> node = node_it.second.lock();
-                    node->asyncUpdateServer(network->getDescription(), (std::int32_t) endpoint_.port(),
+                    node_ptr node = node_it.second.lock();
+                    node->asyncUpdateServer(network->getDescription(), endpoint_.port(),
                             strand_.wrap(
-                                std::bind(Server<Request, Response>::updateStateHandler, 
-                                    this->shared_from_this(), node, _2, _3)));
+                                std::bind(fun, _1, _2, node)));
                 }
             }
 
         template<typename Request, typename Response>
-            void Server<Request, Response>::updateStateHandler(Node* node, NodeError error, std::int32_t time_left) {
+            void Server<Request, Response>::updateStateHandler(NodeError error, std::int32_t time_left, node_ptr node) {
                 if(any(error)) {
                     return;
                 } else {
@@ -169,12 +170,13 @@ namespace sp2p {
         template<typename Request, typename Response>
             void Server<Request, Response>::timerUpdate() {
 
+                auto fun = std::bind(Server<Request, Response>::updateState(), 
+                        this->shared_from_this(), _1, _2, _3);
                 for(auto node_it: nodes_to_update) {
                      // update all TODO update according to time left
-                     node_it.second->asyncUpdateServer(network->getDescription(), (std::int32_t) endpoint_.port(),
+                     node_it.second->asyncUpdateServer(network->getDescription(), endpoint_.port(),
                             strand_.wrap(
-                                std::bind(Server<Request, Response>::updateStateHandler, 
-                                    this->shared_from_this(), node_it.second, _2, _3)));
+                                std::bind(fun, _1, _2, node_it.second)));
                      
                 }
             }

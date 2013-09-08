@@ -109,9 +109,8 @@ namespace sp2p {
                 return NodeError::NOT_LOGGED;
 
             try {
-                if(!isActive()) node_connection.connect(node_desc);
+                if(!isActive()) node_connection.connect(node_desc);  
                 else node_connection.resetDeadlineTimer(global::node_timeout_seconds);
-
                 return NodeError::OK;
             } catch(NodeError& error) {
                 return error;
@@ -134,6 +133,7 @@ namespace sp2p {
                 std::shared_ptr<NodeRequest> loginMessage = 
                     utils::getLoginMessage(my_user.username, my_user.password);
 
+                BOOST_LOG_SEV(lg, debug) << "Prepared message for " << node_desc;
                 connection_ptr<NodeRequest, NodeResponse> con = node_connection.getConnection();
                 try {
                     std::shared_ptr<NodeResponse> nodeResponse = con->sendRequest(loginMessage).get();
@@ -193,6 +193,11 @@ namespace sp2p {
                         result = NodeError::OK;
                         break;
 
+                    case protocol::NodeMessage::NOT_LOGGED:
+                        node_connection.is_logged = false;
+                        result = NodeError::OK;
+                        break;
+
                     default:
                         result = utils::getDefaultError(response.response_type());
                 }
@@ -230,6 +235,8 @@ namespace sp2p {
                         result = NodeError::OK;
                         break;
 
+                    case protocol::NodeMessage::NOT_LOGGED:
+                        node_connection.is_logged = false;
                     default:
                         result = utils::getDefaultError(response.response_type());
                 }
@@ -265,6 +272,8 @@ namespace sp2p {
                         result = NodeError::OK;
                         break;
 
+                    case protocol::NodeMessage::NOT_LOGGED:
+                        node_connection.is_logged = false;
                     default:
                         result = utils::getDefaultError(response.response_type());
                 }
@@ -306,6 +315,8 @@ namespace sp2p {
                         error = NodeError::OK;
                         break;
 
+                    case protocol::NodeMessage::NOT_LOGGED:
+                        node_connection.is_logged = false;
                     default:
                         error = utils::getDefaultError(response.response_type());
                 }
@@ -355,6 +366,8 @@ namespace sp2p {
                             break;
                         }
 
+                    case protocol::NodeMessage::NOT_LOGGED:
+                        node_connection.is_logged = false;
                     default:
                         error = utils::getDefaultError(response.response_type());
                 }
@@ -405,6 +418,8 @@ namespace sp2p {
                             break;
                         }
 
+                    case protocol::NodeMessage::NOT_LOGGED:
+                        node_connection.is_logged = false;
                     default:
                         error = utils::getDefaultError(response.response_type());
                 }
@@ -455,6 +470,8 @@ namespace sp2p {
                             break;
                         }
 
+                    case protocol::NodeMessage::NOT_LOGGED:
+                        node_connection.is_logged = false;
                     default:
                         error = utils::getDefaultError(response.response_type());
                 }
@@ -489,7 +506,9 @@ namespace sp2p {
                     case protocol::NodeMessage::OK:
                         error = NodeError::OK;
                         break;
-
+                        
+                    case protocol::NodeMessage::NOT_LOGGED:
+                        node_connection.is_logged = false;
                     default:
                         error = utils::getDefaultError(response.response_type());
                 }
@@ -524,6 +543,8 @@ namespace sp2p {
                         error = NodeError::OK;
                         break;
 
+                    case protocol::NodeMessage::NOT_LOGGED:
+                        node_connection.is_logged = false;
                     default:
                         error = utils::getDefaultError(response.response_type());
                 }
@@ -566,6 +587,8 @@ namespace sp2p {
                         std::get<1>(resultTuple) = response.update_server_response().seconds_to_update();
                         break;
 
+                    case protocol::NodeMessage::NOT_LOGGED:
+                        node_connection.is_logged = false;
                     default:
                         error = utils::getDefaultError(response.response_type());
                 }
@@ -588,7 +611,7 @@ namespace sp2p {
                     <<  network_desc << " and port " << port;
                 NodeError error = beforeMessage();
                 if(any(error)) {
-                    updateHandler(nullptr, error);
+                    updateHandler(error, 0);
                     return;
                 }
 
@@ -596,17 +619,32 @@ namespace sp2p {
                     utils::getUpdateServerMessage(network_desc, port, node_connection.getCookie());
 
                 connection_ptr<NodeRequest, NodeResponse> con = node_connection.getConnection();
+                NodeConnection* nc = &node_connection;
                 con->sendMessage(updateServerMessage, 
-                        [this, &con, &updateHandler](boost::system::error_code ec) 
+                        [this, con, updateHandler, nc](boost::system::error_code ec) 
                         {
                             if(!ec) {
                                 con->readMessage([&updateHandler](std::shared_ptr<NodeResponse> response_ptr,
                                         boost::system::error_code ec)  
                                 {
-                                    updateHandler(response_ptr, ec);
+
+                                    NodeError error;
+                                    protocol::NodeMessage response = response_ptr->getResponse();
+
+                                    switch(response.response_type()) {
+                                        case protocol::NodeMessage::OK:
+                                            updateHandler(NodeError::OK, response.update_server_response().seconds_to_update());
+                                            break;
+
+                                        case protocol::NodeMessage::NOT_LOGGED:
+                                            nc->is_logged = false;
+                                        default:
+                                            error = utils::getDefaultError(response.response_type());
+                                            updateHandler(error, 0);
+                                    }
                                 });
                             } else {
-                                updateHandler(nullptr, ec);
+                                updateHandler(NodeError::SEND_ERROR, 0);
                             }
                         });
             }
@@ -635,6 +673,8 @@ namespace sp2p {
                         error = NodeError::OK;
                         break;
 
+                    case protocol::NodeMessage::NOT_LOGGED:
+                        node_connection.is_logged = false;
                     default:
                         error = utils::getDefaultError(response.response_type());
                 }
@@ -681,6 +721,8 @@ namespace sp2p {
                             break;
                         }
 
+                    case protocol::NodeMessage::NOT_LOGGED:
+                        node_connection.is_logged = false;
                     default:
                         error = utils::getDefaultError(response.response_type());
                 }

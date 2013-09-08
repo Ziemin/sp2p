@@ -110,7 +110,9 @@ namespace sp2p {
 
 					std::function<void()> starter_function;
 
-					logging::Logger lg = logging::sp2p_lg::get();
+					logging::Logger& lg = logging::sp2p_lg::get();
+
+					std::string peer_ip;
 
 			};
 

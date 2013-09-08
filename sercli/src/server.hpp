@@ -46,7 +46,7 @@ namespace sp2p {
                     void updateState();
                     void timerUpdate();
 
-                    virtual void updateStateHandler(Node* node, types::NodeError error, std::int32_t time_left);
+                    virtual void updateStateHandler(types::NodeError error, std::int32_t time_left, node_ptr node);
                     virtual void connectionErrorHandler();
 
                 private:

@@ -66,7 +66,7 @@ namespace sp2p {
                 ConnectionManager<NodeRequest, NodeResponse>& connection_manager;
                 connection_ptr<NodeRequest, NodeResponse> connection;
 
-                logging::Logger lg = logging::sp2p_lg::get();
+                logging::Logger& lg = logging::sp2p_lg::get();
         };
 
         typedef std::shared_ptr<NodeConnection> node_con_ptr;

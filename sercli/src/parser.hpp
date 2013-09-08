@@ -36,6 +36,7 @@ namespace sp2p {
 
             public:
 
+				~NodeResponseParser() = default;
                 void reset();
                 parse_result parse(NodeResponse&, const char data[], int length);
 

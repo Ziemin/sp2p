@@ -12,7 +12,7 @@ namespace sp2p {
 		namespace global {
 
 			extern boost::asio::io_service* io_s;
-			extern Sp2pHandler* sp2p_handler;
+			extern handler_ptr<NodeRequest, NodeResponse> sp2p_handler;
 			extern std::uint64_t node_timeout_seconds;
 			extern std::uint32_t max_buffer_size;
 
@@ -23,6 +23,7 @@ namespace sp2p {
 					~Sp2pInitializer();
 
 				private:
+					boost::asio::io_service::work* work;
 					std::vector<std::shared_ptr<std::thread>> thread_pool;
 					logging::Logger& lg;
 			};

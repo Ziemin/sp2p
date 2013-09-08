@@ -19,8 +19,6 @@ SET (CMAKE_LINKER  "/usr/bin/llvm-ld")
 #SET (CMAKE_OBJDUMP "/usr/bin/llvm-objdump")
 #SET (CMAKE_RANLIB  "/usr/bin/llvm-ranlib")
 
-add_definitions(-BOOST_ASIO_ENABLE_HANDLER_TRACKING)
-
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${sp2p_SOURCE_DIR}/build)
 set(LIBRARY_OUTPUT_PATH ${sp2p_SOURCE_DIR}/lib)
 

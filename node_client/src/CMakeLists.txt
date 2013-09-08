@@ -5,7 +5,7 @@ find_package(Threads REQUIRED)
 find_package(Botan REQUIRED)
 find_package(Protobuf REQUIRED)
 
-#add_definitions(-BOOST_ASIO_ENABLE_HANDLER_TRACKING)
+#add_definitions(-DBOOST_ASIO_ENABLE_HANDLER_TRACKING)
 ADD_DEFINITIONS(-DBOOST_ALL_DYN_LINK)
 
 SET(SERCLI_LIB_PATH ${node_client_SOURCE_DIR}/../sercli/lib)

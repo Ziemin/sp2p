@@ -8,6 +8,7 @@
 #include <functional>
 #include <boost/asio.hpp>
 #include <tuple>
+#include <signal.h>
 
 using namespace std;
 namespace sc = sp2p::sercli;
@@ -213,19 +214,22 @@ class NodeContext : public Context {
             // login
             handlers["login"] = [this](int argc, const char *argv[]) -> void {
                 checkNode();
-                node->logIn();
+                sc::types::NodeError res = node->logIn();
+                if(sc::types::any(res)) throw res;
             };
 
             // logout
             handlers["logout"] = [this](int argc, const char *argv[]) -> void {
                 checkNode();
-                node->logOut();
+                sc::types::NodeError res = node->logOut();
+                if(sc::types::any(res)) throw res;
             };
 
             // register new user
             handlers["register"] = [this](int argc, const char *argv[]) -> void {
                 checkNode();
-                node->registerUser();
+                sc::types::NodeError res = node->registerUser();
+                if(sc::types::any(res)) throw res;
             };
 
             // change password
@@ -241,7 +245,8 @@ class NodeContext : public Context {
                 }
 
                 if(vm.count("password")) {
-                    node->changePassword(vm["password"].as<string>());
+                    sc::types::NodeError res = node->changePassword(vm["password"].as<string>());
+                    if(sc::types::any(res)) throw res;
                 } else throw CommandException("Password required");
             };
 
@@ -352,8 +357,8 @@ class NodeContext : public Context {
                 }
 
                 if(vm.count("port")) {
-                    tuple<sc::types::NodeError, uint32_t> res = 
-                        node->updateServer(network->getDescription(), vm["port"].as<uint32_t>());
+                    tuple<sc::types::NodeError, uint16_t> res = 
+                        node->updateServer(network->getDescription(), vm["port"].as<uint16_t>());
                     if(any(get<0>(res))) {
                         cout << "Error: " << get<0>(res) << endl;
                     } else {
@@ -468,7 +473,7 @@ po::options_description NodeContext::ups_opts = []() {
     po::options_description opts("Update server");
     opts.add_options()
         ("help,h", "prints this message")
-        ("port,p", po::value<uint32_t>(), "port");
+        ("port,p", po::value<uint16_t>(), "port");
 
     return opts;
 }();
@@ -570,8 +575,14 @@ class Sp2pContext : public Context {
         : Context("Sp2p", root),  
         sp2p_manager(data_manager),
         node_c(root),
-        network_c(root)
+        network_c(root),
+        signals(*sc::global::io_s)
         {
+
+            //signals.add(SIGINT);
+            //signals.add(SIGTERM);
+            //signals.add(SIGQUIT);
+            await_stop();
 
             data_manager.setDataFile(dataFile);
             ifstream ifs(dataFile);
@@ -605,7 +616,7 @@ class Sp2pContext : public Context {
                     description.node_name  = vm["name"].as<string>();
                 } else throw CommandException("Node name required");
                 if(vm.count("port")) {
-                    description.port = vm["port"].as<uint32_t>();
+                    description.port = vm["port"].as<uint16_t>();
                 } else throw CommandException("Port required");
                 if(vm.count("ip-address")) {
                     description.ip_address = 
@@ -650,7 +661,7 @@ class Sp2pContext : public Context {
                 } else throw CommandException("Node name required");
                 int params = 1;
                 if(vm.count("port")) {
-                    description.port = vm["port"].as<uint32_t>();
+                    description.port = vm["port"].as<uint16_t>();
                     params++;
                 }
                 if(vm.count("ip-address")) {
@@ -684,7 +695,7 @@ class Sp2pContext : public Context {
                 } else throw CommandException("Node name required");
                 int params = 1;
                 if(vm.count("port")) {
-                    description.port = vm["port"].as<uint32_t>();
+                    description.port = vm["port"].as<uint16_t>();
                     params++;
                 }
                 if(vm.count("ip-address")) {
@@ -942,6 +953,11 @@ class Sp2pContext : public Context {
             cout << "clear"         << "\t\t - Clear data" << endl;
         }
 
+        void await_stop() {
+            signals.async_wait(
+                    [this](boost::system::error_code /*ec*/, int /*signo*/) { sp2p_manager.stopAll(); });
+        }
+
      private:
 
         sc::DataManager data_manager;
@@ -952,6 +968,7 @@ class Sp2pContext : public Context {
 
         sc::node_ptr current_node;
         sc::network_ptr current_network;
+        boost::asio::signal_set signals;
 
         po::variables_map vm;
 
@@ -998,7 +1015,7 @@ po::options_description Sp2pContext::node_desc = []() {
         ("help,h", "print this message")
         ("name,N", po::value<string>(), "node name")
         ("ip-address,IP", po::value<string>(), "node ip address")
-        ("port,P", po::value<uint32_t>(), "port to connect node");
+        ("port,P", po::value<uint16_t>(), "port to connect node");
 
     return opts;
 }();

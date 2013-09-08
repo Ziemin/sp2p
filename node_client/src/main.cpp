@@ -2,6 +2,7 @@
 
 #include <boost/program_options.hpp>
 #include <boost/program_options/errors.hpp>
+#include <boost/log/core.hpp>
 #include <iostream>
 #include <vector>
 #include <sstream>
@@ -61,12 +62,15 @@ void run_program_loop(RootContext& dispatcher) {
             cerr << "Node exception: " << ne.what() << endl;
         } catch(sc::NetworkException nete) {
             cerr << "Network exception: " << nete.what() << endl;
+        } catch(sc::types::NodeError& error) {
+            cerr << "Node error: " << error;
         } catch(po::error& pe) {
             cerr << "Program option exception: " << pe.what() << endl;
         } catch(CommandException& ce) {
             cerr << "Command exception: " << ce.what() << endl;
         } catch(ExitException& ee) {
             cout << "Exiting" << endl;
+            boost::log::core::get()->flush();
             return;
         }
     }

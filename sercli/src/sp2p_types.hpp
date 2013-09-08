@@ -108,7 +108,7 @@ namespace sp2p {
 			struct NodeDescription {
 				boost::asio::ip::address ip_address;
 				std::string node_name;
-				std::uint32_t port;
+				std::uint16_t port;
 
 				inline bool operator<(const NodeDescription& other) const {
 					return this->node_name < other.node_name;

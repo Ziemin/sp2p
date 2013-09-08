@@ -90,7 +90,7 @@ namespace sp2p {
 
 				ConnectionManager<NodeRequest, NodeResponse> connection_manager;
 
-				logging::Logger lg = logging::sp2p_lg::get();
+				logging::Logger& lg = logging::sp2p_lg::get();
 		};
 
 	} /* namespace sercli */

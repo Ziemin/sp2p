@@ -4,6 +4,7 @@
 #include <set>
 
 #include "connection.hpp"
+#include "logging.hpp"
 
 namespace sp2p {
 	namespace sercli {
@@ -27,6 +28,7 @@ namespace sp2p {
 				private:
 
 					std::set<connection_ptr<Request, Response>> connections;
+					logging::Logger& lg = logging::sp2p_lg::get();
 
 			};
 
