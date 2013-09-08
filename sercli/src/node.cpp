@@ -47,6 +47,9 @@ namespace sp2p {
                 case protocol::NodeMessage::BAD_DATA:
                     os << "BAD DATA";
                     break;
+                case protocol::NodeMessage::ALREADY_EXISTS:
+                    os << "ALREADY EXISTS";
+                    break;
             }
             return os;
         }
@@ -69,6 +72,15 @@ namespace sp2p {
             my_user(user), 
             node_connection(connection_manager)
         { 
+        }
+
+        void Node::setUser(const MyUser& user) {
+            if(isActive()) throw NodeException("Node is active at the moment");
+            my_user = user;
+        }
+
+        const MyUser& Node::getUser() const {
+            return my_user; 
         }
 
         bool Node::isActive() const {
@@ -685,7 +697,7 @@ namespace sp2p {
 
         void Node::stopConnections() {
             BOOST_LOG_SEV(lg, trace) << "Stopping all connections";
-            node_connection.disconnect();
+            if(isActive()) node_connection.disconnect();
         }
 
     } /* namespace sercli */

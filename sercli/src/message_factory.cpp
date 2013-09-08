@@ -363,6 +363,9 @@ namespace sp2p {
                     case protocol::NodeMessage::INTERNAL_SERVER_ERROR:
                         return NodeError::INTERNAL_SERVER_ERROR;
 
+                    case protocol::NodeMessage::ALREADY_EXISTS:
+                        return NodeError::ALREADY_EXISTS;
+
                     default:
                         return NodeError::OTHER;
                 }

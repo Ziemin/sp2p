@@ -8,17 +8,8 @@
 using namespace sp2p::sercli;
 
 struct BeforeTest {
-    
-    BeforeTest() {
-        BOOST_TEST_MESSAGE("INIT Global Test");
-        global::init(10);
-    }
-
-    ~BeforeTest() {
-        BOOST_TEST_MESSAGE("Destroy Global Test");
-        global::destroyAll();
-    }
-
+    BeforeTest() : init(5) { }
+    global::Sp2pInitializer init;
 };
 
 BOOST_FIXTURE_TEST_SUITE(global_test, BeforeTest)

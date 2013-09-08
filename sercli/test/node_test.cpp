@@ -6,17 +6,12 @@
 
 using namespace sp2p::sercli;
 
-struct InitDestroyTest {
-    InitDestroyTest() {
-        global::init(5);
-    }
-
-    ~InitDestroyTest() {
-        global::destroyAll();
-    }
+struct BeforeTest {
+    BeforeTest() : init(5) { }
+    global::Sp2pInitializer init;
 };
 
-BOOST_FIXTURE_TEST_SUITE(basic_node_test, InitDestroyTest)
+BOOST_FIXTURE_TEST_SUITE(basic_node_test, BeforeTest)
 
     BOOST_AUTO_TEST_CASE(create_test) {
 

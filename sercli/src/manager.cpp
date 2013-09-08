@@ -91,7 +91,7 @@ namespace sp2p {
 				if(node_pair.first.node_name == node_name) {
                 	nodes_map.erase(node_pair.first);
 					BOOST_LOG_SEV(lg, trivial::debug) << "Removed " << node_pair.first;
-					break;
+					return;
 				}
 
 			BOOST_LOG_SEV(lg, trivial::debug) << "No such node to remove: " << node_name;
@@ -153,7 +153,7 @@ namespace sp2p {
 				if(network_pair.first.network_name == network_name) {
 					networks_map.erase(network_pair.first);
 					BOOST_LOG_SEV(lg, trivial::debug) << "Removed " << network_pair.first;
-					break;
+					return;
 				}
 
 			BOOST_LOG_SEV(lg, trivial::debug) << "No such network to remove - " << network_name;
@@ -253,6 +253,7 @@ namespace sp2p {
 		}
 
 		void Manager::clear() {
+			stopAll();
 			BOOST_LOG_SEV(lg, trivial::trace) << "Clearing manager";
 			nodes_map.clear();
 			networks_map.clear();

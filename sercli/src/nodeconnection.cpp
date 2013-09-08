@@ -25,7 +25,8 @@ namespace sp2p {
 
 
 	   bool NodeConnection::isActive() const {
-		   return (connection != nullptr || connection->isActive());
+		   if(connection == nullptr) return false;
+		   else return connection->isActive();
 	   } 
 
 	   void NodeConnection::connect(const NodeDescription& node_desc) {

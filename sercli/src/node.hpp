@@ -45,10 +45,9 @@ namespace sp2p {
                 NodeError logIn();
                 NodeError logOut();
 
-                /**
-                 * Changes password if user is registered and new username==old username
-                 */
-                bool setUser(MyUser user);
+                void  setUser(const MyUser& new_user);
+
+                const MyUser& getUser() const;
 
                 NodeError registerUser();
 

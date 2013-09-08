@@ -52,8 +52,59 @@ namespace sp2p {
 			std::ostream& operator<<(std::ostream& os, const NodeDescription& node_desc) {
                 os << "Node - > name: " << node_desc.node_name
                     << ", ip: " << node_desc.ip_address.to_string() 
-                    << "port: " << node_desc.port;
+                    << ", port: " << node_desc.port;
 
+                return os;
+            }
+
+			std::ostream& operator<<(std::ostream& os, const NodeError& error) {
+                switch(error) {
+                    case NodeError::OK:
+                        os << "OK";
+                        break;
+                    case NodeError::IS_ACTIVE:
+                        os << "IS_ACTIVE";
+                        break;
+                    case NodeError::NO_CONNECTION:
+                        os << "NO_CONNECTION";
+                        break;
+                    case NodeError::INTERNAL_SERVER_ERROR:
+                        os << "INTERNAL_SERVER_ERROR";
+                        break;
+                    case NodeError::BAD_REQUEST:
+                        os << "BAD_REQUEST";
+                        break;
+                    case NodeError::NO_PRIVILAGES:
+                        os << "NO_PRIVILAGES";
+                        break;
+                    case NodeError::BAD_CREDENTIALS:
+                        os << "BAD_CREDENTIALS";
+                        break;
+                    case NodeError::NOT_LOGGED:
+                        os << "NOT_LOGGED";
+                        break;
+                    case NodeError::NO_SUCH_USER:
+                        os << "NO_SUCH_USER";
+                        break;
+                    case NodeError::NO_SUCH_NETWORK:
+                        os << "NO_SUCH_NETWORK";
+                        break;
+                    case NodeError::BAD_DATA:
+                        os << "BAD_DATA";
+                        break;
+                    case NodeError::ALREADY_EXISTS:
+                        os << "ALREADY_EXISTS";
+                        break;
+                    case NodeError::BAD_SERVER_RESPONSE:
+                        os << "BAD_SERVER_RESPONSE";
+                        break;
+                    case NodeError::SEND_ERROR:
+                        os << "SEND_ERROR";
+                        break;
+                    case NodeError::OTHER:
+                        os << "OTHER";
+                        break;
+                }
                 return os;
             }
         }

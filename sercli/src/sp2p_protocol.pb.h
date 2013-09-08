@@ -162,11 +162,12 @@ enum NodeMessage_ResponseType {
   NodeMessage_ResponseType_BAD_CREDENTIALS = 503,
   NodeMessage_ResponseType_NO_SUCH_USER = 504,
   NodeMessage_ResponseType_NO_SUCH_NETWORK = 505,
-  NodeMessage_ResponseType_BAD_DATA = 506
+  NodeMessage_ResponseType_BAD_DATA = 506,
+  NodeMessage_ResponseType_ALREADY_EXISTS = 507
 };
 bool NodeMessage_ResponseType_IsValid(int value);
 const NodeMessage_ResponseType NodeMessage_ResponseType_ResponseType_MIN = NodeMessage_ResponseType_OK;
-const NodeMessage_ResponseType NodeMessage_ResponseType_ResponseType_MAX = NodeMessage_ResponseType_BAD_DATA;
+const NodeMessage_ResponseType NodeMessage_ResponseType_ResponseType_MAX = NodeMessage_ResponseType_ALREADY_EXISTS;
 const int NodeMessage_ResponseType_ResponseType_ARRAYSIZE = NodeMessage_ResponseType_ResponseType_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* NodeMessage_ResponseType_descriptor();
@@ -3368,6 +3369,7 @@ class NodeMessage : public ::google::protobuf::Message {
   static const ResponseType NO_SUCH_USER = NodeMessage_ResponseType_NO_SUCH_USER;
   static const ResponseType NO_SUCH_NETWORK = NodeMessage_ResponseType_NO_SUCH_NETWORK;
   static const ResponseType BAD_DATA = NodeMessage_ResponseType_BAD_DATA;
+  static const ResponseType ALREADY_EXISTS = NodeMessage_ResponseType_ALREADY_EXISTS;
   static inline bool ResponseType_IsValid(int value) {
     return NodeMessage_ResponseType_IsValid(value);
   }

@@ -7,12 +7,8 @@
 using namespace sp2p::sercli;
 
 struct InitDestroyTest {
-    InitDestroyTest() {
-        global::init(5);
-    }
-    ~InitDestroyTest() {
-        global::destroyAll();
-    }
+    InitDestroyTest() : init(5) { }
+    global::Sp2pInitializer init;
 };
 
 

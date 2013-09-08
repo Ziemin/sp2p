@@ -28,11 +28,14 @@ namespace sp2p {
 				NO_SUCH_USER,
 				NO_SUCH_NETWORK,
 				BAD_DATA,
+				ALREADY_EXISTS,
 
 				BAD_SERVER_RESPONSE,
 				SEND_ERROR,
 				OTHER
 			};
+
+			std::ostream& operator<<(std::ostream& os, const NodeError& error);
 
 			inline bool any(const NodeError& error) {
                 return error != NodeError::OK;

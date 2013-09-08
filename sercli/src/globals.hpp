@@ -4,6 +4,7 @@
 #include <boost/asio.hpp>
 
 #include "handler.hpp"
+#include "logging.hpp"
 
 namespace sp2p {
 	namespace sercli {
@@ -15,13 +16,16 @@ namespace sp2p {
 			extern std::uint64_t node_timeout_seconds;
 			extern std::uint32_t max_buffer_size;
 
-			void init(int thread_number, boost::asio::io_service* io_s=nullptr);
+			class Sp2pInitializer {
 
-			void setLoggind();
+				public:
+					Sp2pInitializer(int thread_number, boost::asio::io_service* io_s=nullptr);
+					~Sp2pInitializer();
 
-			void stop();
-
-			void destroyAll();
+				private:
+					std::vector<std::shared_ptr<std::thread>> thread_pool;
+					logging::Logger& lg;
+			};
 
 		} /* namespace global */
 

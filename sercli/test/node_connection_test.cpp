@@ -7,15 +7,8 @@
 using namespace sp2p::sercli;
 
 struct BeforeTest {
-    
-    BeforeTest() {
-        global::init(10);
-    }
-
-    ~BeforeTest() {
-        global::destroyAll();
-    }
-
+    BeforeTest() : init(5) { }
+    global::Sp2pInitializer init;
 };
 
 BOOST_FIXTURE_TEST_SUITE(node_connection_test, BeforeTest)
