@@ -63,7 +63,7 @@ void run_program_loop(RootContext& dispatcher) {
         } catch(sc::NetworkException nete) {
             cerr << "Network exception: " << nete.what() << endl;
         } catch(sc::types::NodeError& error) {
-            cerr << "Node error: " << error;
+            cerr << "Node error: " << error << endl;
         } catch(po::error& pe) {
             cerr << "Program option exception: " << pe.what() << endl;
         } catch(CommandException& ce) {

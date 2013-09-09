@@ -225,8 +225,13 @@ namespace sp2p {
 
             BOOST_LOG_SEV(lg, trace) << "Registering user to " << node_desc;
 
-            NodeError result = beforeMessage();
-            if(result != NodeError::NOT_LOGGED && any(result)) return result;
+            NodeError result;
+            try {
+                if(!isActive()) node_connection.connect(node_desc);
+                else node_connection.resetDeadlineTimer(global::node_timeout_seconds);
+            } catch(NodeError& error) {
+                return error;
+            }
 
             std::shared_ptr<NodeRequest> registerUserMessage = utils::getRegisterUserMessage(my_user, ""); // TODO implement
 
@@ -337,6 +342,42 @@ namespace sp2p {
             }
             std::get<0>(resultTuple) = error;
             return resultTuple;
+        }
+
+        NodeError Node::inviteUser(const NetworkDescription& network_desc, const User& user) {
+
+            BOOST_LOG_SEV(lg, trace) << "Inviting user to " << node_desc << " -> " << user;
+            NodeError error = beforeMessage();
+            if(any(error)) return error;
+
+            std::shared_ptr<NodeRequest> inviteUserMessage = 
+                utils::getInviteUserMessage(network_desc, user, node_connection.getCookie());
+
+            connection_ptr<NodeRequest, NodeResponse> con = node_connection.getConnection();
+            try {
+                std::shared_ptr<NodeResponse> nodeResponse = con->sendRequest(inviteUserMessage).get();
+                protocol::NodeMessage response = nodeResponse->getResponse();
+
+                BOOST_LOG_SEV(lg, info) << "Response from " << node_desc <<
+                    " -> " << response.response_type();
+                switch(response.response_type()) {
+                    case protocol::NodeMessage::OK:
+                        error = NodeError::OK;
+                        break;
+
+                    case protocol::NodeMessage::NOT_LOGGED:
+                        node_connection.is_logged = false;
+                    default:
+                        error = utils::getDefaultError(response.response_type());
+                }
+
+                node_connection.resetDeadlineTimer(global::node_timeout_seconds);
+
+            } catch(SendException& e) {
+                error = NodeError::SEND_ERROR;
+            }
+
+            return error;
         }
         
         std::tuple<NodeError, std::vector<NetworkDescription>> Node::getNetworksList() {

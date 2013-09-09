@@ -54,14 +54,14 @@ class Context {
                     cout << "Current context: " << ((Context&)*(this->root->current_context)) << endl;
                 };
 
-                handlers["parent"] = [this](int argc, const char *argv[]) -> void {
+                handlers["pr"] = [this](int argc, const char *argv[]) -> void {
                     if(parent_context != nullptr) {
                         this->root->current_context=parent_context;
                     }
                     else throw CommandException("No parent exists for current context");
                 }; 
 
-                handlers["child"] = [this](int argc, const char *argv[]) -> void {
+                handlers["cd"] = [this](int argc, const char *argv[]) -> void {
                     if(argc <= 1) 
                         throw CommandException("No child name given");
 
@@ -130,9 +130,9 @@ class Context {
         virtual void help_message() const {
             cout << "Basic commands: " << endl;
             cout << "current"       << "\t\t - Prints current context" << endl;
-            cout << "parent"        << "\t\t - Prints parent context" << endl;
-            cout << "child (name)"  << "\t - Sets current context to child context" << endl;
-            cout << "children"      << "\t - Prints all children contexts" << endl;
+            cout << "pr"            << "\t\t - Switches to parent context" << endl;
+            cout << "cd (name)"     << "\t - Sets current context to child context" << endl;
+            cout << "list"          << "\t\t - Prints all children and parent contexts" << endl;
             cout << "exit"          << "\t\t - Exits application" << endl;
             cout << "print"         << "\t\t - Prints all avaialable commands within current context" << endl;
             cout << "flush"         << "\t\t - Flushes logs to file" << endl;
@@ -200,6 +200,11 @@ class NodeContext : public Context {
                 vm.clear();
                 po::store(po::parse_command_line(argc, argv, su_opts), vm);
                 po::notify(vm);
+
+                if(vm.count("help")) {
+                    cout << su_opts << endl;
+                    return;
+                }
 
                 sc::MyUser new_user;
                 if(vm.count("username")) {
@@ -1028,8 +1033,8 @@ po::options_description Sp2pContext::node_desc = []() {
     po::options_description opts("Node description");
     opts.add_options()
         ("help,h", "print this message")
-        ("name,N", po::value<string>(), "node name")
-        ("ip-address,IP", po::value<string>(), "node ip address")
+        ("name,n", po::value<string>(), "node name")
+        ("ip-address,i", po::value<string>(), "node ip address")
         ("port,P", po::value<uint16_t>(), "port to connect node");
 
     return opts;

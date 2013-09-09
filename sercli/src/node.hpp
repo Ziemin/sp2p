@@ -76,6 +76,8 @@ namespace sp2p {
                 NodeError registerNetwork(const NetworkDescription& network_desc);
                 NodeError deleteNetwork(const NetworkDescription& network_desc);
 
+                NodeError inviteUser(const NetworkDescription& network_desc, const User& user);
+
                 std::tuple<NodeError, std::int32_t> updateServer(const NetworkDescription& network_desc, const std::int32_t port); 
 
                 // async function - handler signature is updateHandler(NodeError, std::int32_t)
