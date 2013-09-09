@@ -14,7 +14,7 @@ Server::Server(Factory_ptr factory, const std::string& address, const std::strin
       new_connection_()
 {
     protocolFactory = factory;
-    requestHandler = protocolFactory->produceRequestHandler();
+//    requestHandler = protocolFactory->produceRequestHandler();
     // Open the acceptor with the option to reuse the address (i.e. SO_REUSEADDR).
     boost::asio::ip::tcp::resolver resolver(io_service_);
     boost::asio::ip::tcp::resolver::query query(address, port);

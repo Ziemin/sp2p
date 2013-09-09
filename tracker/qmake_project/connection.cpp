@@ -16,7 +16,7 @@ Connection::Connection(boost::asio::io_service& io_service,
       socket_(io_service)
 {
     this->factory = factory;
-    this->requestHandler = RequestHandler_ptr(factory->produceRequestHandler());
+    this->requestHandler = RequestHandler_ptr(factory->produceRequestHandler(socket_.remote_endpoint()));
     this->requestParser = RequestParser_ptr(factory->produceRequestParser());
     this->request_ = Request_ptr(factory->produceRequest());
 }

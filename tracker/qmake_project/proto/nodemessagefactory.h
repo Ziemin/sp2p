@@ -37,7 +37,10 @@ NodeMessage_ptr signKeyResponse(string& userCertificate);
 
 NodeMessage_ptr listNetworksResponse(shared_ptr<list<utils::ProtoNetwork> > L);
 
-NodeMessage_ptr ListServersResponse(shared_ptr<list<utils::ProtoServer> > L);
+NodeMessage_ptr listMyNetworksResponse(shared_ptr<list<utils::ProtoNetwork> > L);
+
+NodeMessage_ptr listServersResponse(shared_ptr<list<utils::ProtoServer> > L);
+
 
 
 } // namespace NodeMessageFactory

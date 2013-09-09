@@ -95,10 +95,62 @@ bool sp2p::tracker::db::PsqlConnector::isUser(std::string &login, std::string &p
 sp2p::tracker::db::DB_Response sp2p::tracker::db::PsqlConnector::changeUserPassword(std::string &login, std::string &newPassword) {
     try{
         std::string transId = "change_password_" + sp2p::tracker::utils::getRandomString(10);
-        std::string command = "UPDATE users SET password=$1 WHERE login = $2;";
+        std::string command = "UPDATE users SET password=$1 WHERE login = $2";
         pqxx::work Xaction(*connection);
         connection->prepare(transId, command);
         pqxx::result res = Xaction.prepared(transId)(newPassword)(login).exec();
+        Xaction.commit();
+    }catch(pqxx::unique_violation e){
+        std::cout << e.what();
+        return DB_Response::NOT_FOUND;
+    }
+    return DB_Response::OK;
+}
+
+bool sp2p::tracker::db::PsqlConnector::userExists(std::string &login) {
+try{
+    std::string transId = "user_exists_" + sp2p::tracker::utils::getRandomString(10);
+    std::string command = "SELECT id FROM users WHERE login=$1";
+    pqxx::work Xaction(*connection);
+    connection->prepare(transId, command);
+    pqxx::result res = Xaction.prepared(transId)(login).exec();
+    Xaction.commit();
+    return res.size() == 1;
+}catch(pqxx::unique_violation e){
+    std::cout << e.what();
+    return false;
+}
+}
+
+std::string PsqlConnector::getUserInfo(std::string &login, std::string &network) {
+    std::string ret = "";
+    try{
+        std::string transId = "get_user_info_" + sp2p::tracker::utils::getRandomString(10);
+        std::string command = "SELECT key FROM publickey WHERE user_id=(SELECT id FROM users WHERE login=$1)"
+                "AND network_id=(SELECT id FROM networks WHERE name=$2)";
+        pqxx::work Xaction(*connection);
+        connection->prepare(transId, command);
+        pqxx::result res = Xaction.prepared(transId)(login)(network).exec();
+        Xaction.commit();
+        if(res.size() == 0) return "";
+        ret = utils::toString(res[0]["key"]);
+    }catch(pqxx::failure e){
+        std::cout << e.what();
+        return ret;
+    }
+    return ret;
+}
+
+DB_Response PsqlConnector::addKey(std::string &login, std::string &network, std::string &key) {
+    try{
+        std::string transId = "add_key_" + sp2p::tracker::utils::getRandomString(10);
+        std::string command = "INSERT INTO publickey (user_id, network_id, key) VALUES ("
+                "(SELECT id FROM users WHERE login=$1), "
+                "(SELECT id FROM networks WHERE name=$2), "
+                "$3)";
+        pqxx::work Xaction(*connection);
+        connection->prepare(transId, command);
+        pqxx::result res = Xaction.prepared(transId)(login)(network)(key).exec();
         Xaction.commit();
     }catch(pqxx::unique_violation e){
         std::cout << e.what();
@@ -234,21 +286,83 @@ std::shared_ptr<std::list<utils::ProtoNetwork> > sp2p::tracker::db::PsqlConnecto
 }
 
 
+bool PsqlConnector::networkExists(std::string &name) {
+    try{
+        std::string transId = "network_exists_" + sp2p::tracker::utils::getRandomString(10);
+        std::string command = "SELECT id FROM networks WHERE name=$1";
+        pqxx::work Xaction(*connection);
+        connection->prepare(transId, command);
+        pqxx::result res = Xaction.prepared(transId)(name).exec();
+        Xaction.commit();
+        return res.size() > 0;
+    }catch(pqxx::unique_violation e){
+        std::cout << e.what();
+    }
+    return false;
+}
+
+
+bool PsqlConnector::canSeeNetwork(std::string &networkName, std::string &login) {
+    try{
+        std::string transId = "can_see_network_" + sp2p::tracker::utils::getRandomString(10);
+        std::string command = "SELECT id FROM networks "
+                "WHERE name=$2 AND (public=true OR "
+                "owner_id=(SELECT id FROM users WHERE login=$1))";
+        pqxx::work Xaction(*connection);
+        connection->prepare(transId, command);
+        pqxx::result res = Xaction.prepared(transId)(login)(networkName).exec();
+        Xaction.commit();
+        return res.size() > 0;
+    }catch(pqxx::unique_violation e){
+        std::cout << e.what();
+    }
+    return false;
+}
+
+bool sp2p::tracker::db::PsqlConnector::canAddServer(std::string &login, std::string &networkName) {
+    try{
+        std::string transId = "can_add_server_" + sp2p::tracker::utils::getRandomString(10);
+        std::string command = "SELECT id FROM networks "
+                "WHERE name=$2 AND (participable=true OR "
+                "owner_id=(SELECT id FROM users WHERE login=$1))";
+        pqxx::work Xaction(*connection);
+        connection->prepare(transId, command);
+        pqxx::result res = Xaction.prepared(transId)(login)(networkName).exec();
+        Xaction.commit();
+        return res.size() > 0;
+    }catch(pqxx::unique_violation e){
+        std::cout << e.what();
+    }
+    return false;
+}
+
 DB_Response PsqlConnector::updateServer(std::string& network, std::string& user, std::string& ip, int port, int ttl) {
     try{
-        this->deleteServer(network, user);
+
+        //update
+
         std::string transId = "update_server_" + sp2p::tracker::utils::getRandomString(10);
-        std::string command = "INSERT INTO servers(user_id, network_id, ip, port, ttl) "\
-                "values((SELECT id FROM networks WHERE name=$1), " \
-                "(SELECT id FROM users WHERE login=$2), "\
-                "$3, $4, $5)";
+        std::string command = "UPDATE TABLE servers SET ip=$3, port=$4, ttl=$5 "
+                "WHERE user_id=(SELECT id FROM users WHERE login=$2) "
+                "AND network_id=(SELECT id FROM networks WHERE name=$1)";
         pqxx::work Xaction(*connection);
         connection->prepare(transId, command);
         pqxx::result res = Xaction.prepared(transId)(network)(user)(ip)(port)(ttl).exec();
-        Xaction.commit();
+        if(res.affected_rows() > 0)
+            return DB_Response::OK;
+
+        // insert if necessery
+        transId = "update_server_" + sp2p::tracker::utils::getRandomString(10);
+        command = "INSERT INTO servers(user_id, network_id, ip, port, ttl) "
+                "values((SELECT id FROM networks WHERE name=$1), "
+                "(SELECT id FROM users WHERE login=$2),  $3, $4, $5)";
+        pqxx::work Xaction2(*connection);
+        connection->prepare(transId, command);
+        res = Xaction2.prepared(transId)(network)(user)(ip)(port)(ttl).exec();
+
     }catch(pqxx::unique_violation e){
         std::cout << e.what();
-        return DB_Response::NOT_UNIQUE;
+        return DB_Response::NOT_FOUND;
     }
     return DB_Response::OK;
 }
@@ -270,11 +384,41 @@ DB_Response PsqlConnector::deleteServer(std::string& network, std::string& user)
     return DB_Response::OK;
 }
 
+std::shared_ptr<std::list<utils::ProtoServer> > PsqlConnector::getServers(std::string &networkName) {
+    std::shared_ptr<std::list<utils::ProtoServer> > ret(new std::list<utils::ProtoServer>());
+    try{
+        std::string transId = "get_servers_" + sp2p::tracker::utils::getRandomString(10);
+        std::string command = "SELECT login, ip, port from servers s JOIN users u ON s.user_id=u.id " \
+                "WHERE network_id=$1";
+        pqxx::work Xaction(*connection);
+        connection->prepare(transId, command);
+        pqxx::result res = Xaction.prepared(transId)(networkName).exec();
+        for(int i = 0; i < res.size(); ++i) {
+            utils::ProtoServer currServer;
+            currServer.setNetworkName(networkName);
+            currServer.setIp(utils::toString(res[i]["ip"]));
+            currServer.setPort(utils::toInt(res[i]["port"]));
+            ret->push_back(currServer);
+        }
+    }catch(pqxx::unique_violation e){
+        std::cout << e.what();
+    }
+    return ret;
+}
+
+void PsqlConnector::cleanServers(int ttl) {
+    try{
+        std::string transId = "clean_servers_" + sp2p::tracker::utils::getRandomString(10);
+        std::string command = "SELECT clean($1)";
+        pqxx::work Xaction(*connection);
+        connection->prepare(transId, command);
+        pqxx::result res = Xaction.prepared(transId)(ttl).exec();
+        Xaction.commit();
+    }catch(pqxx::unique_violation e){
+        std::cout << e.what();
+    }
+}
+
 } // namespace db
 } // namespace tracker
 } // namespace sp2p
-
-
-
-
-

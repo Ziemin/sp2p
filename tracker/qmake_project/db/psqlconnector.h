@@ -26,6 +26,10 @@ public:
     DB_Response removeUser(int id);
     bool isUser(std::string &login, std::string &password);
     DB_Response changeUserPassword(std::string &login, std::string &newPassword);
+    bool userExists(std::string &login);
+
+    std::string getUserInfo(std::string &login, std::string &network);
+    DB_Response addKey(std::string &login, std::string &network, std::string &key);
 
     DB_Response createInvitation(std::string& login, std::string& networkName);
     DB_Response deleteInvitation(std::string& login, std::string& networkName);
@@ -36,10 +40,16 @@ public:
     DB_Response deleteNetwork(std::string &login, std::string& name);
     std::shared_ptr<std::list<utils::ProtoNetwork>> getAllNetworks(std::string &login);
     std::shared_ptr<std::list<utils::ProtoNetwork>> getUserNetworks(std::string &login);
+    bool networkExists(std::string &name);
 
+    bool canAddServer(std::string &login, std::string &networkName);
+
+    bool canSeeNetwork(std::string &networkName, std::string &login);
     DB_Response updateServer(std::string &network, std::string &user, std::string& ip, \
                              int port, int ttl);
     DB_Response deleteServer(std::string &network, std::string& user);
+    std::shared_ptr<std::list<utils::ProtoServer> > getServers(std::string &networkName);
+    void cleanServers(int ttl);
 
 private:
     std::string dbName;
@@ -49,7 +59,6 @@ private:
     std::string dbPort;
 
     pqxx::connection* connection;
-
 
 };
 

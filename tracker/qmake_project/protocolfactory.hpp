@@ -16,7 +16,7 @@ class ProtocolFactory : public protocol_factory::AbstractProtocolFactory
 public:
     ProtocolFactory(SessionControler_ptr, DBConnector_ptr);
     protocol_factory::AbstractRequest *produceRequest()const;
-    protocol_factory::AbstractRequestHandler *produceRequestHandler() const;
+    protocol_factory::AbstractRequestHandler *produceRequestHandler(boost::asio::ip::tcp::endpoint endpoint_) const;
     protocol_factory::AbstractRequestParser *produceRequestParser() const;
     protocol_factory::AbstractResponse *produceResponse() const;
 

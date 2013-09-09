@@ -6,7 +6,7 @@ create table users(
 
 create table networks(
     id serial primary key not null,
-    owner_id integer references users(id) not null,
+    owner_id integer references users(id) not null ON DELETE CASCADE,
     name char(30) not null unique,
     public boolean not null default false,
     visible boolean not null default false,
@@ -17,8 +17,8 @@ create table networks(
 
 create table servers(
     id serial primary key not null,
-    user_id integer references users(id) not null,
-    network_id integer references networks(id) not null,
+    user_id integer references users(id) not null ON DELETE CASCADE,
+    network_id integer references networks(id) not null ON DELETE CASCADE,
     ip char(20) not null,
     port integer not null,
     ttl integer not null default 0, -- time from 1970 (Node time)
@@ -27,15 +27,28 @@ create table servers(
 
 create table invitations(
     id serial primary key not null,
-    user_id integer references users(id) not null,
-    network_id integer references networks(id) not null
+    user_id integer references users(id) not null ON DELETE CASCADE,
+    network_id integer references networks(id) not null ON DELETE CASCADE
 );
 
 create table publicKey(
     id serial primary key not null,
-    user_id integer references users(id) not null,
-    network_id integer references networks(id) not null,
+    user_id integer references users(id) not null ON DELETE CASCADE,
+    network_id integer references networks(id) not null ON DELETE CASCADE,
     key text not null,
     unique(user_id, network_id)
 );
 
+
+
+CREATE OR REPLACE FUNCTION clean(T integer)
+    returns void as
+$$
+declare
+    curr integer;
+begin
+    curr = extract(epoch FROM now())::int; 
+    DELETE FROM servers WHERE ttl < curr - T;
+end;
+$$
+language plpgsql;

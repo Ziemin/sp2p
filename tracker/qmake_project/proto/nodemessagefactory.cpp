@@ -93,12 +93,85 @@ shared_ptr<NodeMessage> signKeyResponse(string& userCertificate) {
 }
 
 shared_ptr<NodeMessage> listNetworksResponse(shared_ptr<list<utils::ProtoNetwork> > L) {
+    shared_ptr<NodeMessage> request(new NodeMessage());
+    request->set_response_type(NodeMessage_ResponseType_OK);
 
+    NodeMessage::ListNetworks *list_networks_response = new NodeMessage::ListNetworks();
+
+    for(auto i = L->begin(); i != L->end(); ++i) {
+        NodeMessage::ListNetworks::Network *currentNet = list_networks_response->add_network_list();
+        currentNet->set_name(i->getName());
+        currentNet->set_creator_email(i->getCreatorEmail());
+        currentNet->set_creator_name(i->getOwnerName());
+        if(i->getPublicity()) {
+            currentNet->set_access_rights(ClientMessage::CreateNetwork::PUBLIC);
+        }
+        else {
+            currentNet->set_access_rights(ClientMessage::CreateNetwork::PRIVATE);
+        }
+        if(i->getParticipable()) {
+            currentNet->set_participation_rights(ClientMessage::CreateNetwork::CLIENT_SERVER);
+        }
+        else {
+            currentNet->set_participation_rights(ClientMessage::CreateNetwork::CLIENT_ONLY);
+        }
+        currentNet->set_protocol_name(i->getProtocolName());
+        list_networks_response->add_network_list();
+    }
+
+    request->set_allocated_list_networks_response(list_networks_response);
+
+    return request;
+
+}
+
+NodeMessage_ptr listMyNetworksResponse(shared_ptr<list<utils::ProtoNetwork> > L) {
+    shared_ptr<NodeMessage> request(new NodeMessage());
+    request->set_response_type(NodeMessage_ResponseType_OK);
+
+    NodeMessage::ListMyNetworks *list_networks_response = new NodeMessage::ListMyNetworks();
+
+    for(auto i = L->begin(); i != L->end(); ++i) {
+        NodeMessage::ListNetworks::Network *currentNet = list_networks_response->add_network_list();
+        currentNet->set_name(i->getName());
+        currentNet->set_creator_email(i->getCreatorEmail());
+        currentNet->set_creator_name(i->getOwnerName());
+        if(i->getPublicity()) {
+            currentNet->set_access_rights(ClientMessage::CreateNetwork::PUBLIC);
+        }
+        else {
+            currentNet->set_access_rights(ClientMessage::CreateNetwork::PRIVATE);
+        }
+        if(i->getParticipable()) {
+            currentNet->set_participation_rights(ClientMessage::CreateNetwork::CLIENT_SERVER);
+        }
+        else {
+            currentNet->set_participation_rights(ClientMessage::CreateNetwork::CLIENT_ONLY);
+        }
+        currentNet->set_protocol_name(i->getProtocolName());
+        list_networks_response->add_network_list();
+    }
+
+    return request;
 }
 
 shared_ptr<NodeMessage> listServersResponse(shared_ptr<list<utils::ProtoServer> > L) {
+    shared_ptr<NodeMessage> request(new NodeMessage());
+    request->set_response_type(NodeMessage_ResponseType_OK);
+
+    NodeMessage::ListServers *list_servers_response = new NodeMessage::ListServers();
+
+    for(auto i = L->begin(); i != L->end(); ++i) {
+        NodeMessage::ListServers::Server *currentServer = list_servers_response->add_list_servers();
+        currentServer->set_ip_address(i->getIp());
+        currentServer->set_port_number(i->getPort());
+        currentServer->set_username(i->getNetworkName());
+    }
+
+    return request;
 
 }
+
 
 
 

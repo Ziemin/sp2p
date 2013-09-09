@@ -41,7 +41,7 @@ private:
     boost::asio::io_service io_service_;
     boost::asio::ip::tcp::acceptor acceptor_;
     Connection_ptr new_connection_;
-    protocol_factory::AbstractRequestHandler *requestHandler;
+//    protocol_factory::AbstractRequestHandler *requestHandler;
     Factory_ptr protocolFactory;
 };
 

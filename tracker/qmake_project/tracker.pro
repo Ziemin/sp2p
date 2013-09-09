@@ -50,7 +50,8 @@ HEADERS += \
     protocolfactory.hpp \
     logger.hpp \
     sessioncontroler.hpp \
-    protocol_factory/abstractsessioncontroler.hpp
+    protocol_factory/abstractsessioncontroler.hpp \
+    constants.h
 
 QMAKE_CXXFLAGS = -std=c++11
 
