@@ -2,6 +2,7 @@
 #define NETWORK_HPP
 
 #include <string>
+#include <iostream>
 
 namespace sp2p{
 namespace tracker{
@@ -32,6 +33,8 @@ public:
 
     std::string getOwnerName() const;
     void setOwnerName(const std::string &value);
+
+    operator std::string() const;
 
 private:
     std::string name;

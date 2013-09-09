@@ -298,7 +298,7 @@ NodeMessage_ptr RequestHandler::handleCreate_network(const protocol::ClientMessa
                 clientMessage->create_network_message().has_visibility() &&
                 clientMessage->create_network_message().has_participation_rights()) {
             std::string cookie = clientMessage->create_network_message().cookie();
-            std::string login = sessionControler->login(cookie);
+            std::string login = sessionControler->getLogin(cookie);
 
             if(login == "")
                 return NodeMessageFactory::errorMesage(protocol::NodeMessage::NOT_LOGGED);
@@ -344,7 +344,7 @@ NodeMessage_ptr RequestHandler::handleDelete_network(const protocol::ClientMessa
         if(clientMessage->delete_network_message().has_cookie()
                 && clientMessage->delete_network_message().has_name()) {
             std::string cookie = clientMessage->delete_network_message().cookie();
-            std::string login = sessionControler->login(cookie);
+            std::string login = sessionControler->getLogin(cookie);
             if(login == "")
                 return NodeMessageFactory::errorMesage(protocol::NodeMessage::NOT_LOGGED);
             std::string name = clientMessage->delete_network_message().name();
@@ -384,7 +384,7 @@ NodeMessage_ptr RequestHandler::handleInvite_user(const protocol::ClientMessage 
 NodeMessage_ptr RequestHandler::handleRemove_user(const protocol::ClientMessage *clientMessage) const {
     if(clientMessage->has_remove_user_message()) {
         std::string cookie = clientMessage->remove_user_message().cookie();
-        std::string login = sessionControler->login(cookie);
+        std::string login = sessionControler->getLogin(cookie);
         if(login == "")
             return NodeMessageFactory::errorMesage(protocol::NodeMessage::NOT_LOGGED);
         db::DB_Response db_response = DBConnector_->removeUser(login);
@@ -411,7 +411,7 @@ NodeMessage_ptr RequestHandler::handleRemove_user(const protocol::ClientMessage 
 NodeMessage_ptr RequestHandler::handleUser_info(const protocol::ClientMessage *clientMessage) const {
     if(clientMessage->has_user_info_message()) {
         std::string cookie = clientMessage->user_info_message().cookie();
-        std::string login = sessionControler->login(cookie);
+        std::string login = sessionControler->getLogin(cookie);
         if(login == "")
             return NodeMessageFactory::errorMesage(protocol::NodeMessage::NOT_LOGGED);
 
@@ -433,7 +433,7 @@ NodeMessage_ptr RequestHandler::handleUser_info(const protocol::ClientMessage *c
 NodeMessage_ptr RequestHandler::handleUpdate_server(const protocol::ClientMessage *clientMessage) const {
     if(clientMessage->has_update_server_message()) {
         std::string cookie = clientMessage->update_server_message().cookie();
-        std::string login = sessionControler->login(cookie);
+        std::string login = sessionControler->getLogin(cookie);
         if(login == "")
             return NodeMessageFactory::errorMesage(protocol::NodeMessage::NOT_LOGGED);
 
@@ -472,7 +472,7 @@ NodeMessage_ptr RequestHandler::handleUpdate_server(const protocol::ClientMessag
 NodeMessage_ptr RequestHandler::handleStop_server(const protocol::ClientMessage *clientMessage) const {
     if(clientMessage->has_stop_server_message()) {
         std::string cookie = clientMessage->stop_server_message().cookie();
-        std::string login = sessionControler->login(cookie);
+        std::string login = sessionControler->getLogin(cookie);
         if(login == "")
             return NodeMessageFactory::errorMesage(protocol::NodeMessage::NOT_LOGGED);
 
@@ -510,7 +510,7 @@ NodeMessage_ptr RequestHandler::handleSign_key(const protocol::ClientMessage *cl
 NodeMessage_ptr RequestHandler::handleChange_password(const protocol::ClientMessage *clientMessage) const {
     if(clientMessage->has_change_password_message()) {
         std::string cookie = clientMessage->change_password_message().cookie();
-        std::string login = sessionControler->login(cookie);
+        std::string login = sessionControler->getLogin(cookie);
         if(login == "")
             return NodeMessageFactory::errorMesage(protocol::NodeMessage::NOT_LOGGED);
 
