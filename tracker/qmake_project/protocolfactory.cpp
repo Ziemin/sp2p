@@ -22,9 +22,9 @@ protocol_factory::AbstractRequest *ProtocolFactory::produceRequest() const
     return new Request();
 }
 
-protocol_factory::AbstractRequestHandler *ProtocolFactory::produceRequestHandler(boost::asio::ip::tcp::endpoint endpoint_) const
+protocol_factory::AbstractRequestHandler *ProtocolFactory::produceRequestHandler(boost::asio::ip::address address_) const
 {
-    return new RequestHandler(sessionControler, DBConnector_, endpoint_);
+    return new RequestHandler(sessionControler, DBConnector_, address_);
 }
 
 protocol_factory::AbstractRequestParser *ProtocolFactory::produceRequestParser() const

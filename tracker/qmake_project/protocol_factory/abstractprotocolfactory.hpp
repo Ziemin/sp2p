@@ -18,7 +18,7 @@ class AbstractProtocolFactory : public std::enable_shared_from_this<AbstractProt
 {
 public:
     virtual AbstractRequest *produceRequest() const = 0;
-    virtual AbstractRequestHandler *produceRequestHandler(boost::asio::ip::tcp::endpoint) const = 0;
+    virtual AbstractRequestHandler *produceRequestHandler(boost::asio::ip::address) const = 0;
     virtual AbstractRequestParser *produceRequestParser() const = 0;
     virtual AbstractResponse *produceResponse() const = 0;
     virtual ~AbstractProtocolFactory() = default;

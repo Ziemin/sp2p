@@ -19,3 +19,4 @@ const int THREAT_NUMBER = 4;
 }
 
 #endif // CONSTANTS_H
+

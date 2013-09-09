@@ -16,7 +16,6 @@ Connection::Connection(boost::asio::io_service& io_service,
       socket_(io_service)
 {
     this->factory = factory;
-    this->requestHandler = RequestHandler_ptr(factory->produceRequestHandler(socket_.remote_endpoint()));
     this->requestParser = RequestParser_ptr(factory->produceRequestParser());
     this->request_ = Request_ptr(factory->produceRequest());
 }
@@ -31,6 +30,7 @@ void Connection::start()
 #ifdef DEBUG_LOGGING
     BOOST_LOG_TRIVIAL(debug) << "New connection";
 #endif
+    this->requestHandler = RequestHandler_ptr(factory->produceRequestHandler(socket_.remote_endpoint().address()));
     socket_.async_read_some(boost::asio::buffer(buffer_), strand_.wrap(
                                 boost::bind(&Connection::handle_read, shared_from_this(),
                                             boost::asio::placeholders::error,

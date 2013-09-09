@@ -15,11 +15,11 @@
 namespace sp2p {
 namespace tracker {
 
-RequestHandler::RequestHandler(SessionControler_ptr sessionControler, DBConnector_ptr DBConnector_, boost::asio::ip::tcp::endpoint endpoint_)
+RequestHandler::RequestHandler(SessionControler_ptr sessionControler, DBConnector_ptr DBConnector_, boost::asio::ip::address address_)
 {
     this->sessionControler = sessionControler;
     this->DBConnector_ = DBConnector_;
-    this->endpoint_ = endpoint_;
+    this->address_ = address_;
 }
 
 void RequestHandler::handleRequest(const protocol_factory::AbstractRequest *req, protocol_factory::AbstractResponse *rep) const
@@ -144,6 +144,8 @@ void RequestHandler::badRequestResponse(protocol_factory::AbstractResponse *rep)
 }
 
 bool RequestHandler::cookieCorrect(const protocol::ClientMessage *clientMessage) const {
+    (void*)clientMessage;
+    return true;
 }
 
 
@@ -160,11 +162,15 @@ NodeMessage_ptr RequestHandler::handleRegister(const protocol::ClientMessage *cl
             std::string pass = clientMessage->register_message().password();
             db::DB_Response db_response = DBConnector_->createUser(login, pass);
             switch(db_response) {
-            case db::NOT_UNIQUE:
-                return NodeMessageFactory::errorMesage(protocol::NodeMessage::BAD_DATA);
             case db::INTERNAL_ERROR:
                 return NodeMessageFactory::errorMesage(protocol::NodeMessage::INTERNAL_SERVER_ERROR);
-            default:
+            case db::NOT_FOUND:
+                return NodeMessageFactory::errorMesage(protocol::NodeMessage::NO_SUCH_USER);
+            case db::NOT_PERMITED:
+                return NodeMessageFactory::errorMesage(protocol::NodeMessage::NO_PRIVILAGES);
+            case db::NOT_UNIQUE:
+                return NodeMessageFactory::errorMesage(protocol::NodeMessage::ALREADY_EXISTS);
+            case db::OK:
                 std::string cookie = sessionControler->login(login);
                 std::string cert = "notimplementedyet";
                 return NodeMessageFactory::loginResponse(cookie, cert);
@@ -185,12 +191,18 @@ NodeMessage_ptr RequestHandler::handleUnregister(const protocol::ClientMessage *
 
             db::DB_Response db_response = DBConnector_->removeUser(login);
             switch(db_response) {
-            case db::NOT_FOUND:
-                return NodeMessageFactory::errorMesage(protocol::NodeMessage::BAD_DATA);
             case db::INTERNAL_ERROR:
                 return NodeMessageFactory::errorMesage(protocol::NodeMessage::INTERNAL_SERVER_ERROR);
-            default:
+            case db::NOT_FOUND:
+                return NodeMessageFactory::errorMesage(protocol::NodeMessage::NO_SUCH_USER);
+            case db::NOT_PERMITED:
+                return NodeMessageFactory::errorMesage(protocol::NodeMessage::NO_PRIVILAGES);
+            case db::NOT_UNIQUE:
+                return NodeMessageFactory::errorMesage(protocol::NodeMessage::ALREADY_EXISTS);
+            case db::OK:
                 return NodeMessageFactory::errorMesage(protocol::NodeMessage::OK);
+            default:
+                return NodeMessageFactory::errorMesage(protocol::NodeMessage::INTERNAL_SERVER_ERROR);
             }
         }
     }
@@ -309,17 +321,18 @@ NodeMessage_ptr RequestHandler::handleCreate_network(const protocol::ClientMessa
                                                                       visible, participable, ownerEmail,
                                                                       protocol);
             switch(db_response) {
-            case db::NOT_FOUND:
-                return NodeMessageFactory::errorMesage(protocol::NodeMessage::BAD_DATA);
             case db::INTERNAL_ERROR:
                 return NodeMessageFactory::errorMesage(protocol::NodeMessage::INTERNAL_SERVER_ERROR);
+            case db::NOT_FOUND:
+                return NodeMessageFactory::errorMesage(protocol::NodeMessage::NO_SUCH_USER);
+            case db::NOT_PERMITED:
+                return NodeMessageFactory::errorMesage(protocol::NodeMessage::NO_PRIVILAGES);
             case db::NOT_UNIQUE:
-
-                // TO DO
-                // ALREADY_EXISTS
-                return NodeMessageFactory::errorMesage(protocol::NodeMessage::BAD_REQUEST);
-            default:
+                return NodeMessageFactory::errorMesage(protocol::NodeMessage::ALREADY_EXISTS);
+            case db::OK:
                 return NodeMessageFactory::errorMesage(protocol::NodeMessage::OK);
+            default:
+                return NodeMessageFactory::errorMesage(protocol::NodeMessage::INTERNAL_SERVER_ERROR);
             }
         }
     }
@@ -339,10 +352,16 @@ NodeMessage_ptr RequestHandler::handleDelete_network(const protocol::ClientMessa
             switch(db_response) {
             case db::INTERNAL_ERROR:
                 return NodeMessageFactory::errorMesage(protocol::NodeMessage::INTERNAL_SERVER_ERROR);
+            case db::NOT_FOUND:
+                return NodeMessageFactory::errorMesage(protocol::NodeMessage::NO_SUCH_NETWORK);
             case db::NOT_PERMITED:
                 return NodeMessageFactory::errorMesage(protocol::NodeMessage::NO_PRIVILAGES);
-            default:
+            case db::NOT_UNIQUE:
+                return NodeMessageFactory::errorMesage(protocol::NodeMessage::ALREADY_EXISTS);
+            case db::OK:
                 return NodeMessageFactory::errorMesage(protocol::NodeMessage::OK);
+            default:
+                return NodeMessageFactory::errorMesage(protocol::NodeMessage::INTERNAL_SERVER_ERROR);
             }
         }
     }
@@ -375,8 +394,14 @@ NodeMessage_ptr RequestHandler::handleRemove_user(const protocol::ClientMessage 
             return NodeMessageFactory::errorMesage(protocol::NodeMessage::INTERNAL_SERVER_ERROR);
         case db::NOT_FOUND:
             return NodeMessageFactory::errorMesage(protocol::NodeMessage::NO_SUCH_USER);
+        case db::NOT_PERMITED:
+            return NodeMessageFactory::errorMesage(protocol::NodeMessage::NO_PRIVILAGES);
+        case db::NOT_UNIQUE:
+            return NodeMessageFactory::errorMesage(protocol::NodeMessage::ALREADY_EXISTS);
         case db::OK:
             return NodeMessageFactory::errorMesage(protocol::NodeMessage::OK);
+        default:
+            return NodeMessageFactory::errorMesage(protocol::NodeMessage::INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -420,7 +445,7 @@ NodeMessage_ptr RequestHandler::handleUpdate_server(const protocol::ClientMessag
             return NodeMessageFactory::errorMesage(protocol::NodeMessage::NO_PRIVILAGES);
         int port = clientMessage->update_server_message().port_number();
 
-        std::string ip = endpoint_.address().to_string();
+        std::string ip = address_.to_string();
 
         db::DB_Response db_response = DBConnector_->updateServer(network, login, ip, port,
                                                                  utils::currTimeInMS() + consts::SERVER_TTL);
@@ -430,8 +455,14 @@ NodeMessage_ptr RequestHandler::handleUpdate_server(const protocol::ClientMessag
             return NodeMessageFactory::errorMesage(protocol::NodeMessage::INTERNAL_SERVER_ERROR);
         case db::NOT_FOUND:
             return NodeMessageFactory::errorMesage(protocol::NodeMessage::NO_SUCH_USER);
+        case db::NOT_PERMITED:
+            return NodeMessageFactory::errorMesage(protocol::NodeMessage::NO_PRIVILAGES);
+        case db::NOT_UNIQUE:
+            return NodeMessageFactory::errorMesage(protocol::NodeMessage::ALREADY_EXISTS);
         case db::OK:
             return NodeMessageFactory::updateServerResponse(consts::SERVER_TTL);
+        default:
+            return NodeMessageFactory::errorMesage(protocol::NodeMessage::INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -455,8 +486,14 @@ NodeMessage_ptr RequestHandler::handleStop_server(const protocol::ClientMessage 
              return NodeMessageFactory::errorMesage(protocol::NodeMessage::INTERNAL_SERVER_ERROR);
          case db::NOT_FOUND:
              return NodeMessageFactory::errorMesage(protocol::NodeMessage::NO_SUCH_USER);
+         case db::NOT_PERMITED:
+             return NodeMessageFactory::errorMesage(protocol::NodeMessage::NO_PRIVILAGES);
+         case db::NOT_UNIQUE:
+             return NodeMessageFactory::errorMesage(protocol::NodeMessage::ALREADY_EXISTS);
          case db::OK:
              return NodeMessageFactory::errorMesage(protocol::NodeMessage::OK);
+         default:
+             return NodeMessageFactory::errorMesage(protocol::NodeMessage::INTERNAL_SERVER_ERROR);
          }
 
     }
@@ -466,7 +503,7 @@ NodeMessage_ptr RequestHandler::handleStop_server(const protocol::ClientMessage 
 NodeMessage_ptr RequestHandler::handleSign_key(const protocol::ClientMessage *clientMessage) const {
 
     // TO DO
-
+    (void*)(clientMessage);
     return NodeMessageFactory::errorMesage(protocol::NodeMessage::INTERNAL_SERVER_ERROR);
 }
 
@@ -488,8 +525,14 @@ NodeMessage_ptr RequestHandler::handleChange_password(const protocol::ClientMess
             return NodeMessageFactory::errorMesage(protocol::NodeMessage::INTERNAL_SERVER_ERROR);
         case db::NOT_FOUND:
             return NodeMessageFactory::errorMesage(protocol::NodeMessage::NO_SUCH_USER);
+        case db::NOT_PERMITED:
+            return NodeMessageFactory::errorMesage(protocol::NodeMessage::NO_PRIVILAGES);
+        case db::NOT_UNIQUE:
+            return NodeMessageFactory::errorMesage(protocol::NodeMessage::ALREADY_EXISTS);
         case db::OK:
             return NodeMessageFactory::errorMesage(protocol::NodeMessage::OK);
+        default:
+            return NodeMessageFactory::errorMesage(protocol::NodeMessage::INTERNAL_SERVER_ERROR);
         }
     }
     return NodeMessageFactory::badRequestMessage();

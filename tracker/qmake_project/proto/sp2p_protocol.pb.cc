@@ -807,7 +807,7 @@ void protobuf_AddDesc_sp2p_5fprotocol_2eproto() {
     "ORK\020\010\022\017\n\013INVITE_USER\020\t\022\017\n\013REMOVE_USER\020\n\022"
     "\r\n\tUSER_INFO\020\013\022\021\n\rUPDATE_SERVER\020\014\022\017\n\013STO"
     "P_SERVER\020\r\022\014\n\010SIGN_KEY\020\016\022\023\n\017CHANGE_PASSW"
-    "ORD\020\017\"\242\014\n\013NodeMessage\0229\n\rresponse_type\030\001"
+    "ORD\020\017\"\267\014\n\013NodeMessage\0229\n\rresponse_type\030\001"
     " \002(\0162\".protocol.NodeMessage.ResponseType"
     "\0229\n\021register_response\030\002 \001(\0132\036.protocol.N"
     "odeMessage.Register\0223\n\016login_response\030\003 "
@@ -841,12 +841,12 @@ void protobuf_AddDesc_sp2p_5fprotocol_2eproto() {
     "address\030\002 \002(\t\022\023\n\013port_number\030\003 \002(\005\032#\n\010Us"
     "erInfo\022\027\n\017user_public_key\030\001 \002(\t\032)\n\014Updat"
     "eServer\022\031\n\021seconds_to_update\030\001 \002(\005\032#\n\007Si"
-    "gnKey\022\030\n\020user_certificate\030\001 \002(\t\"\270\001\n\014Resp"
+    "gnKey\022\030\n\020user_certificate\030\001 \002(\t\"\315\001\n\014Resp"
     "onseType\022\007\n\002OK\020\310\001\022\032\n\025INTERNAL_SERVER_ERR"
     "OR\020\220\003\022\020\n\013BAD_REQUEST\020\364\003\022\022\n\rNO_PRIVILAGES"
     "\020\365\003\022\017\n\nNOT_LOGGED\020\366\003\022\024\n\017BAD_CREDENTIALS\020"
     "\367\003\022\021\n\014NO_SUCH_USER\020\370\003\022\024\n\017NO_SUCH_NETWORK"
-    "\020\371\003\022\r\n\010BAD_DATA\020\372\003", 4298);
+    "\020\371\003\022\r\n\010BAD_DATA\020\372\003\022\023\n\016ALREADY_EXISTS\020\373\003", 4319);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "sp2p_protocol.proto", &protobuf_RegisterTypes);
   ClientMessage::default_instance_ = new ClientMessage();
@@ -6973,6 +6973,7 @@ bool NodeMessage_ResponseType_IsValid(int value) {
     case 504:
     case 505:
     case 506:
+    case 507:
       return true;
     default:
       return false;
@@ -6989,6 +6990,7 @@ const NodeMessage_ResponseType NodeMessage::BAD_CREDENTIALS;
 const NodeMessage_ResponseType NodeMessage::NO_SUCH_USER;
 const NodeMessage_ResponseType NodeMessage::NO_SUCH_NETWORK;
 const NodeMessage_ResponseType NodeMessage::BAD_DATA;
+const NodeMessage_ResponseType NodeMessage::ALREADY_EXISTS;
 const NodeMessage_ResponseType NodeMessage::ResponseType_MIN;
 const NodeMessage_ResponseType NodeMessage::ResponseType_MAX;
 const int NodeMessage::ResponseType_ARRAYSIZE;

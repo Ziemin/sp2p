@@ -20,10 +20,13 @@ using namespace sp2p::tracker;
 
 int main(int argc, char* argv[])
 {
+    if(argc != 4) {
+        std::cout << "Usage: addres port threads_number" << std::endl;
+        return 1;
+    }
 
     try
     {
-        // Check command line arguments.
         DBConnector_ptr DBConnector_ = DBConnector_ptr(new db::PsqlConnector(
                                                            db::config::DATABASE,
                                                            db::config::USER,
@@ -34,7 +37,12 @@ int main(int argc, char* argv[])
         auto factory = std::shared_ptr<protocol_factory::AbstractProtocolFactory>(
                     new ProtocolFactory(sessionControler, DBConnector_));
 
-        Server *server = new Server(factory, consts::SERVER_ADDRESS, consts::SERVER_PORT, consts::THREAT_NUMBER);
+        std::string ip = argv[1];
+        std::string port = argv[2];
+        int threads = std::stoi(argv[3]);
+
+
+        Server *server = new Server(factory, ip, port, threads);
         server->run();
     }
     catch (std::exception& e)

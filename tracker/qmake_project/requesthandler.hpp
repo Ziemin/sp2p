@@ -22,7 +22,7 @@ class RequestHandler
 {
 public:
     /// Construct with a directory containing files to be served.
-    RequestHandler(SessionControler_ptr sessionControler, DBConnector_ptr DBConnector_, boost::asio::ip::tcp::endpoint endpoint_);
+    RequestHandler(SessionControler_ptr sessionControler, DBConnector_ptr DBConnector_, boost::asio::ip::address address_);
 
     /// Handle a request and produce a reply.
     void handleRequest(const protocol_factory::AbstractRequest *req, protocol_factory::AbstractResponse *rep) const;
@@ -50,7 +50,7 @@ private:
 
     SessionControler_ptr sessionControler;
     DBConnector_ptr DBConnector_;
-    boost::asio::ip::tcp::endpoint endpoint_;
+    boost::asio::ip::address address_;
 };
 
 } // namespace tracker

@@ -6,7 +6,7 @@ create table users(
 
 create table networks(
     id serial primary key not null,
-    owner_id integer references users(id) not null ON DELETE CASCADE,
+    owner_id integer references users(id) ON DELETE CASCADE not null,
     name char(30) not null unique,
     public boolean not null default false,
     visible boolean not null default false,
@@ -17,8 +17,8 @@ create table networks(
 
 create table servers(
     id serial primary key not null,
-    user_id integer references users(id) not null ON DELETE CASCADE,
-    network_id integer references networks(id) not null ON DELETE CASCADE,
+    user_id integer references users(id) ON DELETE CASCADE not null,
+    network_id integer references networks(id)  ON DELETE CASCADE not null,
     ip char(20) not null,
     port integer not null,
     ttl integer not null default 0, -- time from 1970 (Node time)
@@ -27,14 +27,14 @@ create table servers(
 
 create table invitations(
     id serial primary key not null,
-    user_id integer references users(id) not null ON DELETE CASCADE,
-    network_id integer references networks(id) not null ON DELETE CASCADE
+    user_id integer references users(id) ON DELETE CASCADE not null,
+    network_id integer references networks(id) ON DELETE CASCADE not null 
 );
 
 create table publicKey(
     id serial primary key not null,
-    user_id integer references users(id) not null ON DELETE CASCADE,
-    network_id integer references networks(id) not null ON DELETE CASCADE,
+    user_id integer references users(id) ON DELETE CASCADE not null,
+    network_id integer references networks(id) ON DELETE CASCADE not null,
     key text not null,
     unique(user_id, network_id)
 );
