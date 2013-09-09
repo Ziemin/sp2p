@@ -91,6 +91,10 @@ namespace sp2p {
             return this->my_user.is_registered;
         }
 
+        bool Node::isLogged() const {
+            return node_connection.is_logged;
+        }
+
         void Node::setNewDescription(NodeDescription node_desc) {
             if(this->isActive()) {
                 BOOST_LOG_SEV(lg, error) << "Setting new description to active node";
@@ -222,7 +226,7 @@ namespace sp2p {
             BOOST_LOG_SEV(lg, trace) << "Registering user to " << node_desc;
 
             NodeError result = beforeMessage();
-            if(any(result)) return result;
+            if(result != NodeError::NOT_LOGGED && any(result)) return result;
 
             std::shared_ptr<NodeRequest> registerUserMessage = utils::getRegisterUserMessage(my_user, ""); // TODO implement
 

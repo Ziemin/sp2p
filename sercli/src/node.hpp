@@ -70,6 +70,9 @@ namespace sp2p {
                  */
                 bool isRegistered() const;
 
+
+                bool isLogged() const;
+
                 NodeError registerNetwork(const NetworkDescription& network_desc);
                 NodeError deleteNetwork(const NetworkDescription& network_desc);
 

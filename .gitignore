@@ -11,3 +11,4 @@ build
 *kdev4
 *.log
 sercli/test/resources/*
+*.o

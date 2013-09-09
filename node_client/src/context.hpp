@@ -327,6 +327,13 @@ class NodeContext : public Context {
                 else cout << "No" << endl;
             };
 
+            // is active?
+            handlers["il"] = [this](int argc, const char *argv[]) -> void {
+                checkNode();
+                if(node->isLogged()) cout << "Yes" << endl;
+                else cout << "No" << endl;
+            };
+
             // is registered?
             handlers["ir"] = [this](int argc, const char *argv[]) -> void {
                 checkNode();
@@ -423,6 +430,7 @@ class NodeContext : public Context {
             cout << "getSL"     << "\t\t - Gets visible servers" << endl;
             cout << "ia"        << "\t\t - Is active?" << endl;
             cout << "ir"        << "\t\t - Is user registered?" << endl;
+            cout << "il"        << "\t\t - Is user logged?" << endl;
             cout << "regNet"    << "\t\t - Registers network" << endl;
             cout << "delNet"    << "\t\t - Deletes network" << endl;
             cout << "ups"       << "\t\t - Updates server" << endl;
@@ -449,7 +457,7 @@ po::options_description NodeContext::su_opts = []() {
         ("help,h", "prints this message")
         ("username,u", po::value<string>(), "username")
         ("email,e", po::value<string>(), "email")
-        ("password,p", po::value<string>(), "username")
+        ("password,p", po::value<string>(), "password")
         ("registered,r", po::value<bool>()->default_value(false), "is registered (0 or 1)");
 
     return opts;
