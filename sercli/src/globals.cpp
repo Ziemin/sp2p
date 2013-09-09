@@ -50,12 +50,11 @@ namespace sp2p {
 			Sp2pInitializer::~Sp2pInitializer() {
 
 				BOOST_LOG_SEV(lg, trace) << "Destruction of sp2p library";
-
+				delete work;
 				io_s->stop();
 				for(auto tr: thread_pool) tr->join();
 				sp2p_handler.reset();
 				delete io_s;
-				delete work;
 				blg_lg::core::get()->remove_all_sinks(); 
 			}
 

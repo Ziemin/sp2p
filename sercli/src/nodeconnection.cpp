@@ -123,7 +123,6 @@ namespace sp2p {
 			   BOOST_LOG_SEV(lg, debug) << "Closing connection with node";
 
 			   connection_manager.gracefulStop(connection);
-			   is_logged = false;
 			   stopDeadlineTimer();
 			   connection.reset();
 		   }

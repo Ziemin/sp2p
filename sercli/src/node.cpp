@@ -151,6 +151,9 @@ namespace sp2p {
                                     BOOST_LOG_SEV(lg, info) << "Cookie from: " << node_desc << " = " << loginResponse.cookie();
                                     node_connection.setCookie(loginResponse.cookie());
                                     node_connection.is_logged = true;
+
+                                    if(!my_user.is_registered) my_user.is_registered = true;
+
                                     break;
                                 }
                             } 
@@ -192,6 +195,7 @@ namespace sp2p {
                         node_connection.is_logged = false;
                         node_connection.setCookie("");
                         result = NodeError::OK;
+
                         break;
 
                     case protocol::NodeMessage::NOT_LOGGED:
