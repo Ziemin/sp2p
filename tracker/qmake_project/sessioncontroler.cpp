@@ -50,11 +50,11 @@ std::string SessionControler::login(const std::string &login)
 
 bool SessionControler::logout(const std::string &cookie)
 {
-    std::cout << "In logout with " << cookie << std::endl;
-    std::cout << "in session:" << std::endl;
-    for(auto i = cookieToTime.begin(); i != cookieToTime.end(); ++i) {
-        std::cout << i->first << std::endl;
-    }
+//    std::cout << "In logout with " << cookie << std::endl;
+//    std::cout << "in session:" << std::endl;
+//    for(auto i = cookieToTime.begin(); i != cookieToTime.end(); ++i) {
+//        std::cout << i->first << std::endl;
+//    }
     bool ret = false;
     mutex_.lock();
     if(cookieToTime.find(cookie) != cookieToTime.end()) {

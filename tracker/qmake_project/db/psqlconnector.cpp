@@ -45,7 +45,11 @@ DB_Response PsqlConnector::createUser(std::string& login, std::string& password)
     }catch(pqxx::unique_violation e){
         std::cout << e.what();
         return DB_Response::NOT_UNIQUE;
+    }catch(pqxx::failure f) {
+        std::cout << f.what();
+        return DB_Response::INTERNAL_ERROR;
     }
+
     return DB_Response::OK;
 }
 
@@ -59,7 +63,11 @@ DB_Response PsqlConnector::removeUser(std::string& login) {
     }catch(pqxx::unique_violation e){
         std::cout << e.what();
         return DB_Response::NOT_FOUND;
+    }catch(pqxx::failure f) {
+        std::cout << f.what();
+        return DB_Response::INTERNAL_ERROR;
     }
+
     return DB_Response::OK;
 }
 
@@ -73,7 +81,11 @@ DB_Response PsqlConnector::removeUser(int id) {
     }catch(pqxx::unique_violation e){
         std::cout << e.what();
         return DB_Response::NOT_FOUND;
+    }catch(pqxx::failure f) {
+        std::cout << f.what();
+        return DB_Response::INTERNAL_ERROR;
     }
+
     return DB_Response::OK;
 }
 
@@ -89,7 +101,11 @@ bool sp2p::tracker::db::PsqlConnector::isUser(std::string &login, std::string &p
     }catch(pqxx::unique_violation e){
         std::cout << e.what();
         return false;
+    }catch(pqxx::failure f) {
+        std::cout << f.what();
+        return false;
     }
+
 }
 
 sp2p::tracker::db::DB_Response sp2p::tracker::db::PsqlConnector::changeUserPassword(std::string &login, std::string &newPassword) {
@@ -103,23 +119,31 @@ sp2p::tracker::db::DB_Response sp2p::tracker::db::PsqlConnector::changeUserPassw
     }catch(pqxx::unique_violation e){
         std::cout << e.what();
         return DB_Response::NOT_FOUND;
+    }catch(pqxx::failure f) {
+        std::cout << f.what();
+        return DB_Response::INTERNAL_ERROR;
     }
+
     return DB_Response::OK;
 }
 
 bool sp2p::tracker::db::PsqlConnector::userExists(std::string &login) {
-try{
-    std::string transId = "user_exists_" + sp2p::tracker::utils::getRandomString(10);
-    std::string command = "SELECT id FROM users WHERE login=$1";
-    pqxx::work Xaction(*connection);
-    connection->prepare(transId, command);
-    pqxx::result res = Xaction.prepared(transId)(login).exec();
-    Xaction.commit();
-    return res.size() == 1;
-}catch(pqxx::unique_violation e){
-    std::cout << e.what();
-    return false;
-}
+    try{
+        std::string transId = "user_exists_" + sp2p::tracker::utils::getRandomString(10);
+        std::string command = "SELECT id FROM users WHERE login=$1";
+        pqxx::work Xaction(*connection);
+        connection->prepare(transId, command);
+        pqxx::result res = Xaction.prepared(transId)(login).exec();
+        Xaction.commit();
+        return res.size() == 1;
+    }catch(pqxx::unique_violation e){
+        std::cout << e.what();
+        return false;
+    }catch(pqxx::failure f) {
+        std::cout << f.what();
+        return false;
+    }
+
 }
 
 std::string PsqlConnector::getUserInfo(std::string &login, std::string &network) {
@@ -138,6 +162,7 @@ std::string PsqlConnector::getUserInfo(std::string &login, std::string &network)
         std::cout << e.what();
         return ret;
     }
+
     return ret;
 }
 
@@ -155,7 +180,11 @@ DB_Response PsqlConnector::addKey(std::string &login, std::string &network, std:
     }catch(pqxx::unique_violation e){
         std::cout << e.what();
         return DB_Response::NOT_FOUND;
+    }catch(pqxx::failure f) {
+        std::cout << f.what();
+        return DB_Response::INTERNAL_ERROR;
     }
+
     return DB_Response::OK;
 }
 
@@ -172,7 +201,11 @@ DB_Response PsqlConnector::createInvitation(std::string& login, std::string& net
     }catch(pqxx::unique_violation e){
         std::cout << e.what();
         return DB_Response::NOT_UNIQUE;
+    }catch(pqxx::failure f) {
+        std::cout << f.what();
+        return DB_Response::INTERNAL_ERROR;
     }
+
     return DB_Response::OK;
 }
 
@@ -189,7 +222,11 @@ DB_Response PsqlConnector::deleteInvitation(std::string& login, std::string& net
     }catch(pqxx::unique_violation e){
         std::cout << e.what();
         return DB_Response::NOT_FOUND;
+    }catch(pqxx::failure f) {
+        std::cout << f.what();
+        return DB_Response::INTERNAL_ERROR;
     }
+
     return DB_Response::OK;
 }
 
@@ -210,7 +247,11 @@ DB_Response PsqlConnector::createNetwork(std::string& networkName, std::string& 
     }catch(pqxx::foreign_key_violation e){
         std::cout << e.what();
         return DB_Response::NOT_UNIQUE;
+    }catch(pqxx::failure f) {
+        std::cout << f.what();
+        return DB_Response::INTERNAL_ERROR;
     }
+
 
     return DB_Response::OK;
 }
@@ -227,7 +268,11 @@ DB_Response PsqlConnector::deleteNetwork(std::string &login, std::string& name) 
     }catch(pqxx::unique_violation e){
         std::cout << e.what();
         return DB_Response::INTERNAL_ERROR;
+    }catch(pqxx::failure f) {
+        std::cout << f.what();
+        return DB_Response::INTERNAL_ERROR;
     }
+
     return DB_Response::OK;
 }
 
@@ -242,7 +287,7 @@ PsqlConnector::getAllNetworks(std::string &login) {
         pqxx::work Xaction(*connection);
         connection->prepare(transId, command);
         pqxx::result res = Xaction.prepared(transId)(login).exec();
-        for(int i = 0; i < res.size(); ++i) {
+        for(size_t i = 0; i < res.size(); ++i) {
             utils::ProtoNetwork currentNetwork;
             currentNetwork.setName(utils::toString(res[i]["name"]));
             currentNetwork.setOwnerName(utils::toString(res[i]["login"]));
@@ -255,7 +300,10 @@ PsqlConnector::getAllNetworks(std::string &login) {
         }
     }catch(pqxx::unique_violation e){
         std::cout << e.what();
+    }catch(pqxx::failure f) {
+        std::cout << f.what();
     }
+
     return ret;
 }
 
@@ -268,7 +316,7 @@ std::shared_ptr<std::list<utils::ProtoNetwork> > sp2p::tracker::db::PsqlConnecto
         pqxx::work Xaction(*connection);
         connection->prepare(transId, command);
         pqxx::result res = Xaction.prepared(transId)(login).exec();
-        for(int i = 0; i < res.size(); ++i) {
+        for(size_t i = 0; i < res.size(); ++i) {
             utils::ProtoNetwork currentNetwork;
             currentNetwork.setName(utils::toString(res[i]["name"]));
             currentNetwork.setOwnerName(utils::toString(res[i]["login"]));
@@ -281,7 +329,10 @@ std::shared_ptr<std::list<utils::ProtoNetwork> > sp2p::tracker::db::PsqlConnecto
         }
     }catch(pqxx::unique_violation e){
         std::cout << e.what();
+    }catch(pqxx::failure f) {
+        std::cout << f.what();
     }
+
     return ret;
 }
 
@@ -297,7 +348,11 @@ bool PsqlConnector::networkExists(std::string &name) {
         return res.size() > 0;
     }catch(pqxx::unique_violation e){
         std::cout << e.what();
+    }catch(pqxx::failure f) {
+        std::cout << f.what();
+        return false;
     }
+
     return false;
 }
 
@@ -315,7 +370,10 @@ bool PsqlConnector::canSeeNetwork(std::string &networkName, std::string &login) 
         return res.size() > 0;
     }catch(pqxx::unique_violation e){
         std::cout << e.what();
+    }catch(pqxx::failure f) {
+        std::cout << f.what();
     }
+
     return false;
 }
 
@@ -332,7 +390,10 @@ bool sp2p::tracker::db::PsqlConnector::canAddServer(std::string &login, std::str
         return res.size() > 0;
     }catch(pqxx::unique_violation e){
         std::cout << e.what();
+    }catch(pqxx::failure f) {
+        std::cout << f.what();
     }
+
     return false;
 }
 
@@ -342,7 +403,7 @@ DB_Response PsqlConnector::updateServer(std::string& network, std::string& user,
         //update
 
         std::string transId = "update_server_" + sp2p::tracker::utils::getRandomString(10);
-        std::string command = "UPDATE TABLE servers SET ip=$3, port=$4, ttl=$5 "
+        std::string command = "UPDATE servers SET ip=$3, port=$4, ttl=$5 "
                 "WHERE user_id=(SELECT id FROM users WHERE login=$2) "
                 "AND network_id=(SELECT id FROM networks WHERE name=$1)";
         pqxx::work Xaction(*connection);
@@ -351,19 +412,24 @@ DB_Response PsqlConnector::updateServer(std::string& network, std::string& user,
         if(res.affected_rows() > 0)
             return DB_Response::OK;
 
+        Xaction.commit();
         // insert if necessery
         transId = "update_server_" + sp2p::tracker::utils::getRandomString(10);
-        command = "INSERT INTO servers(user_id, network_id, ip, port, ttl) "
+        command = "INSERT INTO servers(network_id, user_id, ip, port, ttl) "
                 "values((SELECT id FROM networks WHERE name=$1), "
                 "(SELECT id FROM users WHERE login=$2),  $3, $4, $5)";
         pqxx::work Xaction2(*connection);
         connection->prepare(transId, command);
         res = Xaction2.prepared(transId)(network)(user)(ip)(port)(ttl).exec();
-
+        Xaction2.commit();
     }catch(pqxx::unique_violation e){
         std::cout << e.what();
         return DB_Response::NOT_FOUND;
+    }catch(pqxx::failure f) {
+        std::cout << f.what();
+        return DB_Response::INTERNAL_ERROR;
     }
+
     return DB_Response::OK;
 }
 
@@ -380,7 +446,11 @@ DB_Response PsqlConnector::deleteServer(std::string& network, std::string& user)
     }catch(pqxx::unique_violation e){
         std::cout << e.what();
         return DB_Response::NOT_FOUND;
+    }catch(pqxx::failure f) {
+        std::cout << f.what();
+        return DB_Response::INTERNAL_ERROR;
     }
+
     return DB_Response::OK;
 }
 
@@ -389,11 +459,11 @@ std::shared_ptr<std::list<utils::ProtoServer> > PsqlConnector::getServers(std::s
     try{
         std::string transId = "get_servers_" + sp2p::tracker::utils::getRandomString(10);
         std::string command = "SELECT login, ip, port from servers s JOIN users u ON s.user_id=u.id " \
-                "WHERE network_id=$1";
+                "WHERE network_id=(SELECT id FROM networks WHERE name=$1)";
         pqxx::work Xaction(*connection);
         connection->prepare(transId, command);
         pqxx::result res = Xaction.prepared(transId)(networkName).exec();
-        for(int i = 0; i < res.size(); ++i) {
+        for(size_t i = 0; i < res.size(); ++i) {
             utils::ProtoServer currServer;
             currServer.setNetworkName(networkName);
             currServer.setIp(utils::toString(res[i]["ip"]));
@@ -402,7 +472,10 @@ std::shared_ptr<std::list<utils::ProtoServer> > PsqlConnector::getServers(std::s
         }
     }catch(pqxx::unique_violation e){
         std::cout << e.what();
+    }catch(pqxx::failure f) {
+        std::cout << f.what();
     }
+
     return ret;
 }
 
@@ -416,7 +489,10 @@ void PsqlConnector::cleanServers(int ttl) {
         Xaction.commit();
     }catch(pqxx::unique_violation e){
         std::cout << e.what();
+    }catch(pqxx::failure f) {
+        std::cout << f.what();
     }
+
 }
 
 } // namespace db

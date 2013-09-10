@@ -28,7 +28,7 @@ boost::asio::ip::tcp::socket& Connection::socket()
 void Connection::start()
 {
 #ifdef DEBUG_LOGGING
-    BOOST_LOG_TRIVIAL(debug) << "New connection";
+    BOOST_LOG_TRIVIAL(debug) << "New connection from " << socket_.remote_endpoint().address().to_string();
 #endif
     this->requestHandler = RequestHandler_ptr(factory->produceRequestHandler(socket_.remote_endpoint().address()));
     socket_.async_read_some(boost::asio::buffer(buffer_), strand_.wrap(
@@ -41,10 +41,6 @@ void Connection::start()
 void Connection::handle_read(const boost::system::error_code& e,
                              std::size_t bytes_transferred)
 {
-#ifdef DEBUG_LOGGING
-    BOOST_LOG_TRIVIAL(debug) << "Reading body";
-    BOOST_LOG_TRIVIAL(debug) << "Bytes transfered: " << bytes_transferred;
-#endif
     if (!e)
     {
         boost::tribool result;
@@ -52,13 +48,14 @@ void Connection::handle_read(const boost::system::error_code& e,
 
         if (result)
         {
-#ifdef DEBUG_LOGGING
-            BOOST_LOG_TRIVIAL(debug) << "WTF!? Resault, dude!";
-#endif
             reply_ = Response_ptr(factory->produceResponse());
             requestHandler->handleRequest(request_.get(), reply_.get());
             std::ostream ostream(&outBuff);
             reply_->parseIntoOstream(&ostream);
+#ifdef DEBUG_LOGGING
+    BOOST_LOG_TRIVIAL(debug) << "Sending reply to: " << socket_.remote_endpoint().address().to_string()
+                             << " size: " << reply_->getSize();
+#endif
             boost::asio::async_write(socket_, outBuff,
                                      strand_.wrap(
                                          boost::bind(&Connection::handle_write, shared_from_this(),
@@ -67,7 +64,7 @@ void Connection::handle_read(const boost::system::error_code& e,
         else if (!result)
         {
 #ifdef DEBUG_LOGGING
-            BOOST_LOG_TRIVIAL(debug) << "Damn you, resault! Next time you'll be mine!";
+            BOOST_LOG_TRIVIAL(debug) << "Result not parsed";
 #endif
             reply_ = Response_ptr(factory->produceResponse());
             requestHandler->badRequestResponse(reply_.get());
@@ -80,9 +77,6 @@ void Connection::handle_read(const boost::system::error_code& e,
         }
         else
         {
-#ifdef DEBUG_LOGGING
-            BOOST_LOG_TRIVIAL(debug) << "Yes? No? Pomidor.";
-#endif
             socket_.async_read_some(boost::asio::buffer(buffer_), strand_.wrap(
                                         boost::bind(&Connection::handle_read, shared_from_this(),
                                                     boost::asio::placeholders::error,

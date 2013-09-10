@@ -99,7 +99,6 @@ shared_ptr<NodeMessage> listNetworksResponse(shared_ptr<list<utils::ProtoNetwork
     NodeMessage::ListNetworks *list_networks_response = new NodeMessage::ListNetworks();
 
     for(auto i = L->begin(); i != L->end(); ++i) {
-        std::cout << (std::string)*i << std::endl;
         NodeMessage::ListNetworks::Network *currentNet = list_networks_response->add_network_list();
         currentNet->set_name(i->getName());
         currentNet->set_creator_email(i->getCreatorEmail());

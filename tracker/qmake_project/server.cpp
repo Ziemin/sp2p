@@ -45,7 +45,6 @@ void Server::run()
 
 void Server::start_accept()
 {
-    std::cout << __FUNCTION__ << std::endl;
     new_connection_.reset(new sp2p::tracker::Connection(io_service_, protocolFactory));
     acceptor_.async_accept(new_connection_->socket(),
                            boost::bind(&sp2p::tracker::Server::handle_accept, this,
@@ -54,7 +53,6 @@ void Server::start_accept()
 
 void Server::handle_accept(const boost::system::error_code& e)
 {
-    std::cout << __FUNCTION__ << std::endl;
     if (!e)
     {
         new_connection_->start();

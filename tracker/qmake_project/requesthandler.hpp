@@ -29,8 +29,6 @@ public:
     void badRequestResponse(protocol_factory::AbstractResponse *rep) const;
 
 private:
-    bool cookieCorrect(const protocol::ClientMessage *clientMessage) const;
-
     NodeMessage_ptr handleRegister(const protocol::ClientMessage *clientMessage) const;
     NodeMessage_ptr handleUnregister(const protocol::ClientMessage *clientMessage) const;
     NodeMessage_ptr handleLogin(const protocol::ClientMessage *clientMessage) const;

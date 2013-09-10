@@ -22,9 +22,6 @@ RequestParser::RequestParser(std::int32_t len) :
 
 boost::tribool RequestParser::parse(protocol_factory::AbstractRequest *clientMessage, const char data[], int length)
 {
-#ifdef DEBUG_LOGGING
-        BOOST_LOG_TRIVIAL(debug) << "Parsing message";
-#endif
     boost::asio::streambuf streambuf_;
     std::ostream os(&streambuf_);
     os.write(data, length);
@@ -34,30 +31,18 @@ boost::tribool RequestParser::parse(protocol_factory::AbstractRequest *clientMes
     }
 
     if(len == -1) {
-#ifdef DEBUG_LOGGING
-        BOOST_LOG_TRIVIAL(debug) << "buff size before: " << streambuf_.size();
-#endif
         std::istream istream(&streambuf_);
         istream.read(reinterpret_cast<char*>(&len), sizeof(len));
 
-#ifdef DEBUG_LOGGING
-        BOOST_LOG_TRIVIAL(debug) << "buff size after: " << streambuf_.size();
-#endif
     }
 
-    if(streambuf_.size() < len) {
+    if(streambuf_.size() < (unsigned int)len) {
         return boost::indeterminate;
     }
 
-    if(streambuf_.size() == len) {
+    if(streambuf_.size() == (unsigned int)len) {
         std::istream istream(&streambuf_);
-#ifdef DEBUG_LOGGING
-        BOOST_LOG_TRIVIAL(debug) << "before parsing";
-#endif
         bool ret = clientMessage->parseFromIstream(&istream);
-#ifdef DEBUG_LOGGING
-        BOOST_LOG_TRIVIAL(debug) << "after parsing";
-#endif
         return ret;
     }
 
