@@ -54,7 +54,7 @@ void Connection::handle_read(const boost::system::error_code& e,
             reply_->parseIntoOstream(&ostream);
 #ifdef DEBUG_LOGGING
     BOOST_LOG_TRIVIAL(debug) << "Sending reply to: " << socket_.remote_endpoint().address().to_string()
-                             << " size: " << reply_->getSize();
+                             << " size: " << reply_->getSize() << " status: " << reply_->status();
 #endif
             boost::asio::async_write(socket_, outBuff,
                                      strand_.wrap(
