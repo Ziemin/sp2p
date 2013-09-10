@@ -227,21 +227,21 @@ class NodeContext : public Context {
             handlers["login"] = [this](int argc, const char *argv[]) -> void {
                 checkNode();
                 sc::types::NodeError res = node->logIn();
-                if(sc::types::any(res)) throw res;
+                cout << "Resp: " << res << endl;
             };
 
             // logout
             handlers["logout"] = [this](int argc, const char *argv[]) -> void {
                 checkNode();
                 sc::types::NodeError res = node->logOut();
-                if(sc::types::any(res)) throw res;
+                cout << "Resp: " << res << endl;
             };
 
             // register new user
             handlers["register"] = [this](int argc, const char *argv[]) -> void {
                 checkNode();
                 sc::types::NodeError res = node->registerUser();
-                if(sc::types::any(res)) throw res;
+                cout << "Resp: " << res << endl;
             };
 
             // change password
@@ -273,7 +273,7 @@ class NodeContext : public Context {
                 checkNode();
                 checkNetwork();
                 vm.clear();
-                po::store(po::parse_command_line(argc, argv, cp_opts), vm);
+                po::store(po::parse_command_line(argc, argv, getU_opts), vm);
                 po::notify(vm);
 
                 if(vm.count("help")) {
@@ -285,8 +285,28 @@ class NodeContext : public Context {
                         node->getUserInfo(network->getDescription(), vm["username"].as<string>());
                     if(any(get<0>(res))) cout << "Error: " << get<0>(res) << endl;
                     else cout << get<1>(res) << endl;
-                }
+                } else throw CommandException("Username required");
             };
+
+            // Invite user
+            handlers["invite"] = [this](int argc, const char *argv[]) -> void {
+                checkNode();
+                checkNetwork();
+
+                vm.clear();
+                po::store(po::parse_command_line(argc, argv, invite_opts), vm);
+                po::notify(vm);
+
+                if(vm.count("help")) {
+                    cout << cp_opts << endl;
+                }
+
+                if(vm.count("username")) {
+                    sc::types::NodeError res= node->inviteUser(network->getDescription(), { vm["username"].as<string>() });
+                    cout << "Resp: " << res << endl;
+                } else throw CommandException("Username required");
+            };
+
 
             // get networks list
             handlers["getNL"] = [this](int argc, const char *argv[]) -> void {
@@ -441,6 +461,7 @@ class NodeContext : public Context {
             cout << "ups"       << "\t\t - Updates server" << endl;
             cout << "ss"        << "\t\t - Stops server" << endl;
             cout << "stop"      << "\t\t - Stops connection with node" << endl;
+            cout << "invite"    << "\t\t - Invite user to network" << endl;
         }
 
     private:
@@ -452,6 +473,7 @@ class NodeContext : public Context {
         static po::options_description cp_opts;
         static po::options_description getU_opts;
         static po::options_description ups_opts;
+        static po::options_description invite_opts;
 
 };
 
@@ -481,6 +503,16 @@ po::options_description NodeContext::cp_opts = []() {
 po::options_description NodeContext::getU_opts = []() {
 
     po::options_description opts("Get info about user");
+    opts.add_options()
+        ("help,h", "prints this message")
+        ("username,u", po::value<string>(), "username");
+
+    return opts;
+}();
+
+po::options_description NodeContext::invite_opts = []() {
+
+    po::options_description opts("Invite user");
     opts.add_options()
         ("help,h", "prints this message")
         ("username,u", po::value<string>(), "username");
