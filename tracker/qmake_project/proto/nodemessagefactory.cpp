@@ -148,8 +148,9 @@ NodeMessage_ptr listMyNetworksResponse(shared_ptr<list<utils::ProtoNetwork> > L)
             currentNet->set_participation_rights(ClientMessage::CreateNetwork::CLIENT_ONLY);
         }
         currentNet->set_protocol_name(i->getProtocolName());
-        list_networks_response->add_network_list();
     }
+
+    request->set_allocated_list_my_networks_response(list_networks_response);
 
     return request;
 }
@@ -166,6 +167,8 @@ shared_ptr<NodeMessage> listServersResponse(shared_ptr<list<utils::ProtoServer> 
         currentServer->set_port_number(i->getPort());
         currentServer->set_username(i->getNetworkName());
     }
+
+    request->set_allocated_list_servers_response(list_servers_response);
 
     return request;
 
