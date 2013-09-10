@@ -384,6 +384,7 @@ NodeMessage_ptr RequestHandler::handleCreate_network(const protocol::ClientMessa
             case db::NOT_UNIQUE:
                 return NodeMessageFactory::errorMesage(protocol::NodeMessage::ALREADY_EXISTS);
             case db::OK:
+                DBConnector_->createInvitation(login, name);
                 return NodeMessageFactory::errorMesage(protocol::NodeMessage::OK);
             default:
                 return NodeMessageFactory::errorMesage(protocol::NodeMessage::INTERNAL_SERVER_ERROR);
@@ -535,7 +536,7 @@ NodeMessage_ptr RequestHandler::handleUser_info(const protocol::ClientMessage *c
 #ifdef DEBUG_LOGGING
         BOOST_LOG_TRIVIAL(debug) << "Asking about: " << infoLogin;
 #endif
-        if(!DBConnector_->userExists(login)) {
+        if(!DBConnector_->userExists(infoLogin)) {
 #ifdef DEBUG_LOGGING
             BOOST_LOG_TRIVIAL(debug) << "User " << infoLogin << " does not exist";
 #endif
