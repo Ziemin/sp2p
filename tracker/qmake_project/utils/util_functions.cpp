@@ -51,6 +51,13 @@ int toInt(pqxx::tuple::reference ref)
     return std::stoi(s);
 }
 
+std::string getPasswordHash(std::string &password)
+{
+    Botan::AutoSeeded_RNG rng;
+
+    return Botan::generate_bcrypt(password, rng);
+}
+
 } // namespace utils
 } // namespace tracker
 } // namespace sp2p

@@ -153,10 +153,11 @@ NodeMessage_ptr RequestHandler::handleRegister(const protocol::ClientMessage *cl
                 && clientMessage->register_message().has_public_key()) {
             std::string login = clientMessage->register_message().username();
             std::string pass = clientMessage->register_message().password();
+            std::string hash = utils::getPasswordHash(pass);
 #ifdef DEBUG_LOGGING
-            BOOST_LOG_TRIVIAL(debug) << "Register login: " << login << " password: " << pass;
+            BOOST_LOG_TRIVIAL(debug) << "Register login: " << login << " password: " << pass << " hash: " << hash;
 #endif
-            db::DB_Response db_response = DBConnector_->createUser(login, pass);
+            db::DB_Response db_response = DBConnector_->createUser(login, hash);
             switch(db_response) {
             case db::INTERNAL_ERROR:
                 return NodeMessageFactory::errorMesage(protocol::NodeMessage::INTERNAL_SERVER_ERROR);
@@ -215,11 +216,11 @@ NodeMessage_ptr RequestHandler::handleLogin(const protocol::ClientMessage *clien
                 && clientMessage->login_message().has_username()) {
             std::string login = clientMessage->login_message().username();
             std::string pass = clientMessage->login_message().password();
-            bool db_response = DBConnector_->isUser(login, pass);
+            bool goodPass = goodCredentials(login, pass);
 #ifdef DEBUG_LOGGING
-            BOOST_LOG_TRIVIAL(debug) << "Login: " << login << " pass: " << pass << " exists: " << db_response;
+            BOOST_LOG_TRIVIAL(debug) << "Login: " << login << " pass: " << pass << " exists: " << goodPass;
 #endif
-            if(!db_response)
+            if(!goodPass)
                 return NodeMessageFactory::errorMesage(protocol::NodeMessage::BAD_CREDENTIALS);
             std::string cookie = sessionControler->login(login);
             std::string cert = "notimplementedyet";
@@ -673,14 +674,15 @@ NodeMessage_ptr RequestHandler::handleChange_password(const protocol::ClientMess
 #ifdef DEBUG_LOGGING
         BOOST_LOG_TRIVIAL(debug) << "Old password: " << oldPass << ", new password: " << newPass;
 #endif
-        if(!DBConnector_->isUser(login, oldPass)) {
+        if(!goodCredentials(login, oldPass)) {
 #ifdef DEBUG_LOGGING
             BOOST_LOG_TRIVIAL(debug) << "User: " << login << " with password: " << oldPass << " does not exist";
 #endif
             return NodeMessageFactory::errorMesage(protocol::NodeMessage::BAD_CREDENTIALS);
         }
 
-        db::DB_Response db_response = DBConnector_->changeUserPassword(login, newPass);
+        std::string hash = utils::getPasswordHash(newPass);
+        db::DB_Response db_response = DBConnector_->changeUserPassword(login, hash);
         switch(db_response) {
         case db::INTERNAL_ERROR:
             return NodeMessageFactory::errorMesage(protocol::NodeMessage::INTERNAL_SERVER_ERROR);
@@ -699,6 +701,11 @@ NodeMessage_ptr RequestHandler::handleChange_password(const protocol::ClientMess
     return NodeMessageFactory::badRequestMessage();
 }
 
+
+bool RequestHandler::goodCredentials(const std::string &login, const std::string &password) const {
+    std::string hash = DBConnector_->getPassHash(login);
+    return Botan::check_bcrypt(password, hash);
+}
 
 } // namespace tracker
 } // namespace sp2p

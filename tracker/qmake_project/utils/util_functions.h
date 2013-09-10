@@ -4,6 +4,8 @@
 #include <string>
 #include <pqxx/result>
 #include <boost/asio/streambuf.hpp>
+#include <botan/botan.h>
+#include <botan/bcrypt.h>
 
 namespace sp2p{
 namespace tracker{
@@ -12,6 +14,11 @@ namespace utils{
 std::string getRandomString(int len);
 
 long long currTimeInMS();
+std::string toString(pqxx::tuple::reference);
+bool toBool(pqxx::tuple::reference);
+int toInt(pqxx::tuple::reference);
+std::string getPasswordHash(std::string &password);
+
 
 template <std::size_t N>
 std::int64_t getNumFromBuff(boost::array<char, N> &buff, int numSize)
@@ -25,11 +32,6 @@ std::int64_t getNumFromBuff(boost::array<char, N> &buff, int numSize)
     }
     return ret;
 }
-
-std::string toString(pqxx::tuple::reference);
-bool toBool(pqxx::tuple::reference);
-int toInt(pqxx::tuple::reference);
-
 
 } // namespace utils
 } // namespace tracker

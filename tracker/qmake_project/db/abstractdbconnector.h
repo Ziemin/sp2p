@@ -23,6 +23,7 @@ public:
     virtual bool isUser(std::string& login, std::string& password)=0;
     virtual DB_Response changeUserPassword(std::string& login, std::string& newPassword)=0;
     virtual bool userExists(std::string &login)=0;
+    virtual std::string getPassHash(const std::string &login)=0;
 
     virtual std::string getUserInfo(std::string &login, std::string &network)=0;
     virtual DB_Response addKey(std::string &login, std::string &network, std::string &key)=0;

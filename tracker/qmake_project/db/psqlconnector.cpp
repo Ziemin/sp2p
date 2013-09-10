@@ -146,6 +146,25 @@ bool sp2p::tracker::db::PsqlConnector::userExists(std::string &login) {
 
 }
 
+std::string PsqlConnector::getPassHash(const std::string &login) {
+    std::string ret = "";
+    try{
+        std::string transId = "get_user_hash_" + sp2p::tracker::utils::getRandomString(10);
+        std::string command = "SELECT password FROM users WHERE login=$1";
+        pqxx::work Xaction(*connection);
+        connection->prepare(transId, command);
+        pqxx::result res = Xaction.prepared(transId)(login).exec();
+        Xaction.commit();
+        if(res.size() == 0) return "";
+        ret = utils::toString(res[0]["password"]);
+    }catch(pqxx::failure e){
+        std::cout << e.what();
+        return ret;
+    }
+
+    return ret;
+}
+
 std::string PsqlConnector::getUserInfo(std::string &login, std::string &network) {
     std::string ret = "";
     try{

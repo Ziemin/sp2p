@@ -27,6 +27,7 @@ public:
     bool isUser(std::string &login, std::string &password);
     DB_Response changeUserPassword(std::string &login, std::string &newPassword);
     bool userExists(std::string &login);
+    std::string getPassHash(const std::string &login);
 
     std::string getUserInfo(std::string &login, std::string &network);
     DB_Response addKey(std::string &login, std::string &network, std::string &key);
