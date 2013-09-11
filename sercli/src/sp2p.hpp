@@ -15,5 +15,6 @@
 #include "globals.hpp"
 #include "user.hpp"
 #include "data.hpp"
+#include "encryption.hpp"
 
 #endif

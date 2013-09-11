@@ -6,6 +6,8 @@
 #include "handler.hpp"
 #include "logging.hpp"
 
+#include <botan/botan.h>
+
 namespace sp2p {
 	namespace sercli {
 
@@ -26,6 +28,7 @@ namespace sp2p {
 					boost::asio::io_service::work* work;
 					std::vector<std::shared_ptr<std::thread>> thread_pool;
 					logging::Logger& lg;
+					Botan::LibraryInitializer init;
 			};
 
 		} /* namespace global */

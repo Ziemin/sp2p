@@ -108,7 +108,7 @@ namespace sp2p {
 
 				void setDataFile(std::string dataFile);
 
-			private:
+			protected:
 
 				std::string dataFile;
 

@@ -625,6 +625,7 @@ class Sp2pContext : public Context {
 
         Sp2pContext(Context* root, const string& dataFile, const string& password)  // passwords currently ignored
         : Context("Sp2p", root),  
+        data_manager(password),
         sp2p_manager(data_manager),
         node_c(root),
         network_c(root),
@@ -1012,7 +1013,7 @@ class Sp2pContext : public Context {
 
      private:
 
-        sc::DataManager data_manager;
+        sc::enc::CryptDataManager data_manager;
         sc::Manager sp2p_manager;
 
         NodeContext node_c;

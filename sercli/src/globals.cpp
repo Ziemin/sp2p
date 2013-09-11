@@ -6,6 +6,8 @@
 #include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
 
+#include <botan/botan.h>
+
 #include "globals.hpp"
 #include "logging.hpp"
 
@@ -26,7 +28,7 @@ namespace sp2p {
 
 
 			Sp2pInitializer::Sp2pInitializer(int thread_count, boost::asio::io_service* io_s) 
-				: lg(logging::sp2p_lg::get()) 
+				: lg(logging::sp2p_lg::get()), init("thread_safe=true")
 			{
 
 				logging::init(); // logging intialization

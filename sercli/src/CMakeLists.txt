@@ -24,6 +24,7 @@ add_library(Sercli STATIC
 	data.cpp
 	logging.cpp
 	sp2p_types.cpp
+	encryption.cpp
 )
 
 set(LOG OFF CACHE BOOL "Enable logging")

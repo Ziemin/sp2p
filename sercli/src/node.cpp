@@ -77,6 +77,8 @@ namespace sp2p {
         void Node::setUser(const MyUser& user) {
             if(isActive()) throw NodeException("Node is active at the moment");
             my_user = user;
+            node_connection.setCookie("");
+            node_connection.is_logged = false;
         }
 
         const MyUser& Node::getUser() const {
