@@ -28,7 +28,8 @@ create table servers(
 create table invitations(
     id serial primary key not null,
     user_id integer references users(id) ON DELETE CASCADE not null,
-    network_id integer references networks(id) ON DELETE CASCADE not null 
+    network_id integer references networks(id) ON DELETE CASCADE not null,
+    unique(user_id, network_id)
 );
 
 create table publicKey(

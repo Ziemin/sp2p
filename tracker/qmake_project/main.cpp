@@ -14,6 +14,7 @@
 #include "db/psqlconnector.h"
 #include "db/dbconfig.h"
 #include "constants.h"
+#include "utils/util_functions.h"
 
 using namespace sp2p::tracker;
 

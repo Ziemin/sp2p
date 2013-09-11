@@ -46,6 +46,8 @@ private:
     NodeMessage_ptr handleSign_key(const protocol::ClientMessage *clientMessage) const;
     NodeMessage_ptr handleChange_password(const protocol::ClientMessage *clientMessage) const;
 
+    bool goodCredentials(const std::string &login, const std::string &password) const;
+
     SessionControler_ptr sessionControler;
     DBConnector_ptr DBConnector_;
     boost::asio::ip::address address_;

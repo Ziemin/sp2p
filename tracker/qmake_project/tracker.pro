@@ -58,3 +58,12 @@ QMAKE_CXXFLAGS = -std=c++11
 unix|win32: LIBS += -lpqxx -lboost_system -lboost_thread -lprotobuf -lboost_log -lboost_log_setup -lpthread
 
 DEFINES += BOOST_ALL_DYN_LINK LOGGING DEBUG_LOGGING
+
+unix|win32: LIBS += -lbotan-1.10
+
+#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../../../usr/lib64/release/ -lbotan-1
+#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../../../usr/lib64/debug/ -lbotan-1
+#else:unix: LIBS += -L$$PWD/../../../../../../usr/lib64/ -lbotan-1
+
+INCLUDEPATH += /usr/include/botan-1.10
+DEPENDPATH += /usr/include/botan-1.10
