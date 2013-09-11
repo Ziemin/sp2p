@@ -13,6 +13,24 @@ namespace sp2p {
 	namespace sercli {
 		namespace enc {
 
+            const std::string ALGORITHM = "AES-256";
+            const std::string KEYALG = "PBKDF2(SHA-1)";
+            const std::uint32_t PBKDF2_ITERATIONS = 8192;
+
+            std::string base64encode(const Botan::SecureVector<Botan::byte>& vec) {
+
+                Botan::Pipe pipe(new Botan::Base64_Encoder());
+                pipe.process_msg(vec);
+                return pipe.read_all_as_string();
+            }
+
+            Botan::SecureVector<Botan::byte> base64decode(const std::string& str) {
+                Botan::Pipe pipe(new Botan::Base64_Decoder());
+                pipe.process_msg(str);
+                return pipe.read_all();
+            }
+
+
 			namespace serialization {
 
                 using namespace sp2p::sercli::serialization;
@@ -24,81 +42,123 @@ namespace sp2p {
                     oa(oss) 
                 {
 
-                    std::cout << " const " << std::endl;
                 }
 
                 EncryptedSink& EncryptedSink::operator<<(const Node& node) { 
-                    std::cout << " node1 " << std::endl;
                     oa << node; 
                     return *this;
                 }
 
                 EncryptedSink& EncryptedSink::operator<<(const Network& network) {
-                    std::cout << " net1 " << std::endl;
                     oa << network; 
                     return *this;
                 }
 
                 EncryptedSink& EncryptedSink::operator<<(const std::vector<types::NodeDescription>& nodes) {
-                    std::cout << " node " << std::endl;
                     oa << nodes;
                     return *this;
                 }
 
                 EncryptedSink& EncryptedSink::operator<<(const std::vector<types::NetworkDescription>& networks) {
-                    std::cout << " net " << std::endl;
                     oa << networks;
                     return *this;
                 }
 
                 EncryptedSink& EncryptedSink::operator<<(const std::string& text) {
-                    std::cout << " text " << std::endl;
                     oa << text; 
                     return *this;
                 }
 
                 EncryptedSink::~EncryptedSink() {
-                    std::cout << "destructor" << std::endl;
                     data = oss.str();
 
                     Botan::AutoSeeded_RNG rng;
-                    Botan::InitializationVector iv(rng, 16);
 
-                    std::string encoded_pass;
-                    Botan::Pipe hasher(new Botan::Hash_Filter("SHA-256"), new Botan::Hex_Encoder);
-                    hasher.process_msg(password);
-                    encoded_pass = hasher.read_all_as_string(0);
-                    std::cout << encoded_pass << std::endl;
+                    const Botan::BlockCipher *cipher = Botan::global_state().algorithm_factory().prototype_block_cipher(ALGORITHM);
+                    const std::uint32_t key_len = cipher->maximum_keylength();
+                    const std::uint32_t iv_len = cipher->block_size();
 
-                    Botan::SymmetricKey symKey(encoded_pass);
-                    std::ofstream ofs(dataFile, std::ios::binary);
+                    std::shared_ptr<Botan::PBKDF> pbkdf(Botan::get_pbkdf(KEYALG));
+                    Botan::SecureVector<Botan::byte> salt(8);
+                    rng.randomize(&salt[0], salt.size());
+
+                    Botan::SymmetricKey symKey = pbkdf->derive_key(key_len, "BLK" + password,
+                            &salt[0], salt.size(), PBKDF2_ITERATIONS);
+
+                    Botan::InitializationVector iv = pbkdf->derive_key(iv_len, "IVL" + password,
+                            &salt[0], salt.size(), PBKDF2_ITERATIONS);
+
+                    Botan::SymmetricKey macKey = pbkdf->derive_key(16, "MAC" + password,
+                            &salt[0], salt.size(), PBKDF2_ITERATIONS);
+
+                    std::ofstream ofs(dataFile);
+                    ofs << "-------- ENCRYPTED FILE --------" << std::endl;
+                    ofs << ALGORITHM<< std::endl;
+
+                    ofs << base64encode(salt) << std::endl;
+
                     Botan::Pipe encryptor(
-                            Botan::get_cipher("AES-256/CBC", symKey, iv, Botan::ENCRYPTION));
-                    std::cout << data << std::endl;
+                            new Botan::Fork(
+                                new Botan::Chain(
+                                    new Botan::MAC_Filter("HMAC(SHA-1)", macKey),
+                                    new Botan::Base64_Encoder(true)),
+                                new Botan::Chain(
+                                    Botan::get_cipher(ALGORITHM + "/CBC", symKey, iv, Botan::ENCRYPTION),
+                                    new Botan::Base64_Encoder(true))
+                                )
+                            );
                     encryptor.process_msg(data);
-                    ofs << encryptor;
+                    ofs << encryptor.read_all_as_string(0) << std::endl;
+                    ofs << encryptor.read_all_as_string(1);
                 }
 
 
                 EncryptedSource::EncryptedSource(const std::string& dataFile, const std::string& password) {
 
-                    Botan::AutoSeeded_RNG rng;
-                    Botan::InitializationVector iv(rng, 16);
+                    std::ifstream ifs(dataFile);
 
-                    std::string encoded_pass;
-                    Botan::Pipe hasher(new Botan::Hash_Filter("SHA-256"), new Botan::Hex_Encoder);
-                    hasher.process_msg(password);
-                    encoded_pass = hasher.read_all_as_string(0);
-                    std::cout << encoded_pass << std::endl;
+                    std::string header;
+                    std::string algo;
+                    std::string salt_str;
+                    std::string mac_str;
+                    std::getline(ifs, header);
+                    std::getline(ifs, algo);
+                    std::getline(ifs, salt_str);
+                    std::getline(ifs, mac_str);
 
-                    Botan::SymmetricKey key(encoded_pass);
+                    const Botan::BlockCipher *cipher = Botan::global_state().algorithm_factory().prototype_block_cipher(ALGORITHM);
+                    const std::uint32_t key_len = cipher->maximum_keylength();
+                    const std::uint32_t iv_len = cipher->block_size();
 
-                    Botan::Pipe decryptor(Botan::get_cipher("AES-256/CBC", key, iv, Botan::DECRYPTION));
-                    std::ifstream ifs(dataFile, std::ios::binary);
+                    std::shared_ptr<Botan::PBKDF> pbkdf(Botan::get_pbkdf(KEYALG));
+                    Botan::SecureVector<Botan::byte> salt = base64decode(salt_str);
+
+                    Botan::SymmetricKey symKey = pbkdf->derive_key(key_len, "BLK" + password,
+                            &salt[0], salt.size(), PBKDF2_ITERATIONS);
+
+                    Botan::InitializationVector iv = pbkdf->derive_key(iv_len, "IVL" + password,
+                            &salt[0], salt.size(), PBKDF2_ITERATIONS);
+
+                    Botan::SymmetricKey macKey = pbkdf->derive_key(16, "MAC" + password,
+                            &salt[0], salt.size(), PBKDF2_ITERATIONS);
+
+
+                    Botan::Pipe decryptor(
+                            new Botan::Base64_Decoder(),
+                            Botan::get_cipher(ALGORITHM + "/CBC", symKey, iv, Botan::DECRYPTION),
+                            new Botan::Fork(
+                                0,
+                                new Botan::Chain(
+                                    new Botan::MAC_Filter("HMAC(SHA-1)", macKey),
+                                    new Botan::Base64_Encoder(true))
+                                )
+                            );
                     decryptor.start_msg();
                     ifs >> decryptor;
                     decryptor.end_msg();
-                    std::cout << "after process" << std::endl;
+
+                    std::string res_mac = decryptor.read_all_as_string(1);
+                    // .... 
                     data = decryptor.read_all_as_string(0);
 
                     iss = new std::istringstream(data);
@@ -133,8 +193,8 @@ namespace sp2p {
 
 
                 EncryptedSource::~EncryptedSource() {
-                    if(iss != nullptr) delete iss;
                     if(ia != nullptr) delete ia;
+                    if(iss != nullptr) delete iss;
                 }
 
 

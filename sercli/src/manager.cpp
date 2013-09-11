@@ -165,7 +165,6 @@ namespace sp2p {
 		}
 
 		void Manager::saveState() {
-			std::cout << "save state" << std::endl;
 			std::shared_ptr<serialization::AbstractSink> sink = data_manager.getSink(); 
 
 			try {
