@@ -17,6 +17,7 @@
 #include "parser.hpp"
 #include "message.hpp"
 #include "logging.hpp"
+#include "encryption.hpp"
 
 namespace sp2p {
 	namespace sercli {
@@ -49,7 +50,7 @@ namespace sp2p {
 
 					Connection(boost::asio::io_service&, boost::asio::ip::tcp::socket, 
 							ConnectionManager<Request, Response>&, parser_ptr<Response>, 
-							handler_ptr<Request, Response>, std::function<void()> = []()->void{});
+							handler_ptr<Request, Response>, std::function<void()> = []()->void{}, enc::priv_st_ptr);
 
 					void setStarterFunction(std::function<void()> fun);
 
@@ -114,6 +115,9 @@ namespace sp2p {
 
 					std::string peer_ip;
 
+				protected:
+
+					enc::priv_st_ptr privateKeyStore;
 			};
 
 		template <typename Request, typename Response>

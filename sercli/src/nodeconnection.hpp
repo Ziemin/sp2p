@@ -15,6 +15,7 @@
 #include "sp2p_types.hpp"
 #include "globals.hpp"
 #include "logging.hpp"
+#include "encryption.hpp"
 
 namespace sp2p {
     namespace sercli {
@@ -26,7 +27,7 @@ namespace sp2p {
         public std::enable_shared_from_this<NodeConnection> {
 
             public:
-                NodeConnection(ConnectionManager<NodeRequest, NodeResponse>& connection_manager);
+                NodeConnection(ConnectionManager<NodeRequest, NodeResponse>& connection_manager, CryptContainer& netCrypto);
 
                 bool isActive() const;
 
@@ -65,6 +66,8 @@ namespace sp2p {
 
                 ConnectionManager<NodeRequest, NodeResponse>& connection_manager;
                 connection_ptr<NodeRequest, NodeResponse> connection;
+
+                CryptContainer& cryptContainer;
 
                 logging::Logger& lg = logging::sp2p_lg::get();
         };

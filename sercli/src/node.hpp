@@ -21,11 +21,17 @@
 #include "nodeconnection.hpp"
 #include "sp2p_types.hpp"
 #include "logging.hpp"
+#include "encryption.hpp"
 
 using namespace sp2p::sercli::types;
 
 namespace sp2p {
     namespace sercli {
+
+        extern const std::string CERT = "CERT"; // certificate fo PRIV_KEY
+        extern const std::string PRIV_KEY = "PRIV_KEY"; // private key to use with node
+        extern const std::string PUB_KEY = "PRIV_KEY"; // public key to user with node
+        extern const std::string NODE_CERT = "NODE_PRIV_KEY"; // certificate of node
 
         // Error from node and nodeclass
 
@@ -39,8 +45,7 @@ namespace sp2p {
                  */
                 Node(NodeDescription node_desc, ConnectionManager<NodeRequest, NodeResponse>&);
 
-                Node(NodeDescription node_desc, ConnectionManager<NodeRequest, NodeResponse>&, 
-                        MyUser user);
+                Node(NodeDescription node_desc, ConnectionManager<NodeRequest, NodeResponse>&, MyUser user);
 
                 NodeError logIn();
                 NodeError logOut();
@@ -94,6 +99,10 @@ namespace sp2p {
 
                 void stopConnections();
 
+                CryptContainer& getNodeCryptData();
+
+                CryptContainer& getNetCryptData();
+
             private:
 
                 NodeError beforeMessage();
@@ -102,9 +111,8 @@ namespace sp2p {
 
                 NodeDescription node_desc;
                 MyUser my_user;
+                CryptContainer nodeCrypto, netCrypto;
                 NodeConnection node_connection;
-                std::vector<Botan::X509_CA> ca_list;
-                std::vector<Botan::X509_Certificate> user_certificates;
 
                 logging::Logger& lg = logging::sp2p_lg::get();
 

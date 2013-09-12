@@ -22,18 +22,22 @@ namespace sp2p {
                    ConnectionManager<Request, Response>& connection_manager,
                    parser_ptr<Response> parser, 
                    handler_ptr<Request, Response> handler,
-                   std::function<void()> starter) 
+                   std::function<void()> starter,
+                   enc::priv_st_ptr privateKeyStore) 
 
            : socket_(std::move(socket)),
            strand(io_s),
            connection_manager(connection_manager),
            parser(parser),
            handler(handler),
-           starter_function(starter)
+           starter_function(starter),
+           privateKeyStore(privatKeyStore)
            {
                is_active = true;
                peer_ip = socket_.remote_endpoint().address().to_string();
                BOOST_LOG_SEV(lg, trace) << "Created connection with: " << peer_ip;
+               BOOST_LOG_SEV(lg, trace) << "Beggining handshake with: " << peer_ip;
+               // to implement
            }
 
         template <typename Request, typename Response>
