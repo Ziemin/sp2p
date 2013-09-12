@@ -462,6 +462,7 @@ DB_Response PsqlConnector::deleteServer(std::string& network, std::string& user)
         connection->prepare(transId, command);
         pqxx::result res = Xaction.prepared(transId)(network)(user).exec();
         Xaction.commit();
+        if(res.size() == 0) return DB_Response::NOT_FOUND;
     }catch(pqxx::unique_violation e){
         std::cout << e.what();
         return DB_Response::NOT_FOUND;

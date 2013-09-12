@@ -1,7 +1,7 @@
 create table users(
     id serial primary key not null,
     login char(30) not null unique,
-    password char(30) not null
+    password char(70) not null
 );
 
 create table networks(

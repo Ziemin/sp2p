@@ -5,6 +5,8 @@
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 #include <boost/lexical_cast.hpp>
+#include <botan/botan.h>
+
 
 #include "types.hpp"
 #include "server.hpp"
@@ -15,6 +17,7 @@
 #include "db/dbconfig.h"
 #include "constants.h"
 #include "utils/util_functions.h"
+
 
 using namespace sp2p::tracker;
 
@@ -28,6 +31,8 @@ int main(int argc, char* argv[])
 
     try
     {
+        Botan::LibraryInitializer li;
+        utils::init_ca(consts::CERT_PATH, consts::PRIV_KEY_PATH);
         DBConnector_ptr DBConnector_ = DBConnector_ptr(new db::PsqlConnector(
                                                            db::config::DATABASE,
                                                            db::config::USER,

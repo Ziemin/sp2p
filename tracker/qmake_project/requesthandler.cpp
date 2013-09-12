@@ -168,9 +168,16 @@ NodeMessage_ptr RequestHandler::handleRegister(const protocol::ClientMessage *cl
             case db::NOT_UNIQUE:
                 return NodeMessageFactory::errorMesage(protocol::NodeMessage::ALREADY_EXISTS);
             case db::OK:
-                std::string cert = "notimplementedyet";
-                std::string nodeCert = "dupadupa";
-                return NodeMessageFactory::registerResponse(cert, nodeCert);
+                std::string nodeCert = utils::getNodeCert();
+                std::string publicKey = clientMessage->register_message().public_key();
+                std::string signedKey = utils::signCertyficate(publicKey);
+#ifdef DEBUG_LOGGING
+                BOOST_LOG_TRIVIAL(debug) << "Cert to sign:\n" << publicKey << "\nSigned certificate: "
+                                         << (signedKey=="" ? "WRONG REQUEST" : signedKey);
+#endif
+                if(signedKey == "")
+                    return NodeMessageFactory::errorMesage(protocol::NodeMessage::BAD_REQUEST);
+                return NodeMessageFactory::registerResponse(signedKey, nodeCert);
             }
         }
     }
@@ -637,7 +644,7 @@ NodeMessage_ptr RequestHandler::handleStop_server(const protocol::ClientMessage 
         case db::INTERNAL_ERROR:
             return NodeMessageFactory::errorMesage(protocol::NodeMessage::INTERNAL_SERVER_ERROR);
         case db::NOT_FOUND:
-            return NodeMessageFactory::errorMesage(protocol::NodeMessage::NO_PRIVILAGES);
+            return NodeMessageFactory::errorMesage(protocol::NodeMessage::BAD_REQUEST);
         case db::NOT_PERMITED:
             return NodeMessageFactory::errorMesage(protocol::NodeMessage::NO_PRIVILAGES);
         case db::NOT_UNIQUE:
@@ -654,6 +661,38 @@ NodeMessage_ptr RequestHandler::handleStop_server(const protocol::ClientMessage 
 
 NodeMessage_ptr RequestHandler::handleSign_key(const protocol::ClientMessage *clientMessage) const {
     if(clientMessage->has_sign_key_message()) {
+        std::string cookie = clientMessage->sign_key_message().cookie();
+        std::string login = sessionControler->getLogin(cookie);
+#ifdef DEBUG_LOGGING
+        BOOST_LOG_TRIVIAL(debug) << "Cookie: " << cookie << " login: " << ((login=="")?"NOT_LOGGED":login);
+#endif
+        if(login == "")
+            return NodeMessageFactory::errorMesage(protocol::NodeMessage::NOT_LOGGED);
+
+        std::string signRequest = clientMessage->sign_key_message().public_key();
+        std::string network = clientMessage->sign_key_message().network_name();
+#ifdef DEBUG_LOGGING
+        BOOST_LOG_TRIVIAL(debug) << "Signing:\n" << signRequest << "\nfor network: " << network;
+#endif
+        std::string signedCert = utils::signCertyficate(signRequest);
+#ifdef DEBUG_LOGGING
+        BOOST_LOG_TRIVIAL(debug) << "Signed certificate: " << (signedCert=="" ? "WRONG REQUEST" : signedCert);
+#endif
+        db::DB_Response db_response = DBConnector_->addKey(login, network, signedCert);
+        if(signedCert == "")
+            return NodeMessageFactory::errorMesage(protocol::NodeMessage::BAD_REQUEST);
+        switch(db_response) {
+        case db::INTERNAL_ERROR:
+            return NodeMessageFactory::errorMesage(protocol::NodeMessage::INTERNAL_SERVER_ERROR);
+        case db::NOT_FOUND:
+            return NodeMessageFactory::errorMesage(protocol::NodeMessage::NO_SUCH_USER);
+        case db::NOT_PERMITED:
+            return NodeMessageFactory::errorMesage(protocol::NodeMessage::NO_PRIVILAGES);
+        case db::NOT_UNIQUE:
+            return NodeMessageFactory::errorMesage(protocol::NodeMessage::ALREADY_EXISTS);
+        case db::OK:
+            return NodeMessageFactory::signKeyResponse(signedCert);
+        }
 
     }
     return NodeMessageFactory::errorMesage(protocol::NodeMessage::INTERNAL_SERVER_ERROR);
