@@ -37,12 +37,15 @@ private:
     /// Handle completion of an asynchronous accept operation.
     void handle_accept(const boost::system::error_code& e);
 
+    std::string getPassword();
+
     std::size_t thread_pool_size_;
     boost::asio::io_service io_service_;
     boost::asio::ip::tcp::acceptor acceptor_;
     Connection_ptr new_connection_;
 //    protocol_factory::AbstractRequestHandler *requestHandler;
     Factory_ptr protocolFactory;
+    boost::asio::ssl::context context_;
 };
 
 } // namespace tracker

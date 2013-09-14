@@ -9,6 +9,7 @@ namespace consts {
 
 const std::string CERT_PATH = "server.pem";
 const std::string PRIV_KEY_PATH = "server.prv";
+const std::string DH_FILE_PATH = "dh512.pem";
 
 const int USER_TTL = 1000*60*30; // 30 min
 const int SERVER_TTL = 1000*60*30; // 30 min

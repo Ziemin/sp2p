@@ -5,17 +5,29 @@
 #include <vector>
 #include <iostream>
 
+#include "constants.h"
+
 namespace sp2p {
 namespace tracker {
 
-Server::Server(Factory_ptr factory, const std::string& address, const std::string& port, std::size_t thread_pool_size)
+Server::Server(Factory_ptr factory, const std::string& address,
+               const std::string& port, std::size_t thread_pool_size)
     : thread_pool_size_(thread_pool_size),
       acceptor_(io_service_),
-      new_connection_()
-{
+      new_connection_(),
+      context_(io_service_, boost::asio::ssl::context::sslv23)
+  {
+    context_.set_options(
+        boost::asio::ssl::context::default_workarounds
+        | boost::asio::ssl::context::no_sslv2
+        | boost::asio::ssl::context::single_dh_use);
+//    context_.use_certificate_chain_file("server.crt");
+//    context_.use_private_key_file("server.key", boost::asio::ssl::context::pem);
+//    context_.use_tmp_dh_file("dh512.pem");
+    context_.use_certificate_chain_file(consts::CERT_PATH);
+    context_.use_private_key_file(consts::PRIV_KEY_PATH, boost::asio::ssl::context::pem);
+    context_.use_tmp_dh_file(consts::DH_FILE_PATH);
     protocolFactory = factory;
-//    requestHandler = protocolFactory->produceRequestHandler();
-    // Open the acceptor with the option to reuse the address (i.e. SO_REUSEADDR).
     boost::asio::ip::tcp::resolver resolver(io_service_);
     boost::asio::ip::tcp::resolver::query query(address, port);
     boost::asio::ip::tcp::endpoint endpoint = *resolver.resolve(query);
@@ -34,7 +46,8 @@ void Server::run()
     for (std::size_t i = 0; i < thread_pool_size_; ++i)
     {
         boost::shared_ptr<boost::thread> thread(new boost::thread(
-                                                    boost::bind(&boost::asio::io_service::run, &io_service_)));
+                                                    boost::bind(&boost::asio::io_service::run,
+                                                                &io_service_)));
         threads.push_back(thread);
     }
 
@@ -45,7 +58,7 @@ void Server::run()
 
 void Server::start_accept()
 {
-    new_connection_.reset(new sp2p::tracker::Connection(io_service_, protocolFactory));
+    new_connection_.reset(new sp2p::tracker::Connection(io_service_, context_, protocolFactory));
     acceptor_.async_accept(new_connection_->socket(),
                            boost::bind(&sp2p::tracker::Server::handle_accept, this,
                                        boost::asio::placeholders::error));
@@ -59,6 +72,11 @@ void Server::handle_accept(const boost::system::error_code& e)
     }
 
     start_accept();
+}
+
+std::string Server::getPassword()
+{
+    return "asdasd";
 }
 
 } // namespace tracker

@@ -5,6 +5,7 @@
 #include <boost/array.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/asio/ssl.hpp>
 #include <memory>
 #include <boost/enable_shared_from_this.hpp>
 #include "requesthandler.hpp"
@@ -27,11 +28,11 @@ class Connection
 {
 public:
     /// Construct a connection with the given io_service.
-    explicit Connection(boost::asio::io_service& io_service,
+    explicit Connection(boost::asio::io_service& io_service, boost::asio::ssl::context &context,
                         Factory_ptr factory);
 
-    /// Get the socket associated with the connection.
-    boost::asio::ip::tcp::socket& socket();
+    boost::asio::ssl::stream<boost::asio::ip::tcp::socket>::lowest_layer_type& socket();
+
 
     /// Start the first asynchronous operation for the connection.
     void start();
@@ -42,6 +43,8 @@ private:
     void handle_read(const boost::system::error_code& e,
                      std::size_t bytes_transferred);
 
+    void handle_handshake(const boost::system::error_code& e);
+
     /// Handle completion of a write operation.
     void handle_write(const boost::system::error_code& e);
 
@@ -49,7 +52,7 @@ private:
     boost::asio::io_service::strand strand_;
 
     /// Socket for the connection.
-    boost::asio::ip::tcp::socket socket_;
+    boost::asio::ssl::stream<boost::asio::ip::tcp::socket> socket_;
 
     Factory_ptr factory;
 
@@ -70,7 +73,7 @@ private:
 
     boost::asio::streambuf outBuff;
 
-//    boost::asio::streambuf buffer_;
+    //    boost::asio::streambuf buffer_;
 };
 
 
