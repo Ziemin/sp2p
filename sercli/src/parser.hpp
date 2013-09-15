@@ -4,6 +4,7 @@
 #include <type_traits>
 #include <cstdint>
 #include <memory>
+#include <thread>
 
 #include <boost/asio.hpp>
 

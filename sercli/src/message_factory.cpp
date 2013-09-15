@@ -44,7 +44,7 @@ namespace sp2p {
 
             }
 
-            std::shared_ptr<NodeRequest> getRegisterUserMessage(const MyUser& my_user, const std::string& request) {
+            std::shared_ptr<NodeRequest> getRegisterUserMessage(const MyUser& my_user, const std::string& pkcs10_request) {
 
                 std::shared_ptr<NodeRequest> request(new NodeRequest());
                 protocol::ClientMessage& protoRequest = request->getRequest();
@@ -53,7 +53,7 @@ namespace sp2p {
                 protocol::ClientMessage::Register *register_message = new protocol::ClientMessage::Register();
                 register_message->set_allocated_username(new std::string(my_user.username));
                 register_message->set_allocated_password(new std::string(my_user.password));
-                register_message->set_allocated_public_key(new std::string(request));
+                register_message->set_allocated_public_key(new std::string(pkcs10_request));
                 
                 protoRequest.set_allocated_register_message(register_message);
 
@@ -275,7 +275,7 @@ namespace sp2p {
                 return request;
             }
 
-            std::shared_ptr<NodeRequest> getSignKeyMessage(const std::string& request,
+            std::shared_ptr<NodeRequest> getSignKeyMessage(const std::string& pkcs10_request,
                    const NetworkDescription* network_desc, const std::string& cookie) {
 
                 std::shared_ptr<NodeRequest> request(new NodeRequest());
@@ -284,7 +284,7 @@ namespace sp2p {
 
                 protocol::ClientMessage::SignKey *sign_key_message = new protocol::ClientMessage::SignKey();
                 sign_key_message->set_allocated_cookie(new std::string(cookie));
-                sign_key_message->set_allocated_public_key(new std::string(request));
+                sign_key_message->set_allocated_public_key(new std::string(pkcs10_request));
 
                 if(network_desc != nullptr)
                     sign_key_message->set_allocated_network_name(new std::string(network_desc->network_name));

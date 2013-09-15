@@ -19,7 +19,7 @@ namespace sp2p {
             return network_desc;
         }
 
-        const std::map<NodeDescription, std::weak_ptr<Node>>& Network::getAssociatedNodes() const {
+        const std::map<types::NodeDescription, std::weak_ptr<Node>>& Network::getAssociatedNodes() const {
             return node_set; 
         }
 

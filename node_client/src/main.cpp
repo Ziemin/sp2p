@@ -24,6 +24,7 @@ namespace config {
     int running_threads;
     string dataFile;
     string password;
+    string config_file;
 }
 
 vector<string> split_input(const string& input) {
@@ -91,7 +92,8 @@ int main(int argc, char *argv[]) {
             ("about,a",                                                                     "about NodeClient")
             ("include-file,I",  po::value<string>(&config::dataFile),                       "file with saved data")
             ("password,P",      po::value<string>(&config::password),                       "password to decode the file")
-            ("threads,T",       po::value<int>(&config::running_threads)->default_value(5), "threads in pool");
+            ("threads,T",       po::value<int>(&config::running_threads)->default_value(5), "threads in pool")
+            ("config-file,C",   po::value<int>(&config::config_file)->default_value(5), "config file");
 
         po::variables_map vm;
         po::store(po::parse_command_line(argc, argv, odesc), vm);
@@ -114,12 +116,17 @@ int main(int argc, char *argv[]) {
             return 1;
         }
 
+        if(!vm.count("config-file")) {
+            cerr << "no config-file given" << endl;
+        } 
+
         sc::global::Sp2pInitializer initer(config::running_threads);
 
         RootContext dispatcher("MainApp");
-        Sp2pContext sp2p_context(&dispatcher, config::dataFile, config::password);
+        Sp2pContext sp2p_context(&dispatcher, config::dataFile, config::password, config::config_file);
 
         dispatcher+(&sp2p_context);
+        dispatcher.current_context = &Sp2pContext; // set default current context to sp2p
 
         run_program_loop(dispatcher);
 

@@ -92,6 +92,11 @@ namespace sp2p {
 
 				}
 
+				inline bool operator==(const NetworkDescription& other) const {
+					return this->network_name == other.network_name;
+
+				}
+
 				// serialization
 				private: 
 					friend std::ostream& operator<<(std::ostream& os, const NetworkDescription& net_desc);
@@ -104,6 +109,13 @@ namespace sp2p {
 					}
 			};
 
+            struct NetworkHash {
+
+                size_t operator()(const NetworkDescription& net_desc) const;
+
+                private:
+                    std::hash<std::string> hash_fn;
+            };
 
 			struct NodeDescription {
 				boost::asio::ip::address ip_address;

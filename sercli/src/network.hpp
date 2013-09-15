@@ -17,6 +17,7 @@
 namespace sp2p {
     namespace sercli {
 
+        class Node;
         /*
          * Class managing network existing on some nodes. It is assumed, that
          * such network is accessible to user on all of the nodes
@@ -41,7 +42,7 @@ namespace sp2p {
                 bool isActive();
 
                 const types::NetworkDescription& getDescription() const;
-                const std::map<NodeDescription, std::weak_ptr<Node>>& getAssociatedNodes() const;
+                const std::map<types::NodeDescription, std::weak_ptr<Node>>& getAssociatedNodes() const;
 
                 std::vector<types::ServerDescription> getAvailableServers() const;
 
@@ -52,7 +53,7 @@ namespace sp2p {
             private:
 
                 types::NetworkDescription network_desc;
-                std::map<NodeDescription, std::weak_ptr<Node>> node_set;
+                std::map<types::NodeDescription, std::weak_ptr<Node>> node_set;
 
             // serialization
             private:

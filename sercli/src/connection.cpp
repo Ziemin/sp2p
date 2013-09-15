@@ -22,16 +22,20 @@ namespace sp2p {
                    ConnectionManager<Request, Response>& connection_manager,
                    parser_ptr<Response> parser, 
                    handler_ptr<Request, Response> handler,
-                   std::function<void()> starter,
-                   enc::priv_st_ptr privateKeyStore) 
+                   std::uint32_t con_type,
+                   std::vector<enc::priv_st_ptr>* priv_keys,
+                   std::vector<enc::cert_st_ptr>* certs,
+                   std::function<void()> starter) 
 
            : socket_(std::move(socket)),
            strand(io_s),
            connection_manager(connection_manager),
            parser(parser),
            handler(handler),
-           starter_function(starter),
-           privateKeyStore(privatKeyStore)
+           con_type(con_type),
+           priv_keys(priv_keys),
+           certs(certs),
+           starter_function(starter)
            {
                is_active = true;
                peer_ip = socket_.remote_endpoint().address().to_string();

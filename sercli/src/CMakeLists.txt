@@ -9,22 +9,22 @@ add_definitions(-BOOST_ASIO_ENABLE_HANDLER_TRACKING)
 ADD_DEFINITIONS(-DBOOST_ALL_DYN_LINK)
 
 add_library(Sercli STATIC
+	logging.cpp
 	user.cpp
+	sp2p_types.cpp
+	parser.cpp
 	node.cpp
 	sp2p_protocol.pb.cc
 	nodemessage.cpp
-	parser.cpp
 	handler.cpp
-	globals.cpp
 	manager.cpp
 	nodeconnection.cpp
 	message_factory.cpp
 	network.cpp
 	parser_factory.cpp
 	data.cpp
-	logging.cpp
-	sp2p_types.cpp
 	encryption.cpp
+	globals.cpp
 )
 
 set(LOG OFF CACHE BOOL "Enable logging")

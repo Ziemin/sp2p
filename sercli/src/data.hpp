@@ -6,9 +6,13 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <fstream>
+#include <botan/botan.h>
+#include <botan/symkey.h>
+#include <botan/x509cert.h>
 
 #include "node.hpp"
 #include "network.hpp"
+#include "sp2p_types.hpp"
 
 namespace sp2p {
 	namespace sercli {
@@ -88,33 +92,94 @@ namespace sp2p {
 
 				private:
 					std::string message;
-			};
+            };
 
-		} /* namespace serialization */
+            class EncryptedSink : public sercli::serialization::AbstractSink {
+
+                public:
+                    EncryptedSink(const std::string& dataFile, const std::string& password);
+                    virtual ~EncryptedSink();
+
+                    virtual EncryptedSink& operator<<(const Node& node) override;
+                    virtual EncryptedSink& operator<<(const Network& network) override;
+                    virtual EncryptedSink& operator<<(const std::vector<types::NodeDescription>& nodes) override;
+                    virtual EncryptedSink& operator<<(const std::vector<types::NetworkDescription>& networks) override;
+                    virtual EncryptedSink& operator<<(const std::string& text) override;
+
+                protected:
+                    const std::string dataFile;
+                    const std::string password;
+                    std::string data;
+                    std::ostringstream oss;
+                    std::ofstream ofs;
+                    boost::archive::text_oarchive oa;
+            };
 
 
-		/**
-		 * Abstract class representing data manager, whose duty is to save state
-		 * of networks and nodes
-		 */
-		class DataManager {
+            class EncryptedSource : public sercli::serialization::AbstractSource {
 
-			public:
+                public:
+                    EncryptedSource(const std::string& dataFile, const std::string& password);
+                    virtual ~EncryptedSource();
 
-				virtual ~DataManager();
+                    virtual EncryptedSource& operator>>(Node& node) override;
+                    virtual EncryptedSource& operator>>(Network& network) override;
+                    virtual EncryptedSource& operator>>(std::vector<types::NodeDescription>& nodes) override;
+                    virtual EncryptedSource& operator>>(std::vector<types::NetworkDescription>& networks) override;
+                    virtual EncryptedSource& operator>>(std::string& text) override;
 
-				virtual std::shared_ptr<serialization::AbstractSink> getSink();
-				virtual std::shared_ptr<serialization::AbstractSource> getSource();
+                protected:
+                    std::string data;
+                    std::istringstream* iss;
+                    boost::archive::text_iarchive* ia;
+            };
 
-				void setDataFile(std::string dataFile);
+        } /* namespace serialization */
 
-			protected:
 
-				std::string dataFile;
+        /**
+         * Abstract class representing data manager, whose duty is to save state
+         * of networks and nodes
+         */
+        class DataManager {
 
-		};
+            public:
 
-	} /* namespace sercli */
+                virtual ~DataManager();
+
+                virtual std::shared_ptr<serialization::AbstractSink> getSink();
+                virtual std::shared_ptr<serialization::AbstractSource> getSource();
+
+                void setDataFile(std::string dataFile);
+
+            protected:
+
+                std::string dataFile;
+
+        };
+
+
+        namespace enc {
+
+            class CryptDataManager : public DataManager {
+
+                public:
+
+                    CryptDataManager(const std::string& password);
+                    ~CryptDataManager() = default;
+
+                    virtual std::shared_ptr<sercli::serialization::AbstractSink> getSink() override;
+                    virtual std::shared_ptr<sercli::serialization::AbstractSource> getSource() override;
+
+                    void setPassword(std::string password);
+
+                protected:
+
+                    std::string password;
+            };
+        }
+
+    } /* namespace sercli */
 } /* namespace sp2p */
 
 #endif /* DATA_H */

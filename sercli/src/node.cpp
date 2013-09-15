@@ -16,12 +16,6 @@ using namespace boost::log::trivial;
 namespace sp2p {
     namespace sercli {
 
-        // utilis
-        const std::string CERT = "CERT"; // certificate fo PRIV_KEY
-        const std::string PRIV_KEY = "PRIV_KEY"; // private key to use with node
-        const std::string PUB_KEY = "PRIV_KEY"; // public key to user with node
-        const std::string NODE_CERT = "NODE_PRIV_KEY"; // certificate of node
-
         std::ostream& operator<<(std::ostream& os, const protocol::NodeMessage::ResponseType& resp_type) {
             switch(resp_type) {
                 case protocol::NodeMessage::OK:
@@ -64,7 +58,7 @@ namespace sp2p {
                 ConnectionManager<NodeRequest, NodeResponse>& connection_manager) 
             : node_desc(node_desc),
             my_user("user", "password", "email"),
-            node_connection(connection_manager, nodeCrypto)
+            node_connection(connection_manager)
         {
         }
 
@@ -248,7 +242,9 @@ namespace sp2p {
             opts.email = my_user.email;
             opts.organization = node_desc.node_name;
 
-            Botan::Private_Key* priv_key = nodeCrypto.privateKeys[PRIV_KEY]->getKey();
+            if(private_keys.empty()) return NodeError::OTHER;
+
+            Botan::Private_Key* priv_key = private_keys[0]->getKey();
             Botan::PKCS10_Request request = Botan::X509::create_cert_req(opts, *priv_key, "SHA-256", rng);
 
 
@@ -272,24 +268,25 @@ namespace sp2p {
                             const std::string& my_cert = reg_resp.user_certificate();
                             const std::string& node_cert = reg_resp.node_certificate();
 
-                            BOOST_LOG_SEV(lg, debug) << "Node cert from node: " << node_desc " -> "
+                            BOOST_LOG_SEV(lg, debug) << "Node cert from node: " << node_desc << " -> "
                                 << node_cert;
-                            BOOST_LOG_SEV(lg, debug) << "My cert from node: " << node_desc " -> "
+                            BOOST_LOG_SEV(lg, debug) << "My cert from node: " << node_desc << " -> "
                                 << my_cert;
 
                             Botan::DataSource_Memory ds_my(my_cert);
                             Botan::DataSource_Memory ds_node(node_cert);
 
-                            enc::cert_st_ptr cert_s_my(new CertificateStore(new Botan::X509_certificate(ds_my)));
-                            cert_s_my->setName(CERT+node_desc.node_name+".pem");
-                            cert_s_my->setFilename(CERT+node_desc.node_name+".pem");
+                            enc::cert_st_ptr cert_st_my(new enc::CertificateStore(new Botan::X509_Certificate(ds_my)));
+                            cert_st_my->setName(node_desc.node_name+"."+free_certs.size()+".pem");
+                            cert_st_my->setFilename(node_desc.node_name+"."+free_certs.size()+".pem");
 
-                            enc::cert_st_ptr cert_s_node(new CertificateStore(new Botan::X509_certificate(ds_node)));
-                            enc::cert_s_node->setName(NODE_CERT+node_desc.node_name+".pem");
-                            cert_s_node->setFilename(NODE_CERT+node_desc.node_name+".pem");
+                            enc::cert_st_ptr cert_st_node(new enc::CertificateStore(new Botan::X509_Certificate(ds_node)));
+                            cert_st_node->setName(node_desc.node_name+"."+node_certs.size()+".pem");
+                            cert_st_node->setFilename(node_desc.node_name+"."+node_certs.size()+".pem");
 
-                            nodeCrypto.certificates[CERT] = cert_s_my;
-                            nodeCrypto.certificates[NODE_CERT] = cert_s_node;
+
+                            node_certs.push_back(cert_st_node);
+                            free_certs.push_back(cert_st_my);
 
                             result = NodeError::OK;
                             break;
@@ -785,7 +782,7 @@ namespace sp2p {
         }
 
         std::tuple<NodeError, Botan::X509_Certificate*> Node::signKey(const Botan::Private_Key& priv_key, 
-                const NetworkDescription* network_desc) {
+                const types::NetworkDescription* network_desc) {
 
             BOOST_LOG_SEV(lg, trace) << "Signing key on " << node_desc;
             if(network_desc != nullptr) BOOST_LOG_SEV(lg, trace) << " - > " << *network_desc;
@@ -797,16 +794,20 @@ namespace sp2p {
                 return resultTuple;
             }
             // creating sign request 
+            if(private_keys.empty()){
+                std::get<0>(resultTuple) = NodeError::OTHER;
+                return resultTuple;
+            } 
+
             Botan::AutoSeeded_RNG rng;
             
             Botan::X509_Cert_Options opts;
             opts.common_name = my_user.username;
             opts.email = my_user.email;
             opts.organization = node_desc.node_name;
-            opts.org_unit = network_desc.network_name;
+            opts.org_unit = network_desc->network_name;
 
-            Botan::Private_Key* priv_key = nodeCrypto.privateKeys[PRIV_KEY]->getKey();
-            Botan::PKCS10_Request request = Botan::X509::create_cert_req(opts, *priv_key, "SHA-256", rng);
+            Botan::PKCS10_Request request = Botan::X509::create_cert_req(opts, priv_key, "SHA-256", rng);
 
             std::shared_ptr<NodeRequest> signKeyMessage = 
                 utils::getSignKeyMessage(request.PEM_encode(), network_desc, node_connection.getCookie());
@@ -824,10 +825,12 @@ namespace sp2p {
                             Botan::DataSource_Memory data_source(response.sign_key_response().user_certificate());
                             Botan::X509_Certificate* certificate = new Botan::X509_Certificate(data_source);
 
-                            cert_st_ptr cert_s(certificate);
-                            cert_s->setName(network_desc.network_name + "-" + node_desc.node_name);
-                            cert_s->setFilename(network_desc.network_name + "-" + node_desc.node_name + ".pem");
-                            netCryptor.certificates[network_desc.network_name] = cert_s;
+                            if(network_desc != nullptr) {
+                                enc::cert_st_ptr cert_s = std::make_shared<enc::CertificateStore>(certificate);
+                                cert_s->setName(node_desc.node_name + "." + network_desc->network_name);
+                                cert_s->setFilename(node_desc.node_name + "." + network_desc->network_name + ".pem");
+                                net_certs[*network_desc] = cert_s;
+                            }
 
                             error = NodeError::OK;
                             std::get<1>(resultTuple) = certificate;
@@ -855,12 +858,21 @@ namespace sp2p {
             if(isActive()) node_connection.disconnect();
         }
 
-        CryptContainer& Node::getNodeCryptData() {
-            return nodeCrypto;
+        std::vector<enc::priv_st_ptr>& Node::getMyKeys() {
+            return private_keys;
+        }
+        std::vector<enc::cert_st_ptr>& Node::getNodeCerts() {
+            return node_certs;
+        }
+        net_cert_map& Node::getNetworkCerts() {
+            return net_certs;
         }
 
-        CryptContainer& Node::getNetCryptData() {
-            return netCrypto;
+        net_key_map& Node::getNetworkKeys() {
+            return net_keys;
+        }
+        std::vector<enc::cert_st_ptr>& Node::getFreeCerts() {
+            return free_certs;
         }
 
     } /* namespace sercli */

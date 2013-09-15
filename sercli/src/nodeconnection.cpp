@@ -45,26 +45,31 @@ namespace sp2p {
 				   throw NodeError::NO_CONNECTION;
 			   }
 
-			   boost::asio::connect(socket, endpoint_iterator, ec);
-			   if(ec) {
-				   BOOST_LOG_SEV(lg, error) << "Could not connect to to " << node_desc.ip_address.to_string() 
-					   << " on port: " << node_desc.port << " error: " << ec.message();
-				   throw NodeError::NO_CONNECTION;
-			   }
-			   else {
-				   BOOST_LOG_SEV(lg, info) << "Connected to " << node_desc.ip_address.to_string() 
-					   << " on port: " << node_desc.port;
-			   }
+               boost::asio::connect(socket, endpoint_iterator, ec);
+               if(ec) {
+                   BOOST_LOG_SEV(lg, error) << "Could not connect to to " << node_desc.ip_address.to_string() 
+                       << " on port: " << node_desc.port << " error: " << ec.message();
+                   throw NodeError::NO_CONNECTION;
+               }
+               else {
+                   BOOST_LOG_SEV(lg, info) << "Connected to " << node_desc.ip_address.to_string() 
+                       << " on port: " << node_desc.port;
+               }
 
 
-			   std::shared_ptr<Parser<NodeResponse>> parser(new NodeResponseParser);
-			   connection.reset(
-					   new Connection<NodeRequest, NodeResponse>(
-						   *global::io_s,
-						   std::move(socket),
-						   connection_manager,
-						   parser,
-						   global::sp2p_handler));
+               std::shared_ptr<Parser<NodeResponse>> parser(new NodeResponseParser);
+               connection.reset
+                   (
+                    new Connection<NodeRequest, NodeResponse>
+                    (
+                     *global::io_s,
+                     std::move(socket),
+                     connection_manager,
+                     parser,
+                     global::sp2p_handler,
+                     (static_cast<std::uint32_t>(TLSConType::AUTH) | static_cast<std::uint32_t>(TLSConType::CLIENT))
+                    )
+                   );
 
 			   connection_manager.start(connection);
 
@@ -96,7 +101,8 @@ namespace sp2p {
 											std::move(socket),
 											connection_manager,
 											parser,
-											global::sp2p_handler
+											global::sp2p_handler,
+                                            (static_cast<std::uint32_t>(TLSConType::AUTH) | static_cast<std::uint32_t>(TLSConType::CLIENT))
 										));
 									connection_manager.start(connection);
 								} else {

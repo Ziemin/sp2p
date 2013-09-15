@@ -8,17 +8,13 @@
 #include <atomic>
 #include <exception>
 #include <sstream>
-#include <botan/symkey.h>
 #include <botan/botan.h>
+#include <botan/symkey.h>
+#include <botan/x509cert.h>
 #include "user.hpp"
-#include "network.hpp"
-#include "node.hpp"
-#include "data.hpp"
-#include <map>
 
 namespace sp2p {
     namespace sercli {
-
 
 		namespace enc {
 
@@ -32,69 +28,6 @@ namespace sp2p {
 					std::string message;
 			};
 
-
-			namespace serialization {
-
-
-				class EncryptedSink : public sercli::serialization::AbstractSink {
-
-					public:
-						EncryptedSink(const std::string& dataFile, const std::string& password);
-						virtual ~EncryptedSink();
-
-						virtual EncryptedSink& operator<<(const Node& node) override;
-						virtual EncryptedSink& operator<<(const Network& network) override;
-						virtual EncryptedSink& operator<<(const std::vector<types::NodeDescription>& nodes) override;
-						virtual EncryptedSink& operator<<(const std::vector<types::NetworkDescription>& networks) override;
-						virtual EncryptedSink& operator<<(const std::string& text) override;
-
-					protected:
-						const std::string dataFile;
-						const std::string password;
-						std::string data;
-						std::ostringstream oss;
-						std::ofstream ofs;
-						boost::archive::text_oarchive oa;
-				};
-
-
-				class EncryptedSource : public sercli::serialization::AbstractSource {
-
-					public:
-						EncryptedSource(const std::string& dataFile, const std::string& password);
-						virtual ~EncryptedSource();
-
-						virtual EncryptedSource& operator>>(Node& node) override;
-						virtual EncryptedSource& operator>>(Network& network) override;
-						virtual EncryptedSource& operator>>(std::vector<types::NodeDescription>& nodes) override;
-						virtual EncryptedSource& operator>>(std::vector<types::NetworkDescription>& networks) override;
-						virtual EncryptedSource& operator>>(std::string& text) override;
-
-					protected:
-						std::string data;
-						std::istringstream* iss;
-						boost::archive::text_iarchive* ia;
-				};
-
-			}
-
-
-			class CryptDataManager : public DataManager {
-
-				public:
-
-					CryptDataManager(const std::string& password);
-					~CryptDataManager() = default;
-
-					virtual std::shared_ptr<sercli::serialization::AbstractSink> getSink() override;
-					virtual std::shared_ptr<sercli::serialization::AbstractSource> getSource() override;
-
-					void setPassword(std::string password);
-
-				protected:
-
-					std::string password;
-			};
 
 			// utility functions
 			Botan::Private_Key* generatePrivateKey(std::uint32_t bits);
@@ -117,17 +50,21 @@ namespace sp2p {
 					const std::string& getName() const;
 					void setName(const std::string& name);
 					void setFilename(const std::string &filename);
+					void setPath(const std::string &filename);
+					const std::string& getPath() const;
 					const std::string& getFilename() const;
 
 					virtual void save(const std::string& dir) = 0;
+					virtual void save() = 0;
 					virtual void load(const std::string& dir) = 0;
+					virtual void load() = 0;
 
 					virtual bool inMemory() = 0;
 					bool inFile(const std::string& dir);
 
 				protected:
 
-					std::string name, filename;
+					std::string name, filename, path = ".";
 			};
 
 			class PrivateKeyStore : public ElementStore {
@@ -138,7 +75,9 @@ namespace sp2p {
 					PrivateKeyStore(Botan::Private_Key* = nullptr);
 
 					virtual void save(const std::string& dir) override;
+					virtual void save() override;
 					virtual void load(const std::string& dir) override;
+					virtual void load() override;
 
 					void setKey(Botan::Private_Key* key);
 					Botan::Private_Key* getKey();
@@ -162,7 +101,9 @@ namespace sp2p {
 					PublicKeyStore(Botan::Public_Key* = nullptr);
 
 					virtual void save(const std::string& dir) override;
+					virtual void save() override;
 					virtual void load(const std::string& dir) override;
+					virtual void load() override;
 					void setKey(Botan::Public_Key* key);
 					Botan::Public_Key* getKey();
 					virtual bool inMemory() override;
@@ -184,7 +125,9 @@ namespace sp2p {
 					CertificateStore(Botan::X509_Certificate* = nullptr);
 
 					virtual void save(const std::string& dir) override;
+					virtual void save() override;
 					virtual void load(const std::string& dir) override;
+					virtual void load() override;
 					void setCertificate(Botan::X509_Certificate* cert);
 					Botan::X509_Certificate* getCertificate();
 					virtual bool inMemory() override;
@@ -197,17 +140,7 @@ namespace sp2p {
 
 			typedef std::shared_ptr<CertificateStore> cert_st_ptr;
 
-			struct CryptContainer {
-
-				std::map<std::string, priv_st_ptr> privateKeys;
-				std::map<std::string, pub_st_ptr> publicKeys;
-				std::map<std::string, cert_st_ptr> certificates;
-
-				void save(const std::string& dir);
-			};
-
-
-		} /* namespace encryption */
+		} /* namespace enc */
 	} /* namespace sercli */
 } /* namespace sp2p */
 

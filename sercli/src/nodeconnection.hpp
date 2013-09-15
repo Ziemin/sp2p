@@ -4,21 +4,25 @@
 #include <string>
 #include <memory>
 #include <atomic>
+#include <vector>
+#include <thread>
 #include <boost/noncopyable.hpp>
 #include <boost/asio.hpp>
 #include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/sinks/text_ostream_backend.hpp>
 
-#include "nodemessage.hpp"
+#include "globals.hpp"
+//#include "nodemessage.hpp"
 #include "connection.hpp"
 #include "sp2p_types.hpp"
-#include "globals.hpp"
 #include "logging.hpp"
-#include "encryption.hpp"
 
 namespace sp2p {
     namespace sercli {
+
+        class NodeRequest;
+        class NodeResponse;
 
         /**
          * Wrapper over Connection<NodeRequest, NodeResponse>
@@ -27,7 +31,7 @@ namespace sp2p {
         public std::enable_shared_from_this<NodeConnection> {
 
             public:
-                NodeConnection(ConnectionManager<NodeRequest, NodeResponse>& connection_manager, CryptContainer& netCrypto);
+                NodeConnection(ConnectionManager<NodeRequest, NodeResponse>& connection_manager);
 
                 bool isActive() const;
 
@@ -66,8 +70,6 @@ namespace sp2p {
 
                 ConnectionManager<NodeRequest, NodeResponse>& connection_manager;
                 connection_ptr<NodeRequest, NodeResponse> connection;
-
-                CryptContainer& cryptContainer;
 
                 logging::Logger& lg = logging::sp2p_lg::get();
         };

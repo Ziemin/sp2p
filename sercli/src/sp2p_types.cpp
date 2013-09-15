@@ -107,6 +107,10 @@ namespace sp2p {
                 }
                 return os;
             }
+
+            size_t NetworkHash::operator()(const NetworkDescription& net_desc) const {
+                return hash_fn(net_desc.network_name);
+            }
         }
     }
 }

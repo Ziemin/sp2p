@@ -22,6 +22,8 @@
 namespace sp2p {
 	namespace sercli {
 
+        enum TLSConType { NO_AUTH = 1, AUTH = 2, CLIENT = 4, SEVER = 8 };
+
 		inline void defaultHandlerMethod(boost::system::error_code /* ec */) { }
 
 		template <typename Request, typename Response>
@@ -48,9 +50,15 @@ namespace sp2p {
 					Connection(const Connection&) = delete;
 					Connection& operator=(Connection&) = delete;
 
-					Connection(boost::asio::io_service&, boost::asio::ip::tcp::socket, 
-							ConnectionManager<Request, Response>&, parser_ptr<Response>, 
-							handler_ptr<Request, Response>, std::function<void()> = []()->void{}, enc::priv_st_ptr);
+					Connection(boost::asio::io_service&, 
+                            boost::asio::ip::tcp::socket, 
+							ConnectionManager<Request, Response>&, 
+                            parser_ptr<Response>, 
+							handler_ptr<Request, Response>,
+                            std::uint32_t = static_cast<std::uint32_t>(TLSConType::NO_AUTH),
+                            std::vector<enc::priv_st_ptr>* = nullptr,
+                            std::vector<enc::cert_st_ptr>* = nullptr,
+                            std::function<void()> = []()->void{});
 
 					void setStarterFunction(std::function<void()> fun);
 
@@ -109,15 +117,16 @@ namespace sp2p {
 					parser_ptr<Response> parser;
 					handler_ptr<Request, Response> handler;
 
+                    std::uint32_t con_type;
+                    std::vector<enc::priv_st_ptr>* priv_keys;
+                    std::vector<enc::cert_st_ptr>* certs;
+
 					std::function<void()> starter_function;
 
 					logging::Logger& lg = logging::sp2p_lg::get();
 
 					std::string peer_ip;
 
-				protected:
-
-					enc::priv_st_ptr privateKeyStore;
 			};
 
 		template <typename Request, typename Response>

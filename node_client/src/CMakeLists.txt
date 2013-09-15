@@ -1,6 +1,6 @@
 link_directories( ${Boost_LIBRARY_DIRS} )
 include_directories( ${Boost_INCLUDE_DIRS} ${BOTAN_INCLUDE_DIR} ${PROTOBUF_INCLUDE_DIR})
-find_package(Boost COMPONENTS log log_setup system thread date_time serialization unit_test_framework program_options REQUIRED)
+find_package(Boost COMPONENTS filesystem log log_setup system thread date_time serialization unit_test_framework program_options regex REQUIRED)
 find_package(Threads REQUIRED)
 find_package(Botan REQUIRED)
 find_package(Protobuf REQUIRED)
