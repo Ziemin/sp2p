@@ -16,15 +16,15 @@
 namespace sp2p {
 namespace tracker {
 
-/// The common handler for all incoming requests.
+/**
+ * @brief The RequestHandler class - implementation od AbstractRequestHandler for sp2p protocol
+ */
 class RequestHandler
         : public protocol_factory::AbstractRequestHandler
 {
 public:
-    /// Construct with a directory containing files to be served.
     RequestHandler(SessionControler_ptr sessionControler, DBConnector_ptr DBConnector_, boost::asio::ip::address address_);
 
-    /// Handle a request and produce a reply.
     void handleRequest(const protocol_factory::AbstractRequest *req, protocol_factory::AbstractResponse *rep) const;
     void badRequestResponse(protocol_factory::AbstractResponse *rep) const;
 

@@ -9,6 +9,9 @@
 namespace sp2p {
 namespace tracker {
 
+/**
+ * @brief The Request class - implementation od AbstractRequest for sp2p protocl
+ */
 class Request : public protocol_factory::AbstractRequest
 {
 public:

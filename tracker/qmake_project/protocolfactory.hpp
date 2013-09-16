@@ -11,6 +11,10 @@
 namespace sp2p {
 namespace tracker {
 
+
+/**
+ * @brief The ProtocolFactory class - implementation of AbstractFactory for sp2p protocol
+ */
 class ProtocolFactory : public protocol_factory::AbstractProtocolFactory
 {
 public:

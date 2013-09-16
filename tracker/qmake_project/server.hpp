@@ -18,23 +18,37 @@
 namespace sp2p {
 namespace tracker {
 
-/// The top-level class of the server.
+/**
+* @brief The Server class - top level class of the server
+*/
 class Server
         : private boost::noncopyable
 {
 public:
-    /// Construct the server to listen on the specified TCP address and port, and
-    /// serve up files from the given directory.
+    /**
+     * @brief Server - constructor
+     * @param factory - implementation of AbstractProtofolFactory to produce protocol components
+     * @param address - address to listen on
+     * @param port - port to listen on
+     * @param thread_pool_size - number of threads to handle connections
+     */
     explicit Server(Factory_ptr factory, const std::string& address, const std::string& port, std::size_t thread_pool_size);
 
-    /// Run the server's io_service loop.
+    /**
+     * @brief run - run the server in io_service loop
+     */
     void run();
 
 private:
-    /// Initiate an asynchronous accept operation.
+    /**
+     * @brief start_accept - initiate an asynchronous accept operation.
+     */
     void start_accept();
 
-    /// Handle completion of an asynchronous accept operation.
+    /**
+     * @brief handle_accept - handles completion of an asynchronous accept operation
+     * @param e
+     */
     void handle_accept(const boost::system::error_code& e);
 
     std::string getPassword();

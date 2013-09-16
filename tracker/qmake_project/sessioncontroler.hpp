@@ -12,6 +12,10 @@
 namespace sp2p {
 namespace tracker {
 
+
+/**
+ * @brief The SessionControler class - implementation of AbstractSessionController on std::map
+ */
 class SessionControler : public protocol_factory::AbstractSessionControler
 {
 public:

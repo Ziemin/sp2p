@@ -12,7 +12,9 @@ namespace sp2p {
 namespace tracker {
 
 
-/// Parser for incoming requests.
+/**
+ * @brief The RequestParser class - implementation od AbstractRequestParser for sp2p protocol
+ */
 class RequestParser : public protocol_factory::AbstractRequestParser
 {
 public:

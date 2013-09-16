@@ -10,6 +10,9 @@
 namespace sp2p {
 namespace tracker {
 
+/**
+ * @brief The Response class - implementation od AbstractResponse for sp2p protocol
+ */
 class Response : public protocol_factory::AbstractResponse
 {
 public:
