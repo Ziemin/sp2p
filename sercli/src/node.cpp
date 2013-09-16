@@ -277,12 +277,12 @@ namespace sp2p {
                             Botan::DataSource_Memory ds_node(node_cert);
 
                             enc::cert_st_ptr cert_st_my(new enc::CertificateStore(new Botan::X509_Certificate(ds_my)));
-                            cert_st_my->setName(node_desc.node_name+"."+free_certs.size()+".pem");
-                            cert_st_my->setFilename(node_desc.node_name+"."+free_certs.size()+".pem");
+                            cert_st_my->setName(node_desc.node_name+"."+std::to_string(free_certs.size())+".pem");
+                            cert_st_my->setFilename(node_desc.node_name+"."+std::to_string(free_certs.size())+".pem");
 
                             enc::cert_st_ptr cert_st_node(new enc::CertificateStore(new Botan::X509_Certificate(ds_node)));
-                            cert_st_node->setName(node_desc.node_name+"."+node_certs.size()+".pem");
-                            cert_st_node->setFilename(node_desc.node_name+"."+node_certs.size()+".pem");
+                            cert_st_node->setName(node_desc.node_name+"."+std::to_string(node_certs.size())+".pem");
+                            cert_st_node->setFilename(node_desc.node_name+"."+std::to_string(node_certs.size())+".pem");
 
 
                             node_certs.push_back(cert_st_node);

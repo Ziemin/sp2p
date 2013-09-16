@@ -6,6 +6,7 @@
 #include <boost/log/core.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
+#include <boost/regex.hpp>
 #include <exception>
 #include <map>
 #include <functional>
@@ -13,12 +14,16 @@
 #include <tuple>
 #include <signal.h>
 #include <boost/regex.hpp>
+#include <botan/botan.h>
+#include <botan/x509cert.h>
+#include <botan/pem.h>
+#include <botan/rsa.h>
+#include <iostream>
 
 using namespace std;
 namespace sc = sp2p::sercli;
 namespace po = boost::program_options;
 namespace fs = boost::filesystem;
-namespace rg = boost::regex;
 
 const string NODE_CONTEXT_NAME = "Node";
 const string NETWORK_CONTEXT_NAME = "Network";
@@ -198,7 +203,7 @@ class NodeContext : public Context {
 
     public:
 
-        NodeContext(Context* root) : Context(NODE_CONTEXT_NAME, root) {
+        NodeContext(Context* root, sc::Manager& manager) : Context(NODE_CONTEXT_NAME, root), sp2p_manager(manager) {
 
             // print current node
             handlers["pnd"] = [this](int argc, const char *argv[]) -> void {
@@ -445,6 +450,7 @@ class NodeContext : public Context {
                 help_message();
             };
 
+            // generate private key
             handlers["gk"] = [this](int argc, const char *argv[]) -> void {
                 checkNode();
                 checkNetwork();
@@ -461,13 +467,25 @@ class NodeContext : public Context {
                 if(vm.count("password")) password = vm["password"].as<string>();
                 else throw CommandException("No password given");
 
-                if(vm.count("network")) {
+                sc::enc::priv_st_ptr priv_key(new sc::enc::PrivateKeyStore(sc::enc::generatePrivateKey(2048)));
+                priv_key->setPassword(password);
 
+                if(vm.count("network")) {
+                    sc::network_ptr net = sp2p_manager.getNetwork(vm["network"].as<string>());
+                    priv_key->setName(node->getDescription().node_name + "." + net->getDescription().network_name);
+                    priv_key->setFilename(priv_key->getName() + ".pem");
+                    priv_key->setPath(priv_key_dir);
+                    node->getNetworkKeys()[net->getDescription()] = priv_key;
                 } else {
-                    
+                    priv_key->setName(node->getDescription().node_name);
+                    priv_key->setFilename(priv_key->getName() + ".pem");
+                    priv_key->setPath(priv_key_dir);
+                    node->getMyKeys().push_back(priv_key);
                 }
+                priv_key->save();
             };
 
+            // sign key
             handlers["sk"] = [this](int argc, const char *argv[]) -> void {
                 checkNode();
                 checkNetwork();
@@ -479,6 +497,15 @@ class NodeContext : public Context {
                     cout << sk_opts << endl;
                     return;
                 }
+                if(vm.count("network")) {
+                    sc::network_ptr net = sp2p_manager.getNetwork(vm["network"].as<string>());
+                    sc::enc::priv_st_ptr key = node->getNetworkKeys()[net->getDescription()];
+                    Botan::Private_Key* priv_key = key->getKey();
+                    tuple<NodeError, Botan::X509_Certificate*> res = node->signKey(*priv_key, &net->getDescription());
+                    cout << get<0>(res) << endl;
+                    Botan::X509_Certificate* cert = get<1>(res);
+                    cout << "Cert: " << endl <<  cert->to_string() << endl;
+                } else throw CommandException("Network name required");
             };
         }
 
@@ -531,6 +558,7 @@ class NodeContext : public Context {
     private:
         sc::node_ptr node = nullptr;
         sc::network_ptr network = nullptr;
+        sc::Manager& sp2p_manager;
         po::variables_map vm;
         string priv_key_dir;
         string cert_dir;
@@ -712,11 +740,11 @@ class Sp2pContext : public Context {
 
     public:
 
-        Sp2pContext(Context* root, const string& dataFile, const string& password, const string config_file)
+        Sp2pContext(Context* root, const string& dataFile, const string& password, const string& config_file)
         : Context("Sp2p", root),  
         data_manager(password),
         sp2p_manager(data_manager),
-        node_c(root),
+        node_c(root, sp2p_manager),
         network_c(root),
         signals(*sc::global::io_s)
         {
@@ -743,7 +771,8 @@ class Sp2pContext : public Context {
             get_network.add(network_desc);
             remove_network.add(network_desc);
 
-            po::store(po::parse_config_file(config_file, load_conf_opts), vm);
+            ifstream iconf(config_file);
+            po::store(po::parse_config_file(iconf, load_conf_opts), vm);
             po::notify(vm);
             
             if(vm.count("node_name") && vm["node_name"].as<string>().size() > 0) {
@@ -1150,11 +1179,11 @@ class Sp2pContext : public Context {
             getFilenames(dir, filenames);
 
             string pass;
-            rg::regex reg1("(\\w+)\\.pem");
-            rg::regex reg2("(\\w+)\\.(\\w+)\\.pem");
-            rg::smatch sm;
+            boost::regex reg1("(\\w+)\\.pem");
+            boost::regex reg2("(\\w+)\\.(\\w+)\\.pem");
+            boost::smatch sm;
             for(string& name: filenames) {
-                if(rg::regex_match(name, sm, reg1)) {
+                if(boost::regex_match(name, sm, reg1)) {
                     cout << "Type password for: " << name << endl;
                     cin >> pass;
                     sc::enc::priv_st_ptr key(new sc::enc::PrivateKeyStore());
@@ -1165,7 +1194,7 @@ class Sp2pContext : public Context {
                     key->load();
                     sc::node_ptr node = sp2p_manager.getNode(sm[1]);
                     node->getMyKeys().push_back(key);
-                } else if(rg::regex_match(name, sm, reg2)) {
+                } else if(boost::regex_match(name, sm, reg2)) {
                     cout << "Type password for: " << name << endl;
                     cin >> pass;
                     sc::enc::priv_st_ptr key(new sc::enc::PrivateKeyStore());
@@ -1175,7 +1204,8 @@ class Sp2pContext : public Context {
                     key->setPassword(pass);
                     key->load();
                     sc::node_ptr node = sp2p_manager.getNode(sm[1]);
-                    node->getNetworkKeys()[sm[2]] = key;
+                    sc::network_ptr net = sp2p_manager.getNetwork(sm[2]);
+                    node->getNetworkKeys()[net->getDescription()] = key;
                 }
             }
         }
@@ -1184,10 +1214,10 @@ class Sp2pContext : public Context {
             vector<string> filenames;
             getFilenames(dir, filenames);
 
-            rg::regex reg("(\\w+)\\.pem");
-            rg::smatch sm;
+            boost::regex reg("(\\w+)\\.pem");
+            boost::smatch sm;
             for(string& name: filenames) {
-                if(rg::regex_match(name, sm, reg)) {
+                if(boost::regex_match(name, sm, reg)) {
                     sc::enc::pub_st_ptr key(new sc::enc::PublicKeyStore());
                     key->setFilename(name);
                     key->setPath(dir);
@@ -1202,11 +1232,11 @@ class Sp2pContext : public Context {
             vector<string> filenames;
             getFilenames(dir, filenames);
 
-            rg::regex reg1("(\\w+)\\.([0-9]+)\\.pem");
-            rg::regex reg2("(\\w+)\\.(\\w+)\\.pem");
-            rg::smatch sm;
+            boost::regex reg1("(\\w+)\\.([0-9]+)\\.pem");
+            boost::regex reg2("(\\w+)\\.(\\w+)\\.pem");
+            boost::smatch sm;
             for(string& name: filenames) {
-                if(rg::regex_match(name, sm, reg1)) {
+                if(regex_match(name, sm, reg1)) {
                     sc::enc::cert_st_ptr cert(new sc::enc::CertificateStore());
                     cert->setFilename(name);
                     cert->setPath(dir);
@@ -1215,7 +1245,7 @@ class Sp2pContext : public Context {
                     sc::node_ptr node = sp2p_manager.getNode(sm[1]);
                     node->getNodeCerts().push_back(cert);
                 }
-                else if(rg::regex_match(name, sm, reg2)) {
+                else if(regex_match(name, sm, reg2)) {
                     sc::enc::cert_st_ptr cert(new sc::enc::CertificateStore());
                     cert->setFilename(name);
                     cert->setPath(dir);
@@ -1223,7 +1253,7 @@ class Sp2pContext : public Context {
                     cert->load();
                     sc::node_ptr node = sp2p_manager.getNode(sm[1]);
                     sc::network_ptr network = sp2p_manager.getNetwork(sm[2]);
-                    node->getNetworkCerts()[network->getDescription().network_name] = cert;
+                    node->getNetworkCerts()[network->getDescription()] = cert;
                 }
             }
         }
@@ -1351,9 +1381,9 @@ po::options_description Sp2pContext::path_opts = []() {
     return opts;
 }();
 
-po::options_description Sp2pContext::load_conf_opts = [] {
+po::options_description Sp2pContext::load_conf_opts = []() -> po::options_description {
 
-    po::options_descritpion opts("Load configuration file");
+    po::options_description opts("Load configuration file");
     opts.add_options()
         ("node_name", po::value<string>(), "name of node to load")
         ("network_name", po::value<string>(), "name of network to load")

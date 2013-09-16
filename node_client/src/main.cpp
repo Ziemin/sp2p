@@ -93,7 +93,7 @@ int main(int argc, char *argv[]) {
             ("include-file,I",  po::value<string>(&config::dataFile),                       "file with saved data")
             ("password,P",      po::value<string>(&config::password),                       "password to decode the file")
             ("threads,T",       po::value<int>(&config::running_threads)->default_value(5), "threads in pool")
-            ("config-file,C",   po::value<int>(&config::config_file)->default_value(5), "config file");
+            ("config-file,C",   po::value<string>(&config::config_file),                    "config file");
 
         po::variables_map vm;
         po::store(po::parse_command_line(argc, argv, odesc), vm);
@@ -126,7 +126,7 @@ int main(int argc, char *argv[]) {
         Sp2pContext sp2p_context(&dispatcher, config::dataFile, config::password, config::config_file);
 
         dispatcher+(&sp2p_context);
-        dispatcher.current_context = &Sp2pContext; // set default current context to sp2p
+        dispatcher.current_context = &sp2p_context; // set default current context to sp2p
 
         run_program_loop(dispatcher);
 
