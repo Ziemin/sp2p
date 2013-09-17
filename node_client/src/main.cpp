@@ -132,7 +132,10 @@ int main(int argc, char *argv[]) {
 
     } catch(exception& e) {
         cerr << "exception: " << e.what() << endl;
-    } catch(...) {
+    } catch(const char* s) {
+        cerr << "String exc: " << s << endl;
+    } 
+    catch(...) {
         cerr << "exception of unknown type" << endl;
     }
 

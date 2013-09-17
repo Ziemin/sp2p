@@ -19,11 +19,24 @@
 #include <botan/pem.h>
 #include <botan/rsa.h>
 #include <iostream>
+#include <termios.h>
+#include <unistd.h>
 
 using namespace std;
 namespace sc = sp2p::sercli;
 namespace po = boost::program_options;
 namespace fs = boost::filesystem;
+
+void disableEnableEcho(bool enable = true) {
+    struct termios tty;
+    tcgetattr(STDIN_FILENO, &tty);
+    if(!enable)
+        tty.c_lflag &= ~ECHO;
+    else
+        tty.c_lflag |= ECHO;
+
+    (void) tcsetattr(STDIN_FILENO, TCSANOW, &tty);
+}
 
 const string NODE_CONTEXT_NAME = "Node";
 const string NETWORK_CONTEXT_NAME = "Network";
@@ -503,8 +516,10 @@ class NodeContext : public Context {
                     Botan::Private_Key* priv_key = key->getKey();
                     tuple<NodeError, Botan::X509_Certificate*> res = node->signKey(*priv_key, &net->getDescription());
                     cout << get<0>(res) << endl;
-                    Botan::X509_Certificate* cert = get<1>(res);
-                    cout << "Cert: " << endl <<  cert->to_string() << endl;
+                    if(!sc::types::any(get<0>(res))) {
+                        Botan::X509_Certificate* cert = get<1>(res);
+                        cout << "Cert: " << endl <<  cert->to_string() << endl;
+                    }
                 } else throw CommandException("Network name required");
             };
         }
@@ -772,6 +787,8 @@ class Sp2pContext : public Context {
             remove_network.add(network_desc);
 
             ifstream iconf(config_file);
+            if(!iconf) throw "Could not open config file";
+
             po::store(po::parse_config_file(iconf, load_conf_opts), vm);
             po::notify(vm);
             
@@ -790,15 +807,18 @@ class Sp2pContext : public Context {
             if(vm.count("priv_keys_dir")) {
                 scanForPrivKeys(vm["priv_keys_dir"].as<string>());
                 node_c.setPrivKeyDir(vm["priv_keys_dir"].as<string>());
+                priv_keys_dir = vm["priv_keys_dir"].as<string>();
             } else throw "No private keys directory specified";
 
             if(vm.count("pub_keys_dir")) {
                 scanForPubKeys(vm["pub_keys_dir"].as<string>());
+                pub_keys_dir = vm["pub_keys_dir"].as<string>();
             } else throw "No public keys directory specified";
 
             if(vm.count("certs_dir")) {
                 scanForCerts(vm["certs_dir"].as<string>());
                 node_c.setCertDir(vm["certs_dir"].as<string>());
+                cert_dir = vm["certs_dir"].as<string>();
             } else throw "No certificates directory specified";
 
             // initialization of handlers
@@ -1132,13 +1152,13 @@ class Sp2pContext : public Context {
             };
 
             handlers["priv_dir"] = [this](int argc, const char *argv[]) -> void {
-                cout << " - " << priv_keys_dir << endl;
+                cout << " " << priv_keys_dir << endl;
             };
             handlers["pub_dir"] = [this](int argc, const char *argv[]) -> void {
-                cout << " - " << pub_keys_dir << endl;
+                cout << " " << pub_keys_dir << endl;
             };
             handlers["cert_dir"] = [this](int argc, const char *argv[]) -> void {
-                cout << " - " << cert_dir << endl;
+                cout << " " << cert_dir << endl;
             };
 
             // Clear
@@ -1159,9 +1179,9 @@ class Sp2pContext : public Context {
             cout << "gnt"           << "\t\t - Gets a network to work with" << endl;
             cout << "rnt"           << "\t\t - Remove networks" << endl;
             cout << "pnt"           << "\t\t - Print all networks" << endl;
-            cout << "priv_dir"      << "\t\t - Directory with user private keys" << endl;
-            cout << "pub_dir"       << "\t\t - Directory with user public keys" << endl;
-            cout << "cert_dir"      << "\t\t - Directory with user certificates" << endl;
+            cout << "priv_dir"      << "\t - Directory with user private keys" << endl;
+            cout << "pub_dir"       << "\t - Directory with user public keys" << endl;
+            cout << "cert_dir"      << "\t - Directory with user certificates" << endl;
             cout << "save"          << "\t\t - Save state" << endl;
             cout << "load"          << "\t\t - Load state" << endl;
             cout << "clear"         << "\t\t - Clear data" << endl;
@@ -1183,9 +1203,13 @@ class Sp2pContext : public Context {
             boost::regex reg2("(\\w+)\\.(\\w+)\\.pem");
             boost::smatch sm;
             for(string& name: filenames) {
+                cout << "Type password for: " << name << endl;
+
+                disableEnableEcho(false);
+                cin >> pass;
+                disableEnableEcho(true);
+
                 if(boost::regex_match(name, sm, reg1)) {
-                    cout << "Type password for: " << name << endl;
-                    cin >> pass;
                     sc::enc::priv_st_ptr key(new sc::enc::PrivateKeyStore());
                     key->setFilename(name);
                     key->setPath(dir);
@@ -1195,8 +1219,6 @@ class Sp2pContext : public Context {
                     sc::node_ptr node = sp2p_manager.getNode(sm[1]);
                     node->getMyKeys().push_back(key);
                 } else if(boost::regex_match(name, sm, reg2)) {
-                    cout << "Type password for: " << name << endl;
-                    cin >> pass;
                     sc::enc::priv_st_ptr key(new sc::enc::PrivateKeyStore());
                     key->setFilename(name);
                     key->setPath(dir);

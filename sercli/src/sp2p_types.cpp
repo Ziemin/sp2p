@@ -14,7 +14,7 @@ namespace sp2p {
 			std::ostream& operator<<(std::ostream& os, const NetworkDescription& net_desc) {
                 os << "Network - > name: " << net_desc.network_name 
                     << ", protocol: " << net_desc.protocol_name 
-                    << "creator: " << net_desc.creator;
+                    << ", creator: " << net_desc.creator;
 
                 os << " ,access rights: ";
                 switch(net_desc.access_rights) {

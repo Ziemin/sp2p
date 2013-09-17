@@ -4,6 +4,7 @@ find_package(Boost COMPONENTS filesystem log log_setup system thread date_time s
 find_package(Threads REQUIRED)
 find_package(Botan REQUIRED)
 find_package(Protobuf REQUIRED)
+find_package(OpenSSL REQUIRED)
 
 #add_definitions(-DBOOST_ASIO_ENABLE_HANDLER_TRACKING)
 ADD_DEFINITIONS(-DBOOST_ALL_DYN_LINK)
@@ -22,6 +23,7 @@ target_link_libraries (nodeClient ${CMAKE_THREAD_LIBS_INIT})
 target_link_libraries (nodeClient ${BOTAN_LIBRARIES})
 target_link_libraries (nodeClient ${PROTOBUF_LIBRARY})
 target_link_libraries (nodeClient ${SERCLI_LIB_PATH}/libSercli.a)
+target_link_libraries (nodeClient ${OPENSSL_LIBRARIES})
 #target_link_libraries (nodeClient nodeClientLib)
 
 set(LOG OFF CACHE BOOL "Enable logging")

@@ -12,7 +12,6 @@ namespace sp2p {
 		namespace enc {
 
 
-            Botan::AutoSeeded_RNG rng;
 
             EncryptionException::EncryptionException(std::string message) : message(std::move(message)) { }
 
@@ -20,15 +19,16 @@ namespace sp2p {
                 return message.c_str();
             }
 
-
             // ---------------------- utility functions -----------------------------------
 
 			Botan::Private_Key* generatePrivateKey(std::uint32_t bits) {
                 if(bits < 1024 || bits > 16384) throw EncryptionException("Invalid bits size");
+                Botan::AutoSeeded_RNG rng;
                 return new Botan::RSA_PrivateKey(rng, bits);
             }
 
 			void savePrivateKeyToFile(const Botan::Private_Key& key, const std::string& filename, const std::string& password) {
+                Botan::AutoSeeded_RNG rng;
                 std::ofstream ofs(filename);
                 if(password.size() > 0) ofs << Botan::PKCS8::PEM_encode(key, rng, password);
                 else ofs << Botan::PKCS8::PEM_encode(key);
@@ -36,6 +36,7 @@ namespace sp2p {
 
 			Botan::Private_Key* getPrivateKeyFromFile(const std::string& filename, const std::string& password) {
                 try {
+                    Botan::AutoSeeded_RNG rng;
                     Botan::Private_Key* key = Botan::PKCS8::load_key(filename, rng, password);
                     return key;
                 } catch(std::exception& e) {

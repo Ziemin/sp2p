@@ -3,6 +3,7 @@
 
 #include <boost/noncopyable.hpp>
 #include <boost/asio.hpp>
+#include <boost/asio/ssl.hpp>
 #include <boost/array.hpp>
 
 #include <type_traits>
@@ -22,7 +23,9 @@
 namespace sp2p {
 	namespace sercli {
 
-        enum TLSConType { NO_AUTH = 1, AUTH = 2, CLIENT = 4, SEVER = 8 };
+        // AUTH - if authentication is required
+        // CLIENT/SERVER - my role
+        enum TLSConType { NO_AUTH = 1, AUTH = 2, CLIENT = 4, SERVER = 8 };
 
 		inline void defaultHandlerMethod(boost::system::error_code /* ec */) { }
 
@@ -51,17 +54,23 @@ namespace sp2p {
 					Connection& operator=(Connection&) = delete;
 
 					Connection(boost::asio::io_service&, 
-                            boost::asio::ip::tcp::socket, 
+                            boost::asio::ssl::context context,
+                            boost::asio::ip::tcp::resolver::iterator endpoint_iterator,
 							ConnectionManager<Request, Response>&, 
                             parser_ptr<Response>, 
 							handler_ptr<Request, Response>,
-                            std::uint32_t = static_cast<std::uint32_t>(TLSConType::NO_AUTH),
+                            std::uint32_t = (TLSConType::NO_AUTH | TLSConType::CLIENT),
                             std::vector<enc::priv_st_ptr>* = nullptr,
                             std::vector<enc::cert_st_ptr>* = nullptr,
                             std::function<void()> = []()->void{});
 
 					void setStarterFunction(std::function<void()> fun);
 
+                    boost::system::error_code connect();
+
+                    // handler signature: void handler(const boost::system::error_code& error)
+                    template <typename ConHandler>
+                        void asyncConnect(ConHandler handler);
 					/**
 					 * Starts connection's job
 					 */
@@ -104,9 +113,15 @@ namespace sp2p {
 					void sendHandler(boost::system::error_code ec, 
 							std::shared_ptr<std::promise<std::shared_ptr<Response>>> prom);
 
+                    bool verifyCertificate(bool preverified, boost::asio::ssl::verify_context& ctx);
+
+
+
 				private:
 
-					boost::asio::ip::tcp::socket socket_;
+                    boost::asio::ssl::context context;
+                    boost::asio::ip::tcp::resolver::iterator endpoint_iterator;
+                    boost::asio::ssl::stream<boost::asio::ip::tcp::socket> socket;
 					boost::asio::io_service::strand strand;
 					ConnectionManager<Request, Response>& connection_manager;
 

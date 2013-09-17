@@ -241,15 +241,20 @@ namespace sp2p {
             opts.common_name = my_user.username;
             opts.email = my_user.email;
             opts.organization = node_desc.node_name;
+            opts.country = "Pl";
 
             if(private_keys.empty()) return NodeError::OTHER;
 
             Botan::Private_Key* priv_key = private_keys[0]->getKey();
+            if(priv_key == nullptr) {
+                BOOST_LOG_SEV(lg, debug) << "Private key is null";
+                return NodeError::OTHER;
+            } 
+
             Botan::PKCS10_Request request = Botan::X509::create_cert_req(opts, *priv_key, "SHA-256", rng);
 
-
             std::shared_ptr<NodeRequest> registerUserMessage = 
-                utils::getRegisterUserMessage(my_user, request.PEM_encode()); // TODO implement
+                utils::getRegisterUserMessage(my_user, request.PEM_encode()); 
 
             connection_ptr<NodeRequest, NodeResponse> con = node_connection.getConnection();
             try {
@@ -276,19 +281,24 @@ namespace sp2p {
                             Botan::DataSource_Memory ds_my(my_cert);
                             Botan::DataSource_Memory ds_node(node_cert);
 
-                            enc::cert_st_ptr cert_st_my(new enc::CertificateStore(new Botan::X509_Certificate(ds_my)));
-                            cert_st_my->setName(node_desc.node_name+"."+std::to_string(free_certs.size())+".pem");
-                            cert_st_my->setFilename(node_desc.node_name+"."+std::to_string(free_certs.size())+".pem");
+                            try {
+                                enc::cert_st_ptr cert_st_my(new enc::CertificateStore(new Botan::X509_Certificate(ds_my)));
+                                cert_st_my->setName(node_desc.node_name+"."+std::to_string(free_certs.size())+".pem");
+                                cert_st_my->setFilename(node_desc.node_name+"."+std::to_string(free_certs.size())+".pem");
 
-                            enc::cert_st_ptr cert_st_node(new enc::CertificateStore(new Botan::X509_Certificate(ds_node)));
-                            cert_st_node->setName(node_desc.node_name+"."+std::to_string(node_certs.size())+".pem");
-                            cert_st_node->setFilename(node_desc.node_name+"."+std::to_string(node_certs.size())+".pem");
+                                enc::cert_st_ptr cert_st_node(new enc::CertificateStore(new Botan::X509_Certificate(ds_node)));
+                                cert_st_node->setName(node_desc.node_name+"."+std::to_string(node_certs.size())+".pem");
+                                cert_st_node->setFilename(node_desc.node_name+"."+std::to_string(node_certs.size())+".pem");
 
 
-                            node_certs.push_back(cert_st_node);
-                            free_certs.push_back(cert_st_my);
+                                node_certs.push_back(cert_st_node);
+                                free_certs.push_back(cert_st_my);
 
-                            result = NodeError::OK;
+                                result = NodeError::OK;
+                            } catch(std::exception& e) {
+                                BOOST_LOG_SEV(lg, error) << e.what();
+                                result = NodeError::BAD_SERVER_RESPONSE;
+                            }
                             break;
                         }
 
@@ -303,7 +313,6 @@ namespace sp2p {
             } catch(SendException& e) {
                 return NodeError::SEND_ERROR;
             }
-
             return result;
         }
 
@@ -788,9 +797,9 @@ namespace sp2p {
             if(network_desc != nullptr) BOOST_LOG_SEV(lg, trace) << " - > " << *network_desc;
 
             std::tuple<NodeError, Botan::X509_Certificate*> resultTuple;
-            NodeError error = beforeMessage();
-            if(any(error)) {
-                std::get<0>(resultTuple) = error;
+            NodeError res = beforeMessage();
+            if(any(res)) {
+                std::get<0>(resultTuple) = res;
                 return resultTuple;
             }
             // creating sign request 
@@ -806,6 +815,7 @@ namespace sp2p {
             opts.email = my_user.email;
             opts.organization = node_desc.node_name;
             opts.org_unit = network_desc->network_name;
+            opts.country = "Pl";
 
             Botan::PKCS10_Request request = Botan::X509::create_cert_req(opts, priv_key, "SHA-256", rng);
 
@@ -823,33 +833,38 @@ namespace sp2p {
                     case protocol::NodeMessage::OK:
                         {
                             Botan::DataSource_Memory data_source(response.sign_key_response().user_certificate());
-                            Botan::X509_Certificate* certificate = new Botan::X509_Certificate(data_source);
+                            try {
+                                Botan::X509_Certificate* certificate = new Botan::X509_Certificate(data_source);
 
-                            if(network_desc != nullptr) {
-                                enc::cert_st_ptr cert_s = std::make_shared<enc::CertificateStore>(certificate);
-                                cert_s->setName(node_desc.node_name + "." + network_desc->network_name);
-                                cert_s->setFilename(node_desc.node_name + "." + network_desc->network_name + ".pem");
-                                net_certs[*network_desc] = cert_s;
+                                if(network_desc != nullptr) {
+                                    enc::cert_st_ptr cert_s = std::make_shared<enc::CertificateStore>(certificate);
+                                    cert_s->setName(node_desc.node_name + "." + network_desc->network_name);
+                                    cert_s->setFilename(node_desc.node_name + "." + network_desc->network_name + ".pem");
+                                    net_certs[*network_desc] = cert_s;
+                                }
+
+                                res = NodeError::OK;
+                                std::get<1>(resultTuple) = certificate;
+                            } catch(std::exception& e) {
+                                BOOST_LOG_SEV(lg, error) << e.what();
+                                res = NodeError::BAD_SERVER_RESPONSE;
                             }
-
-                            error = NodeError::OK;
-                            std::get<1>(resultTuple) = certificate;
                             break;
                         }
 
                     case protocol::NodeMessage::NOT_LOGGED:
                         node_connection.is_logged = false;
                     default:
-                        error = utils::getDefaultError(response.response_type());
+                        res = utils::getDefaultError(response.response_type());
                 }
 
                 node_connection.resetDeadlineTimer(global::node_timeout_seconds);
 
             } catch(SendException& e) {
-                error = NodeError::SEND_ERROR;
+                res = NodeError::SEND_ERROR;
             }
 
-            std::get<0>(resultTuple) = error;
+            std::get<0>(resultTuple) = res;
             return resultTuple;
         }
 

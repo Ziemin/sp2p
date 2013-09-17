@@ -3,6 +3,7 @@ find_package(Boost COMPONENTS log log_setup thread system date_time serializatio
 find_package(Threads REQUIRED)
 find_package(Botan REQUIRED)
 find_package(Protobuf REQUIRED)
+find_package(OpenSSL REQUIRED)
 
 ADD_DEFINITIONS(-DBOOST_ALL_DYN_LINK)
 ADD_DEFINITIONS(-DBOOST_TEST_DYN_LINK)
@@ -40,6 +41,7 @@ foreach(file ${TEST_FILES})
     target_link_libraries (${base_name} ${CMAKE_THREAD_LIBS_INIT})
     target_link_libraries (${base_name} ${BOTAN_LIBRARIES})
     target_link_libraries (${base_name} ${PROTOBUF_LIBRARY})
+    target_link_libraries (${base_name} ${OPENSSL_LIBRARIES})
 
     target_link_libraries (${base_name} ${LIBRARY_OUTPUT_PATH}/libSercli.a)
 

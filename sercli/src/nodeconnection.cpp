@@ -45,36 +45,31 @@ namespace sp2p {
 				   throw NodeError::NO_CONNECTION;
 			   }
 
-               boost::asio::connect(socket, endpoint_iterator, ec);
-               if(ec) {
-                   BOOST_LOG_SEV(lg, error) << "Could not connect to to " << node_desc.ip_address.to_string() 
-                       << " on port: " << node_desc.port << " error: " << ec.message();
-                   throw NodeError::NO_CONNECTION;
-               }
-               else {
-                   BOOST_LOG_SEV(lg, info) << "Connected to " << node_desc.ip_address.to_string() 
-                       << " on port: " << node_desc.port;
-               }
-
-
                std::shared_ptr<Parser<NodeResponse>> parser(new NodeResponseParser);
+
+               boost::asio::ssl::context ctx(boost::asio::ssl::context::tlsv12);
                connection.reset
                    (
                     new Connection<NodeRequest, NodeResponse>
                     (
                      *global::io_s,
-                     std::move(socket),
+                     std::move(ctx),
+                     endpoint_iterator,
                      connection_manager,
                      parser,
                      global::sp2p_handler,
-                     (static_cast<std::uint32_t>(TLSConType::AUTH) | static_cast<std::uint32_t>(TLSConType::CLIENT))
+                     (static_cast<std::uint32_t>(TLSConType::NO_AUTH) | static_cast<std::uint32_t>(TLSConType::CLIENT))
                     )
                    );
 
-			   connection_manager.start(connection);
+               ec = connection->connect();
+               if(ec) {
+				   BOOST_LOG_SEV(lg, error) << "Could not connect to " << node_desc.ip_address.to_string() 
+					   << " on port: " << node_desc.port << " error: " << ec.message();
+				   throw NodeError::NO_CONNECTION;
+               }
 
-			   BOOST_LOG_SEV(lg, debug) << "End of NodeConnection::connect to " << node_desc.ip_address.to_string() 
-				   << " on port: " << node_desc.port;
+			   connection_manager.start(connection);
 
 			   timer.expires_from_now(boost::posix_time::seconds(global::node_timeout_seconds));
 			   timer.async_wait(std::bind(&NodeConnection::closeConnection, this));
@@ -84,31 +79,31 @@ namespace sp2p {
 	   template <typename ConnectHandler>                    
 	   	   void NodeConnection::asyncConnect(const NodeDescription& node_desc, ConnectHandler con_handler) {
 			   if(!isActive()) {
+
 				   boost::asio::ip::tcp::resolver resolver(*global::io_s);
-				   auto endpoint_iterator = resolver.resolve({ node_desc.ip_address, node_desc.port });
+                   boost::system::error_code ec;                                    
+				   auto endpoint_iterator = resolver.resolve({ node_desc.ip_address, node_desc.port }, ec);
+                   if(ec) {
+                       BOOST_LOG_SEV(lg, error) << "Could not resolve endpoint to " << node_desc.ip_address.to_string() 
+                           << " on port: " << node_desc.port << " error: " << ec.message();
 
-				   boost::asio::async_connect(socket, endpoint_iterator, 
-						   [this] (const boost::system::error_code& ec, tcp::resolver::iterator it) 
-						   {
-						   		if(!ec) {
-									BOOST_LOG_SEV(lg, info) << "Connected to " << node_desc.ip_address.to_string() 
-									   << " on port: " << node_desc.port;
+                       con_handler(ec);
+                   }
 
-									std::shared_ptr<Parser<NodeResponse>> parser(new NodeResponseParser);
-									connection.reset(
-										new Connection<NodeRequest, NodeResponse>(
-											*global::io_s,
-											std::move(socket),
-											connection_manager,
-											parser,
-											global::sp2p_handler,
-                                            (static_cast<std::uint32_t>(TLSConType::AUTH) | static_cast<std::uint32_t>(TLSConType::CLIENT))
-										));
-									connection_manager.start(connection);
-								} else {
-									// handle connect error
-								}
-						   });
+                   std::shared_ptr<Parser<NodeResponse>> parser(new NodeResponseParser);
+
+                   boost::asio::ssl::context ctx(boost::asio::ssl::context::tlsv12);
+                   connection.reset(
+                       new Connection<NodeRequest, NodeResponse>(
+                           *global::io_s,
+                           std::move(ctx),
+                           endpoint_iterator,
+                           connection_manager,
+                           parser,
+                           global::sp2p_handler,
+                           (static_cast<std::uint32_t>(TLSConType::NO_AUTH) | static_cast<std::uint32_t>(TLSConType::CLIENT))
+                       ));
+                   connection->asyncConnect(con_handler);
 
 				   timer.expires_from_now(boost::posix_time::seconds(global::node_timeout_seconds));
 				   timer.async_wait(std::bind(&NodeConnection::closeConnection, this));
