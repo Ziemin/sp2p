@@ -1127,6 +1127,24 @@ class Sp2pContext : public Context {
                     sp2p_manager.saveState(filename);
                 } else 
                     sp2p_manager.saveState();
+
+                for(auto node_ptr: sp2p_manager.getAllNodes()) {
+                    for(sc::enc::cert_st_ptr cert: node_ptr->getNodeCerts()) {
+                        if(!cert->inFile(cert_dir)) cert->save(cert_dir);
+                    }
+                    for(sc::enc::cert_st_ptr cert: node_ptr->getFreeCerts()) {
+                        if(!cert->inFile(cert_dir)) cert->save(cert_dir);
+                    }
+                    for(auto cert_pair: node_ptr->getNetworkCerts()) {
+                        if(!cert_pair.second->inFile(cert_dir)) cert_pair.second->save(cert_dir);
+                    }
+                    for(sc::enc::priv_st_ptr key: node_ptr->getMyKeys()) {
+                        if(!key->inFile(priv_keys_dir)) key->save(priv_keys_dir);
+                    }
+                    for(auto key_pair: node_ptr->getNetworkKeys()) {
+                        if(!key_pair.second->inFile(priv_keys_dir)) key_pair.second->save(priv_keys_dir);
+                    }
+                }
             };
 
             // load state

@@ -58,7 +58,7 @@ namespace sp2p {
                 ConnectionManager<NodeRequest, NodeResponse>& connection_manager) 
             : node_desc(node_desc),
             my_user("user", "password", "email"),
-            node_connection(connection_manager)
+            node_connection(connection_manager, node_certs)
         {
         }
 
@@ -68,7 +68,7 @@ namespace sp2p {
                 MyUser user)
             : node_desc(node_desc), 
             my_user(user), 
-            node_connection(connection_manager)
+            node_connection(connection_manager, node_certs)
         { 
         }
 

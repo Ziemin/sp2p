@@ -24,13 +24,13 @@ namespace sp2p {
                    parser_ptr<Response> parser, 
                    handler_ptr<Request, Response> handler,
                    std::uint32_t con_type,
-                   std::vector<enc::priv_st_ptr>* priv_keys,
-                   std::vector<enc::cert_st_ptr>* certs,
+                   const std::vector<enc::priv_st_ptr>* priv_keys,
+                   const std::vector<enc::cert_st_ptr>* certs,
                    std::function<void()> starter) 
 
            : context(std::move(context)),
            endpoint_iterator(endpoint_iterator),
-           socket(io_s, context),
+           socket(io_s, this->context),
            strand(io_s),
            connection_manager(connection_manager),
            parser(parser),
@@ -42,14 +42,19 @@ namespace sp2p {
            {
                is_active = true;
 
-               peer_ip = socket.lowest_layer().remote_endpoint().address().to_string();
+               peer_ip = endpoint_iterator->endpoint().address().to_string();
                BOOST_LOG_SEV(lg, debug) << "Created Connection object with: " << peer_ip;
                if(con_type & TLSConType::AUTH) {
-                   socket.set_verify_mode(boost::asio::ssl::verify_peer | boost::asio::ssl::verify_fail_if_no_peer_cert);
+                   if(certs != nullptr && certs->size() > 0) {
+                       BOOST_LOG_SEV(lg, debug) << "Loading verify files" << peer_ip;
+                       enc::cert_st_ptr cs = (*certs)[0];
+
+                       if(cs->getPath().size() > 0 && cs->inFile(cs->getPath()))
+                           this->context.load_verify_file(cs->getPath()+"/"+cs->getFilename());
+                   }
                    socket.set_verify_callback(std::bind(
                                &Connection<Request,Response>::verifyCertificate,
-                               this->shared_from_this(),
-                               pl::_1, pl::_2));
+                               this, pl::_1, pl::_2));
                }
            }
 

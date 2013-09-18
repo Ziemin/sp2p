@@ -17,6 +17,7 @@
 #include "connection.hpp"
 #include "sp2p_types.hpp"
 #include "logging.hpp"
+#include "encryption.hpp"
 
 namespace sp2p {
     namespace sercli {
@@ -31,7 +32,8 @@ namespace sp2p {
         public std::enable_shared_from_this<NodeConnection> {
 
             public:
-                NodeConnection(ConnectionManager<NodeRequest, NodeResponse>& connection_manager);
+                NodeConnection(ConnectionManager<NodeRequest, NodeResponse>& connection_manager,
+                    const std::vector<enc::cert_st_ptr>& certs); 
 
                 bool isActive() const;
 
@@ -66,9 +68,12 @@ namespace sp2p {
                 boost::asio::io_service::strand strand;
                 boost::asio::ip::tcp::socket socket;
 
+                boost::asio::streambuf cert_buf;
+
                 std::string cookie;
 
                 ConnectionManager<NodeRequest, NodeResponse>& connection_manager;
+                const std::vector<enc::cert_st_ptr>& certs;
                 connection_ptr<NodeRequest, NodeResponse> connection;
 
                 logging::Logger& lg = logging::sp2p_lg::get();

@@ -60,8 +60,8 @@ namespace sp2p {
                             parser_ptr<Response>, 
 							handler_ptr<Request, Response>,
                             std::uint32_t = (TLSConType::NO_AUTH | TLSConType::CLIENT),
-                            std::vector<enc::priv_st_ptr>* = nullptr,
-                            std::vector<enc::cert_st_ptr>* = nullptr,
+                            const std::vector<enc::priv_st_ptr>* = nullptr,
+                            const std::vector<enc::cert_st_ptr>* = nullptr,
                             std::function<void()> = []()->void{});
 
 					void setStarterFunction(std::function<void()> fun);
@@ -133,8 +133,8 @@ namespace sp2p {
 					handler_ptr<Request, Response> handler;
 
                     std::uint32_t con_type;
-                    std::vector<enc::priv_st_ptr>* priv_keys;
-                    std::vector<enc::cert_st_ptr>* certs;
+                    const std::vector<enc::priv_st_ptr>* priv_keys;
+                    const std::vector<enc::cert_st_ptr>* certs;
 
 					std::function<void()> starter_function;
 

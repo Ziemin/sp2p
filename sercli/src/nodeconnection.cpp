@@ -1,6 +1,7 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/log/core.hpp>
 #include <memory>
+#include <iostream>
 
 #include "nodeconnection.hpp"
 #include "globals.hpp"
@@ -15,14 +16,22 @@ namespace sp2p {
 		using namespace sp2p::sercli::types;
 		using namespace boost::log::trivial;
 
-		NodeConnection::NodeConnection(ConnectionManager<NodeRequest, NodeResponse>& connection_manager) 
+		NodeConnection::NodeConnection(ConnectionManager<NodeRequest, NodeResponse>& connection_manager,
+				const std::vector<enc::cert_st_ptr>& certs)
 			: is_logged(false),
 			timer(*global::io_s),
 		   	strand(*global::io_s),
 			socket(*global::io_s),
 			connection_manager(connection_manager),
+			certs(certs),
 			connection(nullptr)
-	   	{ }
+	   	{ 
+			std::ostream os(&cert_buf);
+			for(auto cs: certs) {
+				std::cout << cs->getCertificate()->PEM_encode() << std::endl;
+				if(cs->inMemory()) os << cs->getCertificate()->PEM_encode();
+			}
+		}
 
 
 	   bool NodeConnection::isActive() const {
@@ -48,6 +57,13 @@ namespace sp2p {
                std::shared_ptr<Parser<NodeResponse>> parser(new NodeResponseParser);
 
                boost::asio::ssl::context ctx(boost::asio::ssl::context::tlsv12);
+			   ctx.set_verify_mode(boost::asio::ssl::verify_peer);
+			   ctx.set_options(boost::asio::ssl::context::default_workarounds
+					   | boost::asio::ssl::context::no_sslv3
+					   | boost::asio::ssl::context::no_sslv2);
+			   if(cert_buf.size() > 0) 
+				   ctx.use_certificate_chain(boost::asio::const_buffer(cert_buf.prepare(cert_buf.size())));
+
                connection.reset
                    (
                     new Connection<NodeRequest, NodeResponse>
@@ -58,7 +74,9 @@ namespace sp2p {
                      connection_manager,
                      parser,
                      global::sp2p_handler,
-                     (static_cast<std::uint32_t>(TLSConType::NO_AUTH) | static_cast<std::uint32_t>(TLSConType::CLIENT))
+                     (static_cast<std::uint32_t>(TLSConType::AUTH) | static_cast<std::uint32_t>(TLSConType::CLIENT)),
+					 nullptr,
+					 &certs
                     )
                    );
 
@@ -93,6 +111,12 @@ namespace sp2p {
                    std::shared_ptr<Parser<NodeResponse>> parser(new NodeResponseParser);
 
                    boost::asio::ssl::context ctx(boost::asio::ssl::context::tlsv12);
+				   ctx.set_verify_mode(boost::asio::ssl::verify_peer);
+				   ctx.set_options(boost::asio::ssl::context::default_workarounds
+						   | boost::asio::ssl::context::no_sslv3
+						   | boost::asio::ssl::context::no_sslv2);
+				   if(cert_buf.size() > 0) 
+					   ctx.use_certificate_chain(boost::asio::const_buffer(cert_buf.prepare(cert_buf.size())));
                    connection.reset(
                        new Connection<NodeRequest, NodeResponse>(
                            *global::io_s,
@@ -101,7 +125,7 @@ namespace sp2p {
                            connection_manager,
                            parser,
                            global::sp2p_handler,
-                           (static_cast<std::uint32_t>(TLSConType::NO_AUTH) | static_cast<std::uint32_t>(TLSConType::CLIENT))
+                           (static_cast<std::uint32_t>(TLSConType::AUTH) | static_cast<std::uint32_t>(TLSConType::CLIENT))
                        ));
                    connection->asyncConnect(con_handler);
 
