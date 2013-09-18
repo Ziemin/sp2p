@@ -10,6 +10,7 @@
 #include <atomic>
 #include <exception>
 #include <mutex>
+#include <unordered_map>
 
 #include <boost/serialization/utility.hpp>
 #include <boost/serialization/string.hpp>
@@ -21,26 +22,27 @@
 #include "nodeconnection.hpp"
 #include "sp2p_types.hpp"
 #include "logging.hpp"
+#include "globals.hpp"
+#include "encryption.hpp"
 
 using namespace sp2p::sercli::types;
 
 namespace sp2p {
     namespace sercli {
 
+        typedef std::unordered_map<types::NetworkDescription, enc::cert_st_ptr, types::NetworkHash> net_cert_map;
+        typedef std::unordered_map<types::NetworkDescription, enc::priv_st_ptr, types::NetworkHash> net_key_map;
         // Error from node and nodeclass
 
         class Node : boost::noncopyable { 
             
-            typedef weak_connection_ptr<NodeRequest, NodeResponse> weak_node_con_ptr ;
-
             public:
                 /**
                  * Constructor...
                  */
                 Node(NodeDescription node_desc, ConnectionManager<NodeRequest, NodeResponse>&);
 
-                Node(NodeDescription node_desc, ConnectionManager<NodeRequest, NodeResponse>&, 
-                        MyUser user);
+                Node(NodeDescription node_desc, ConnectionManager<NodeRequest, NodeResponse>&, MyUser user);
 
                 NodeError logIn();
                 NodeError logOut();
@@ -86,13 +88,19 @@ namespace sp2p {
 
                 NodeError stopServer(const NetworkDescription& network_desc); 
 
-                std::tuple<NodeError, Botan::X509_Certificate*> signKey(const Botan::Public_Key& public_key, 
-                        const NetworkDescription* network_desc);
+                std::tuple<NodeError, Botan::X509_Certificate*> signKey(const Botan::Private_Key& public_key, 
+                        const types::NetworkDescription* network_desc);
 
                 const NodeDescription& getDescription();
                 void setNewDescription(NodeDescription node_desc);
 
                 void stopConnections();
+
+                std::vector<enc::priv_st_ptr>& getMyKeys();
+                std::vector<enc::cert_st_ptr>& getNodeCerts();
+                net_cert_map& getNetworkCerts();
+                net_key_map& getNetworkKeys();
+                std::vector<enc::cert_st_ptr>& getFreeCerts();
 
             private:
 
@@ -102,9 +110,14 @@ namespace sp2p {
 
                 NodeDescription node_desc;
                 MyUser my_user;
+
+                std::vector<enc::priv_st_ptr> private_keys;                                 // private keys
+                std::vector<enc::cert_st_ptr> free_certs;                                   // not related to network certificates
+                net_cert_map net_certs;                                                     // certificates for particular networks
+                net_key_map net_keys;                                                       // private keys for particular networks
+                std::vector<enc::cert_st_ptr> node_certs;                                   // node certificates
+
                 NodeConnection node_connection;
-                std::vector<Botan::X509_CA> ca_list;
-                std::vector<Botan::X509_Certificate> user_certificates;
 
                 logging::Logger& lg = logging::sp2p_lg::get();
 

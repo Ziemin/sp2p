@@ -20,7 +20,7 @@ namespace sp2p {
 
             std::shared_ptr<NodeRequest> getLogoutMessage(const std::string& cookie);
 
-            std::shared_ptr<NodeRequest> getRegisterUserMessage(const MyUser& my_user, const std::string& public_key);
+            std::shared_ptr<NodeRequest> getRegisterUserMessage(const MyUser& my_user, const std::string& request);
 
             std::shared_ptr<NodeRequest> getUnregisterUserMessage(const std::string& cookie);
 
@@ -51,7 +51,7 @@ namespace sp2p {
 
             std::shared_ptr<NodeRequest> getStopServerMessage(const NetworkDescription& network_desc, const std::string& cookie);
 
-            std::shared_ptr<NodeRequest> getSignKeyMessage(const Botan::Public_Key& public_key,
+            std::shared_ptr<NodeRequest> getSignKeyMessage(const std::string& request,
                    const NetworkDescription* network_desc, const std::string& cookie);
 
 

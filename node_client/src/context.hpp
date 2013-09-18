@@ -4,19 +4,56 @@
 #include "../../sercli/src/sp2p.hpp"
 #include <boost/program_options.hpp>
 #include <boost/log/core.hpp>
+#include <boost/filesystem/path.hpp>
+#include <boost/filesystem/operations.hpp>
+#include <boost/regex.hpp>
 #include <exception>
 #include <map>
 #include <functional>
 #include <boost/asio.hpp>
 #include <tuple>
 #include <signal.h>
+#include <boost/regex.hpp>
+#include <botan/botan.h>
+#include <botan/x509cert.h>
+#include <botan/pem.h>
+#include <botan/rsa.h>
+#include <iostream>
+#include <termios.h>
+#include <unistd.h>
 
 using namespace std;
 namespace sc = sp2p::sercli;
 namespace po = boost::program_options;
+namespace fs = boost::filesystem;
+
+void disableEnableEcho(bool enable = true) {
+    struct termios tty;
+    tcgetattr(STDIN_FILENO, &tty);
+    if(!enable)
+        tty.c_lflag &= ~ECHO;
+    else
+        tty.c_lflag |= ECHO;
+
+    (void) tcsetattr(STDIN_FILENO, TCSANOW, &tty);
+}
 
 const string NODE_CONTEXT_NAME = "Node";
 const string NETWORK_CONTEXT_NAME = "Network";
+
+void getFilenames(const string& dir, vector<string>& filenames) {
+    fs::path pt = fs::system_complete(fs::path(dir));
+    if(!fs::exists(pt)) throw "Path does no exists";
+    if(!fs::is_directory(pt)) throw "Path is not a directory";
+
+    string filename;
+    fs::directory_iterator end_it;
+    for(fs::directory_iterator it(pt); it != end_it; ++it) {
+        if(!fs::is_directory(it->path())) {
+            filenames.push_back(filename = it->path().filename().string());
+        }
+    }
+}
 
 class CommandException : exception {
 
@@ -179,7 +216,7 @@ class NodeContext : public Context {
 
     public:
 
-        NodeContext(Context* root) : Context(NODE_CONTEXT_NAME, root) {
+        NodeContext(Context* root, sc::Manager& manager) : Context(NODE_CONTEXT_NAME, root), sp2p_manager(manager) {
 
             // print current node
             handlers["pnd"] = [this](int argc, const char *argv[]) -> void {
@@ -425,6 +462,73 @@ class NodeContext : public Context {
             handlers["help"] = [this](int argc, const char *argv[]) -> void {
                 help_message();
             };
+
+            // generate private key
+            handlers["gk"] = [this](int argc, const char *argv[]) -> void {
+                checkNode();
+                checkNetwork();
+                vm.clear();
+                po::store(po::parse_command_line(argc, argv, gk_opts), vm);
+                po::notify(vm);
+
+                if(vm.count("help")) {
+                    cout << gk_opts << endl;
+                    return;
+                }
+
+                string password;
+                if(vm.count("password")) password = vm["password"].as<string>();
+                else throw CommandException("No password given");
+
+                sc::enc::priv_st_ptr priv_key(new sc::enc::PrivateKeyStore(sc::enc::generatePrivateKey(2048)));
+                priv_key->setPassword(password);
+
+                if(vm.count("network")) {
+                    sc::network_ptr net = sp2p_manager.getNetwork(vm["network"].as<string>());
+                    priv_key->setName(node->getDescription().node_name + "." + net->getDescription().network_name);
+                    priv_key->setFilename(priv_key->getName() + ".pem");
+                    priv_key->setPath(priv_key_dir);
+                    node->getNetworkKeys()[net->getDescription()] = priv_key;
+                } else {
+                    priv_key->setName(node->getDescription().node_name);
+                    priv_key->setFilename(priv_key->getName() + ".pem");
+                    priv_key->setPath(priv_key_dir);
+                    node->getMyKeys().push_back(priv_key);
+                }
+                priv_key->save();
+            };
+
+            // sign key
+            handlers["sk"] = [this](int argc, const char *argv[]) -> void {
+                checkNode();
+                checkNetwork();
+                vm.clear();
+                po::store(po::parse_command_line(argc, argv, sk_opts), vm);
+                po::notify(vm);
+
+                if(vm.count("help")) {
+                    cout << sk_opts << endl;
+                    return;
+                }
+                if(vm.count("network")) {
+                    sc::network_ptr net = sp2p_manager.getNetwork(vm["network"].as<string>());
+                    sc::enc::priv_st_ptr key = node->getNetworkKeys()[net->getDescription()];
+                    Botan::Private_Key* priv_key = key->getKey();
+                    tuple<NodeError, Botan::X509_Certificate*> res = node->signKey(*priv_key, &net->getDescription());
+                    cout << get<0>(res) << endl;
+                    if(!sc::types::any(get<0>(res))) {
+                        Botan::X509_Certificate* cert = get<1>(res);
+                        cout << "Cert: " << endl <<  cert->to_string() << endl;
+                    }
+                } else throw CommandException("Network name required");
+            };
+        }
+
+        void setPrivKeyDir(const std::string& dir) {
+            priv_key_dir = dir;
+        }
+        void setCertDir(const std::string& dir) {
+            cert_dir = dir;
         }
 
     private:
@@ -462,18 +566,25 @@ class NodeContext : public Context {
             cout << "ss"        << "\t\t - Stops server" << endl;
             cout << "stop"      << "\t\t - Stops connection with node" << endl;
             cout << "invite"    << "\t\t - Invite user to network" << endl;
+            cout << "gk"        << "\t\t - Generate private key" << endl;
+            cout << "sk"        << "\t\t - Sign key" << endl;
         }
 
     private:
         sc::node_ptr node = nullptr;
         sc::network_ptr network = nullptr;
+        sc::Manager& sp2p_manager;
         po::variables_map vm;
+        string priv_key_dir;
+        string cert_dir;
 
         static po::options_description su_opts;
         static po::options_description cp_opts;
         static po::options_description getU_opts;
         static po::options_description ups_opts;
         static po::options_description invite_opts;
+        static po::options_description gk_opts;
+        static po::options_description sk_opts;
 
 };
 
@@ -526,6 +637,27 @@ po::options_description NodeContext::ups_opts = []() {
     opts.add_options()
         ("help,h", "prints this message")
         ("port,p", po::value<uint16_t>(), "port");
+
+    return opts;
+}();
+
+po::options_description NodeContext::gk_opts = []() {
+
+    po::options_description opts("Generate private key");
+    opts.add_options()
+        ("help,h", "prints this message")
+        ("network,n", po::value<string>(), "Optional - generate key for network")
+        ("password,p", po::value<string>(), "Password for key");
+
+    return opts;
+}();
+
+po::options_description NodeContext::sk_opts = []() {
+
+    po::options_description opts("Sign key");
+    opts.add_options()
+        ("help,h", "prints this message")
+        ("network,n", po::value<string>(), "Optional - generate key for network");
 
     return opts;
 }();
@@ -623,11 +755,11 @@ class Sp2pContext : public Context {
 
     public:
 
-        Sp2pContext(Context* root, const string& dataFile, const string& password)  // passwords currently ignored
+        Sp2pContext(Context* root, const string& dataFile, const string& password, const string& config_file)
         : Context("Sp2p", root),  
         data_manager(password),
         sp2p_manager(data_manager),
-        node_c(root),
+        node_c(root, sp2p_manager),
         network_c(root),
         signals(*sc::global::io_s)
         {
@@ -654,6 +786,42 @@ class Sp2pContext : public Context {
             get_network.add(network_desc);
             remove_network.add(network_desc);
 
+            ifstream iconf(config_file);
+            if(!iconf) throw "Could not open config file";
+
+            po::store(po::parse_config_file(iconf, load_conf_opts), vm);
+            po::notify(vm);
+            
+            if(vm.count("node_name") && vm["node_name"].as<string>().size() > 0) {
+                sc::node_ptr node = sp2p_manager.getNode(vm["node_name"].as<string>());
+                node_c.setNode(node);
+                network_c.setNode(node);
+                current_node = node;
+            }
+            if(vm.count("network_name") && vm["network_name"].as<string>().size() > 0) {
+                sc::network_ptr network = sp2p_manager.getNetwork(vm["network_name"].as<string>());
+                node_c.setNetwork(network);
+                network_c.setNetwork(network);
+                current_network = network;
+            }
+            if(vm.count("priv_keys_dir")) {
+                scanForPrivKeys(vm["priv_keys_dir"].as<string>());
+                node_c.setPrivKeyDir(vm["priv_keys_dir"].as<string>());
+                priv_keys_dir = vm["priv_keys_dir"].as<string>();
+            } else throw "No private keys directory specified";
+
+            if(vm.count("pub_keys_dir")) {
+                scanForPubKeys(vm["pub_keys_dir"].as<string>());
+                pub_keys_dir = vm["pub_keys_dir"].as<string>();
+            } else throw "No public keys directory specified";
+
+            if(vm.count("certs_dir")) {
+                scanForCerts(vm["certs_dir"].as<string>());
+                node_c.setCertDir(vm["certs_dir"].as<string>());
+                cert_dir = vm["certs_dir"].as<string>();
+            } else throw "No certificates directory specified";
+
+            // initialization of handlers
             // create node
             handlers["cnd"] = [this](int argc, const char *argv[]) -> void {
                 vm.clear();
@@ -983,6 +1151,16 @@ class Sp2pContext : public Context {
                     sp2p_manager.loadState();
             };
 
+            handlers["priv_dir"] = [this](int argc, const char *argv[]) -> void {
+                cout << " " << priv_keys_dir << endl;
+            };
+            handlers["pub_dir"] = [this](int argc, const char *argv[]) -> void {
+                cout << " " << pub_keys_dir << endl;
+            };
+            handlers["cert_dir"] = [this](int argc, const char *argv[]) -> void {
+                cout << " " << cert_dir << endl;
+            };
+
             // Clear
             handlers["clear"] = [this](int argc, const char *argv[]) -> void {
                 sp2p_manager.clear();
@@ -994,13 +1172,16 @@ class Sp2pContext : public Context {
             Context::help_message();
             cout << "Sp2p commands: " << endl;
             cout << "cnd"           << "\t\t - Add new node" << endl;
-            cout << "gnd"           << "\t\t - Go to new node" << endl;
+            cout << "gnd"           << "\t\t - Gets a node to work with" << endl;
             cout << "rnd"           << "\t\t - Remove node" << endl;
             cout << "pnd"           << "\t\t - Print all nodes" << endl;
             cout << "cnt"           << "\t\t - Add new network" << endl;
-            cout << "gnt"           << "\t\t - Go to network" << endl;
+            cout << "gnt"           << "\t\t - Gets a network to work with" << endl;
             cout << "rnt"           << "\t\t - Remove networks" << endl;
             cout << "pnt"           << "\t\t - Print all networks" << endl;
+            cout << "priv_dir"      << "\t - Directory with user private keys" << endl;
+            cout << "pub_dir"       << "\t - Directory with user public keys" << endl;
+            cout << "cert_dir"      << "\t - Directory with user certificates" << endl;
             cout << "save"          << "\t\t - Save state" << endl;
             cout << "load"          << "\t\t - Load state" << endl;
             cout << "clear"         << "\t\t - Clear data" << endl;
@@ -1013,6 +1194,92 @@ class Sp2pContext : public Context {
 
      private:
 
+        void scanForPrivKeys(const std::string& dir) {
+            vector<string> filenames;
+            getFilenames(dir, filenames);
+
+            string pass;
+            boost::regex reg1("(\\w+)\\.pem");
+            boost::regex reg2("(\\w+)\\.(\\w+)\\.pem");
+            boost::smatch sm;
+            for(string& name: filenames) {
+                cout << "Type password for: " << name << endl;
+
+                disableEnableEcho(false);
+                cin >> pass;
+                disableEnableEcho(true);
+
+                if(boost::regex_match(name, sm, reg1)) {
+                    sc::enc::priv_st_ptr key(new sc::enc::PrivateKeyStore());
+                    key->setFilename(name);
+                    key->setPath(dir);
+                    key->setName(sm[1]);
+                    key->setPassword(pass);
+                    key->load();
+                    sc::node_ptr node = sp2p_manager.getNode(sm[1]);
+                    node->getMyKeys().push_back(key);
+                } else if(boost::regex_match(name, sm, reg2)) {
+                    sc::enc::priv_st_ptr key(new sc::enc::PrivateKeyStore());
+                    key->setFilename(name);
+                    key->setPath(dir);
+                    key->setName(sm[1]+"."+sm[2]);
+                    key->setPassword(pass);
+                    key->load();
+                    sc::node_ptr node = sp2p_manager.getNode(sm[1]);
+                    sc::network_ptr net = sp2p_manager.getNetwork(sm[2]);
+                    node->getNetworkKeys()[net->getDescription()] = key;
+                }
+            }
+        }
+
+        void scanForPubKeys(const std::string& dir) {
+            vector<string> filenames;
+            getFilenames(dir, filenames);
+
+            boost::regex reg("(\\w+)\\.pem");
+            boost::smatch sm;
+            for(string& name: filenames) {
+                if(boost::regex_match(name, sm, reg)) {
+                    sc::enc::pub_st_ptr key(new sc::enc::PublicKeyStore());
+                    key->setFilename(name);
+                    key->setPath(dir);
+                    key->setName(sm[1]);
+                    key->load();
+                    pub_keys.push_back(key);
+                }
+            }
+        }
+
+        void scanForCerts(const std::string& dir) {
+            vector<string> filenames;
+            getFilenames(dir, filenames);
+
+            boost::regex reg1("(\\w+)\\.([0-9]+)\\.pem");
+            boost::regex reg2("(\\w+)\\.(\\w+)\\.pem");
+            boost::smatch sm;
+            for(string& name: filenames) {
+                if(regex_match(name, sm, reg1)) {
+                    sc::enc::cert_st_ptr cert(new sc::enc::CertificateStore());
+                    cert->setFilename(name);
+                    cert->setPath(dir);
+                    cert->setName(sm[1]+"."+sm[2]);
+                    cert->load();
+                    sc::node_ptr node = sp2p_manager.getNode(sm[1]);
+                    node->getNodeCerts().push_back(cert);
+                }
+                else if(regex_match(name, sm, reg2)) {
+                    sc::enc::cert_st_ptr cert(new sc::enc::CertificateStore());
+                    cert->setFilename(name);
+                    cert->setPath(dir);
+                    cert->setName(sm[1]+"."+sm[2]);
+                    cert->load();
+                    sc::node_ptr node = sp2p_manager.getNode(sm[1]);
+                    sc::network_ptr network = sp2p_manager.getNetwork(sm[2]);
+                    node->getNetworkCerts()[network->getDescription()] = cert;
+                }
+            }
+        }
+
         sc::enc::CryptDataManager data_manager;
         sc::Manager sp2p_manager;
 
@@ -1023,7 +1290,15 @@ class Sp2pContext : public Context {
         sc::network_ptr current_network;
         boost::asio::signal_set signals;
 
+        std::string priv_keys_dir;
+        std::string pub_keys_dir;
+        std::string cert_dir;
+
         po::variables_map vm;
+
+        vector<sc::enc::priv_st_ptr> priv_keys;
+        vector<sc::enc::pub_st_ptr> pub_keys;
+        vector<sc::enc::cert_st_ptr> certs;
 
         static po::options_description user;
         static po::options_description my_user;
@@ -1038,6 +1313,8 @@ class Sp2pContext : public Context {
         static po::options_description save_state;
         static po::options_description load_state;
         static po::options_description clear_data;
+        static po::options_description path_opts;
+        static po::options_description load_conf_opts;
 
 }; 
 
@@ -1117,6 +1394,27 @@ po::options_description Sp2pContext::load_state = []() {
     return opts;
 }();
 
+po::options_description Sp2pContext::path_opts = []() {
+    po::options_description opts("Path");
+    opts.add_options()
+        ("help,h", "print this message")
+        ("path,p", "set path");
+
+    return opts;
+}();
+
+po::options_description Sp2pContext::load_conf_opts = []() -> po::options_description {
+
+    po::options_description opts("Load configuration file");
+    opts.add_options()
+        ("node_name", po::value<string>(), "name of node to load")
+        ("network_name", po::value<string>(), "name of network to load")
+        ("priv_keys_dir", po::value<string>(), "directory with private keys")
+        ("pub_keys_dir", po::value<string>(), "directory with public keys")
+        ("certs_dir", po::value<string>(), "directory with certificates");
+
+    return opts;
+}();
 /* ------------------ ~ Sp2pContext ------------------------------------------------- */
 
 #endif /* CONTEXT_HPP  */

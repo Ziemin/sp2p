@@ -65,6 +65,8 @@ BOOST_AUTO_TEST_CASE(self_signed_cert) {
 
 		std::ofstream cert_file("cert.pem");
         cert_file << cert.PEM_encode();                        	
+		std::ofstream cert_file_raw("cert.raw");
+        cert_file_raw << cert.to_string();                        	
 
 
 		delete priv_key;        

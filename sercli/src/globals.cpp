@@ -8,6 +8,7 @@
 
 #include <botan/botan.h>
 
+#include "handler.hpp"
 #include "globals.hpp"
 #include "logging.hpp"
 

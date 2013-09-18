@@ -18,23 +18,101 @@ namespace sp2p {
         template <typename Request, typename Response>
            Connection<Request, Response>::Connection(
                    boost::asio::io_service& io_s,
-                   boost::asio::ip::tcp::socket socket, 
+                   boost::asio::ssl::context context,
+                   boost::asio::ip::tcp::resolver::iterator endpoint_iterator,
                    ConnectionManager<Request, Response>& connection_manager,
                    parser_ptr<Response> parser, 
                    handler_ptr<Request, Response> handler,
+                   std::uint32_t con_type,
+                   std::vector<enc::priv_st_ptr>* priv_keys,
+                   std::vector<enc::cert_st_ptr>* certs,
                    std::function<void()> starter) 
 
-           : socket_(std::move(socket)),
+           : context(std::move(context)),
+           endpoint_iterator(endpoint_iterator),
+           socket(io_s, context),
            strand(io_s),
            connection_manager(connection_manager),
            parser(parser),
            handler(handler),
+           con_type(con_type),
+           priv_keys(priv_keys),
+           certs(certs),
            starter_function(starter)
            {
                is_active = true;
-               peer_ip = socket_.remote_endpoint().address().to_string();
-               BOOST_LOG_SEV(lg, trace) << "Created connection with: " << peer_ip;
+
+               peer_ip = socket.lowest_layer().remote_endpoint().address().to_string();
+               BOOST_LOG_SEV(lg, debug) << "Created Connection object with: " << peer_ip;
+               if(con_type & TLSConType::AUTH) {
+                   socket.set_verify_mode(boost::asio::ssl::verify_peer | boost::asio::ssl::verify_fail_if_no_peer_cert);
+                   socket.set_verify_callback(std::bind(
+                               &Connection<Request,Response>::verifyCertificate,
+                               this->shared_from_this(),
+                               pl::_1, pl::_2));
+               }
            }
+
+
+        template <typename Request, typename Response>
+            boost::system::error_code Connection<Request, Response>::connect() {
+               BOOST_LOG_SEV(lg, debug) << "Sync connecting with: " << peer_ip;
+
+               boost::system::error_code ec;
+               boost::asio::connect(socket.lowest_layer(), endpoint_iterator, ec);
+               if(ec) {
+                   BOOST_LOG_SEV(lg, trace) << "Could not connect to: " << peer_ip;
+                   return ec;
+               } else {
+                   BOOST_LOG_SEV(lg, trace) << "Connected to: " << peer_ip;
+               }
+
+               if(con_type & TLSConType::CLIENT) {
+                   socket.handshake(boost::asio::ssl::stream_base::client, ec);
+                   if(ec) BOOST_LOG_SEV(lg, trace) << "Handshake failed with: " << peer_ip;
+               }
+               else if(con_type & TLSConType::SERVER) {
+                   socket.handshake(boost::asio::ssl::stream_base::server, ec);
+                   if(ec) BOOST_LOG_SEV(lg, trace) << "Handshake failed with: " << peer_ip;
+               } 
+               else {
+                   BOOST_LOG_SEV(lg, error) << "No role for connection specified" << std::endl;
+                   ec.assign(boost::system::errc::invalid_argument, ec.category());
+               }
+               return ec;
+            }
+
+        template <typename Request, typename Response>
+            template <typename ConHandler>
+            void Connection<Request, Response>::asyncConnect(ConHandler handler) {
+               BOOST_LOG_SEV(lg, debug) << "Async connecting with: " << peer_ip;
+
+               auto self(this->shared_from_this());
+               boost::asio::async_connect(socket.lowest_layer(), endpoint_iterator, 
+                       [this, self, handler](const boost::system::error_code& ec) {
+                            if(!ec) {
+                                BOOST_LOG_SEV(lg, info) << "Connected to: " << peer_ip;
+
+                                if(con_type & TLSConType::CLIENT) 
+                                    socket.async_handshake(boost::asio::ssl::stream_base::client, handler);
+                                else if(con_type & TLSConType::SERVER) 
+                                    socket.async_handshake(boost::asio::ssl::stream_base::server, handler);
+                                else {
+                                    boost::system::error_code error;
+                                    BOOST_LOG_SEV(lg, error) << "No role for connection specified" << std::endl;
+                                    error.assign(boost::system::errc::invalid_argument, ec.category());
+                                }
+                            } else {
+                                BOOST_LOG_SEV(lg, info) << "Could not connect to: " << peer_ip;
+                            }
+                       });
+            }
+
+        template <typename Request, typename Response>
+            bool Connection<Request, Response>::verifyCertificate(bool preverified, boost::asio::ssl::verify_context& ctx) {
+                BOOST_LOG_SEV(lg, trace) << "Veryfing certificate of: " << peer_ip;
+                return preverified;
+            }
 
         template <typename Request, typename Response>
             void Connection<Request, Response>::go() {
@@ -54,8 +132,8 @@ namespace sp2p {
                 BOOST_LOG_SEV(lg, trace) << "Stopping connection with: " << peer_ip;
                 strand.post([this]()
                 { 
-                    if(this->socket_.is_open()) {
-                        this->socket_.close();
+                    if(this->socket.lowest_layer().is_open()) {
+                        this->socket.lowest_layer().close();
                         this->is_active = false;
                     }
                 });
@@ -67,9 +145,9 @@ namespace sp2p {
                 BOOST_LOG_SEV(lg, trace) << "Gracefully stopping connection with: " << peer_ip;
                 strand.post([this]()
                 { 
-                    if(this->socket_.is_open()) {
+                    if(this->socket.lowest_layer().is_open()) {
                         boost::system::error_code ign_error;
-                        this->socket_.shutdown(socket_.shutdown_both, ign_error);
+                        this->socket.lowest_layer().shutdown(socket.lowest_layer().shutdown_both, ign_error);
                         this->is_active = false;
                     }
                 });
@@ -116,7 +194,7 @@ namespace sp2p {
                 request->SerializeToOstream(&os);
 
                 auto self(this->shared_from_this());
-                boost::asio::async_write(socket_, send_buf, strand.wrap(
+                boost::asio::async_write(socket, send_buf, strand.wrap(
                         [this, self, newSendHandler, request] (boost::system::error_code ec, std::size_t length)
                         {
                             BOOST_LOG_SEV(lg, trace) << "Async write handler";
@@ -132,7 +210,7 @@ namespace sp2p {
                 
                 BOOST_LOG_SEV(lg, trace) << "Reading message from: " << peer_ip;
                 auto self(this->shared_from_this());
-                socket_.async_read_some(
+                socket.async_read_some(
                         boost::asio::buffer(recv_buf), strand.wrap(
                         [this, self, readHandler] (boost::system::error_code ec, std::size_t length) 
                         {

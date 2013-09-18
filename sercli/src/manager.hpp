@@ -9,8 +9,6 @@
 #include <string>
 #include <tuple>
 #include "data.hpp"
-#include "node.hpp"
-#include "network.hpp"
 #include "connection_manager.hpp"
 
 #ifdef LOGGING_ENABLED

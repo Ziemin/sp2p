@@ -2,16 +2,24 @@
 #define GLOBALS_HPP
 
 #include <boost/asio.hpp>
+#include <botan/botan.h>
 
-#include "handler.hpp"
+//#include "handler.hpp"
 #include "logging.hpp"
 
-#include <botan/botan.h>
 
 namespace sp2p {
 	namespace sercli {
 
+        class NodeRequest;
+        class NodeResponse;
+
+        template <typename Request, typename Response> class Handler;
+        template <typename Request, typename Response>
+            using handler_ptr = std::shared_ptr<Handler<Request, Response>>;
+
 		namespace global {
+
 
 			extern boost::asio::io_service* io_s;
 			extern handler_ptr<NodeRequest, NodeResponse> sp2p_handler;
@@ -32,7 +40,6 @@ namespace sp2p {
 			};
 
 		} /* namespace global */
-
 	} /* namespace sercli */
 } /* namespace sp2p */
 

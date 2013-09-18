@@ -4,20 +4,25 @@
 #include <string>
 #include <memory>
 #include <atomic>
+#include <vector>
+#include <thread>
 #include <boost/noncopyable.hpp>
 #include <boost/asio.hpp>
 #include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/sinks/text_ostream_backend.hpp>
 
-#include "nodemessage.hpp"
+#include "globals.hpp"
+//#include "nodemessage.hpp"
 #include "connection.hpp"
 #include "sp2p_types.hpp"
-#include "globals.hpp"
 #include "logging.hpp"
 
 namespace sp2p {
     namespace sercli {
+
+        class NodeRequest;
+        class NodeResponse;
 
         /**
          * Wrapper over Connection<NodeRequest, NodeResponse>
