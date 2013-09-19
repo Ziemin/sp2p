@@ -76,11 +76,17 @@ std::string getPasswordHash(std::string &password)
 
 void init_ca(const std::string &certPath, const std::string &privateKeyPath)
 {
+    // get provate key pass
+
+    std::string privPass;
+    std::cout << "CA private key password: ";
+    std::cin >> privPass;
+
     // create CA class object
 
     Botan::X509_Certificate cert(certPath);
     Botan::AutoSeeded_RNG rng;
-    Botan::Private_Key* pKey = Botan::PKCS8::load_key(privateKeyPath, rng, "asdasd");
+    Botan::Private_Key* pKey = Botan::PKCS8::load_key(privateKeyPath, rng, privPass);
     certificateAuthoritie_ = new Botan::X509_CA(cert, *pKey, "SHA-256");
 
     // load server public key to RAM
