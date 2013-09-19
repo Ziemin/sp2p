@@ -80,7 +80,7 @@ void init_ca(const std::string &certPath, const std::string &privateKeyPath)
 
     Botan::X509_Certificate cert(certPath);
     Botan::AutoSeeded_RNG rng;
-    Botan::Private_Key* pKey = Botan::PKCS8::load_key(privateKeyPath, rng);
+    Botan::Private_Key* pKey = Botan::PKCS8::load_key(privateKeyPath, rng, "asdasd");
     certificateAuthoritie_ = new Botan::X509_CA(cert, *pKey, "SHA-256");
 
     // load server public key to RAM
@@ -88,8 +88,7 @@ void init_ca(const std::string &certPath, const std::string &privateKeyPath)
     std::ifstream ifs(certPath);
     std::string str((std::istreambuf_iterator<char>(ifs)),
                      std::istreambuf_iterator<char>());
-
-    nodeCert = str;
+    nodeCert = cert.PEM_encode();
 
 }
 
@@ -103,7 +102,7 @@ std::string signCertyficate(std::string &request)
         Botan::X509_Time notBefore(currTimeInMS()/1000);
         Botan::X509_Time notAfter((currTimeInMS() + consts::CERT_TTL)/1000);
         auto signed_ = certificateAuthoritie_->sign_request(pkcs10Request, rng, notBefore, notAfter);
-        return signed_.to_string();
+        return signed_.PEM_encode();
     } catch(std::exception e) {
 #ifdef DEBUG_LOGGING
         BOOST_LOG_TRIVIAL(debug) << "Invalid argument in certificate signing: " << e.what();

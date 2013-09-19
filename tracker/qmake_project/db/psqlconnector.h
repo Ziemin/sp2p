@@ -1,6 +1,6 @@
 #ifndef PSQLCONNECTOR_H
 #define PSQLCONNECTOR_H
-#include "postgresql/libpq-fe.h"
+
 #include <string>
 #include <memory>
 #include <list>

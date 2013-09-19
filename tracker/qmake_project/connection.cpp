@@ -69,7 +69,7 @@ void Connection::handle_read(const boost::system::error_code& e,
     if (!e)
     {
 #ifdef DEBUG_LOGGING
-        BOOST_LOG_TRIVIAL(debug) << "No i teges...";
+        BOOST_LOG_TRIVIAL(debug) << "in handle read with no error";
 #endif
 
         boost::tribool result;
@@ -77,6 +77,9 @@ void Connection::handle_read(const boost::system::error_code& e,
 
         if (result)
         {
+#ifdef DEBUG_LOGGING
+            BOOST_LOG_TRIVIAL(debug) << "in result";
+#endif
             reply_ = Response_ptr(factory->produceResponse());
             requestHandler->handleRequest(request_.get(), reply_.get());
             std::ostream ostream(&outBuff);
@@ -93,6 +96,9 @@ void Connection::handle_read(const boost::system::error_code& e,
         else if (!result)
         {
 #ifdef DEBUG_LOGGING
+            BOOST_LOG_TRIVIAL(debug) << "in not result";
+#endif
+#ifdef DEBUG_LOGGING
             BOOST_LOG_TRIVIAL(debug) << "Result not parsed";
 #endif
             reply_ = Response_ptr(factory->produceResponse());
@@ -106,6 +112,10 @@ void Connection::handle_read(const boost::system::error_code& e,
         }
         else
         {
+#ifdef DEBUG_LOGGING
+            BOOST_LOG_TRIVIAL(debug) << "in else";
+#endif
+
             socket_.async_read_some(boost::asio::buffer(buffer_), strand_.wrap(
                                         boost::bind(&Connection::handle_read, shared_from_this(),
                                                     boost::asio::placeholders::error,

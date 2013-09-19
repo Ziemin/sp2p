@@ -15,15 +15,16 @@ Server::Server(Factory_ptr factory, const std::string& address,
     : thread_pool_size_(thread_pool_size),
       acceptor_(io_service_),
       new_connection_(),
-      context_(io_service_, boost::asio::ssl::context::sslv23)
-  {
+      context_(io_service_, boost::asio::ssl::context::tlsv12_server)
+{
     context_.set_options(
-        boost::asio::ssl::context::default_workarounds
-        | boost::asio::ssl::context::no_sslv2
-        | boost::asio::ssl::context::single_dh_use);
-//    context_.use_certificate_chain_file("server.crt");
-//    context_.use_private_key_file("server.key", boost::asio::ssl::context::pem);
-//    context_.use_tmp_dh_file("dh512.pem");
+                boost::asio::ssl::context::default_workarounds
+                | boost::asio::ssl::context::no_sslv2
+                | boost::asio::ssl::context::no_sslv3
+                | boost::asio::ssl::context::single_dh_use);
+    //    context_.use_certificate_chain_file("server.crt");
+    //    context_.use_private_key_file("server.key", boost::asio::ssl::context::pem);
+    //    context_.use_tmp_dh_file("dh512.pem");
     context_.use_certificate_chain_file(consts::CERT_PATH);
     context_.use_private_key_file(consts::PRIV_KEY_PATH, boost::asio::ssl::context::pem);
     context_.use_tmp_dh_file(consts::DH_FILE_PATH);

@@ -7,7 +7,7 @@ namespace sp2p {
 namespace tracker {
 namespace consts {
 
-const std::string CERT_PATH = "server.pem";
+const std::string CERT_PATH = "server.crt";
 const std::string PRIV_KEY_PATH = "server.prv";
 const std::string DH_FILE_PATH = "dh512.pem";
 

@@ -32,6 +32,7 @@ public:
     void refresh(const std::string &cookie);
     void cleanAll();
     void cleanSome(const long long ttl);
+//    ~SessionControler() = default;
 
 private:
     static const int COOKIE_LEN = 15;
