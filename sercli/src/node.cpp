@@ -77,6 +77,9 @@ namespace sp2p {
             my_user = user;
             node_connection.setCookie("");
             node_connection.is_logged = false;
+            free_certs.clear();
+            net_certs.clear();
+            private_keys.clear();
         }
 
         const MyUser& Node::getUser() const {

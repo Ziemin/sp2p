@@ -61,8 +61,6 @@ namespace sp2p {
 			   ctx.set_options(boost::asio::ssl::context::default_workarounds
 					   | boost::asio::ssl::context::no_sslv3
 					   | boost::asio::ssl::context::no_sslv2);
-			   if(cert_buf.size() > 0) 
-				   ctx.use_certificate_chain(boost::asio::const_buffer(cert_buf.prepare(cert_buf.size())));
 
                connection.reset
                    (
@@ -115,8 +113,6 @@ namespace sp2p {
 				   ctx.set_options(boost::asio::ssl::context::default_workarounds
 						   | boost::asio::ssl::context::no_sslv3
 						   | boost::asio::ssl::context::no_sslv2);
-				   if(cert_buf.size() > 0) 
-					   ctx.use_certificate_chain(boost::asio::const_buffer(cert_buf.prepare(cert_buf.size())));
                    connection.reset(
                        new Connection<NodeRequest, NodeResponse>(
                            *global::io_s,
