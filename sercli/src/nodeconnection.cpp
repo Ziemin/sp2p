@@ -82,6 +82,7 @@ namespace sp2p {
                if(ec) {
 				   BOOST_LOG_SEV(lg, error) << "Could not connect to " << node_desc.ip_address.to_string() 
 					   << " on port: " << node_desc.port << " error: " << ec.message();
+				   connection.reset();
 				   throw NodeError::NO_CONNECTION;
                }
 
