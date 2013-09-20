@@ -279,6 +279,12 @@ class NodeContext : public Context {
                 checkNode();
                 sc::types::NodeError res = node->registerUser();
                 cout << "Resp: " << res << endl;
+                if(!sc::types::any(res)) {
+                    vector<sc::enc::priv_st_ptr> vec = node->getMyKeys();
+                    if(!vec.empty()) vec[vec.size()-1]->save(priv_key_dir);
+                    vector<sc::enc::cert_st_ptr> vec2 = node->getNodeCerts();
+                    if(!vec2.empty()) vec2[vec2.size()-1]->save(cert_dir);
+                }
             };
 
             // change password
@@ -466,7 +472,6 @@ class NodeContext : public Context {
             // generate private key
             handlers["gk"] = [this](int argc, const char *argv[]) -> void {
                 checkNode();
-                checkNetwork();
                 vm.clear();
                 po::store(po::parse_command_line(argc, argv, gk_opts), vm);
                 po::notify(vm);
@@ -501,7 +506,6 @@ class NodeContext : public Context {
             // sign key
             handlers["sk"] = [this](int argc, const char *argv[]) -> void {
                 checkNode();
-                checkNetwork();
                 vm.clear();
                 po::store(po::parse_command_line(argc, argv, sk_opts), vm);
                 po::notify(vm);
@@ -512,14 +516,21 @@ class NodeContext : public Context {
                 }
                 if(vm.count("network")) {
                     sc::network_ptr net = sp2p_manager.getNetwork(vm["network"].as<string>());
-                    sc::enc::priv_st_ptr key = node->getNetworkKeys()[net->getDescription()];
+                    sc::net_key_map& map = node->getNetworkKeys();
+                    sc::enc::priv_st_ptr key;
+                    if(map.find(net->getDescription()) != map.end()) {
+                        key = node->getNetworkKeys()[net->getDescription()];
+                    } else throw CommandException("No private key for given network");
                     Botan::Private_Key* priv_key = key->getKey();
                     tuple<NodeError, Botan::X509_Certificate*> res = node->signKey(*priv_key, &net->getDescription());
                     cout << get<0>(res) << endl;
                     if(!sc::types::any(get<0>(res))) {
                         Botan::X509_Certificate* cert = get<1>(res);
                         cout << "Cert: " << endl <<  cert->to_string() << endl;
-                    }
+                        sc::enc::cert_st_ptr cert_st = node->getNetworkCerts()[net->getDescription()];
+                        cert_st->setPath(cert_dir);
+                        cert_st->save();
+                    } else throw get<0>(res);
                 } else throw CommandException("Network name required");
             };
         }
