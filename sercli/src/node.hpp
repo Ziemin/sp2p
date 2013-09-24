@@ -82,7 +82,9 @@ namespace sp2p {
 
                 std::tuple<NodeError, std::int32_t> updateServer(const NetworkDescription& network_desc, const std::int32_t port); 
 
-                // async function - handler signature is updateHandler(NodeError, std::int32_t)
+                /** Asynchronous server update
+                 *  async function - handler signature is updateHandler(NodeError, std::int32_t)
+                 */
                 template<typename UpdateHandler>
                     void asyncUpdateServer(const NetworkDescription& network_desc, const std::int32_t port, UpdateHandler updateHandler);
 
@@ -94,12 +96,31 @@ namespace sp2p {
                 const NodeDescription& getDescription();
                 void setNewDescription(NodeDescription node_desc);
 
+                /**
+                 * Stops all open connections
+                 */
                 void stopConnections();
 
+                /**
+                 * Returns private keys associated with node but not with any particular network
+                 */
                 std::vector<enc::priv_st_ptr>& getMyKeys();
+
+                /** 
+                 * Returns certificates of node
+                 */
                 std::vector<enc::cert_st_ptr>& getNodeCerts();
+                /**
+                 * Returns a map of association between networks and certificates
+                 */
                 net_cert_map& getNetworkCerts();
+                /**
+                 * Returns a map of association between networks and private keys
+                 */
                 net_key_map& getNetworkKeys();
+                /**
+                 * Returns certificates associated with node but not with any particular network
+                 */
                 std::vector<enc::cert_st_ptr>& getFreeCerts();
 
             private:
@@ -141,7 +162,7 @@ namespace sp2p {
 
         typedef std::shared_ptr<Node> node_ptr;
 
-        // Error from Node class
+        //!< Error delivered casted by node's methods
         class NodeException : public std::exception {
 
             public:

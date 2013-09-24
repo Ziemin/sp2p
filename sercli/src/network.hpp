@@ -29,13 +29,11 @@ namespace sp2p {
                 Network(types::NetworkDescription network_desc);
                 /**
                  * Associates node with certain network
-                 * @param network_desc data identyfying network created on node
                  */
                 void associateNode(std::weak_ptr<Node> node_ptr);
 
                 /**
                  * Removes node from network
-                 * @param network_id data identyfying network created on node
                  */
                 void detachNode(const types::NodeDescription& node_desc);
 

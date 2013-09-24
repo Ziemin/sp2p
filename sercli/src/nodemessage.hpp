@@ -7,6 +7,10 @@
 namespace sp2p {
 	namespace sercli {
 
+		/**
+		 * Message implementation depicting client message to 
+		 * send to Node
+		 */
 		class NodeRequest : Message {
 
 			public:
@@ -24,6 +28,10 @@ namespace sp2p {
 		};
 
 
+		/**
+		 * Message implementation depicting node message 
+		 * received by client
+		 */
 		class NodeResponse : Message {
 
 			public:

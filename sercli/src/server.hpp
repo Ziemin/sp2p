@@ -34,9 +34,18 @@ namespace sp2p {
                     void changeIP(const tcp::endpoint& endpoint);
                     void stop();
 
+                    /**
+                     * Returns number of nodes on which server is active
+                     */
                     int connectedNodes() const;
+                    /**
+                     * Returns number of all nodes server is associated to
+                     */
                     int allNodes() const;
 
+                    /**
+                     * Returns network in which server operates
+                     */
                     network_ptr getRelatedNetwork() const;
 
                 protected:
@@ -46,6 +55,9 @@ namespace sp2p {
                     void updateState();
                     void timerUpdate();
 
+                    /**
+                     * Updates node about servers address
+                     */
                     virtual void updateStateHandler(types::NodeError error, std::int32_t time_left, node_ptr node);
                     virtual void connectionErrorHandler();
 

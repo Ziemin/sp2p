@@ -15,6 +15,9 @@ namespace sp2p {
 		template <typename Request, typename Response>
 			using connection_ptr = std::shared_ptr<Connection<Request, Response>>;
 
+		/**
+		 * Class responsibible for managing multiple connections
+		 */
 		template <typename Request, typename Response>
 			class ConnectionManager {
 

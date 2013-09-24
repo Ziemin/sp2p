@@ -22,6 +22,9 @@ namespace sp2p {
 
 		namespace serialization {
 
+			/**
+			 * Abstract class being a sink for saving all sp2p related data 
+			 */
 			class AbstractSink {
 
 				public:
@@ -34,6 +37,9 @@ namespace sp2p {
 					virtual AbstractSink& operator<<(const std::string& text) = 0;
 			};
 
+			/**
+			 * An AbstractSink implementation which saves all data directly to disk
+			 */
 			class BasicSink : public AbstractSink {
 
 				public:
@@ -54,6 +60,9 @@ namespace sp2p {
 
 			};
 
+			/**
+			 * Abstract class being a source for loading all sp2p related data 
+			 */
 			class AbstractSource {
 
 				public:
@@ -66,6 +75,9 @@ namespace sp2p {
 					virtual AbstractSource& operator>>(std::string& text) = 0;
 			};
 
+			/**
+			 * An AbstractSource implementation which loads all data directly from disk
+			 */
 			class BasicSource : public AbstractSource {
 
 				public:
@@ -83,6 +95,9 @@ namespace sp2p {
 					boost::archive::text_iarchive ia;
 			};
 
+			/**
+			 * Exception throw during serialization process
+			 */
 			class DataException : public std::exception {
 
 				public:
@@ -94,6 +109,9 @@ namespace sp2p {
 					std::string message;
             };
 
+			/**
+			 * Encrypted version of AbstractSink using AES-256 algorithm 
+			 */
             class EncryptedSink : public sercli::serialization::AbstractSink {
 
                 public:
@@ -116,6 +134,9 @@ namespace sp2p {
             };
 
 
+			/**
+			 * Encrypted version of AbstractSource using AES-256 algorithm 
+			 */
             class EncryptedSource : public sercli::serialization::AbstractSource {
 
                 public:
@@ -138,7 +159,7 @@ namespace sp2p {
 
 
         /**
-         * Abstract class representing data manager, whose duty is to save state
+         * Class representing data manager, whose duty is to save state
          * of networks and nodes
          */
         class DataManager {
@@ -161,6 +182,9 @@ namespace sp2p {
 
         namespace enc {
 
+			/**
+			 * Derivative class of DataManager providing encrypted sinks and sources.
+			 */
             class CryptDataManager : public DataManager {
 
                 public:

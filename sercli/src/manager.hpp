@@ -19,8 +19,8 @@ namespace sp2p {
 	namespace sercli {
 
 		/**
-		 * Object of Manager class is responsible for dispatching asynchronous actions
-		 * related to creating networks, and assigning them with nodes
+		 * Object of Manager class is responsible for managing whole sp2p related data
+		 * including creating networks, and assigning nodes to them
 		 */
 		class Manager : boost::noncopyable {
 
@@ -33,18 +33,12 @@ namespace sp2p {
 				 */
 				Manager(DataManager& dataManager);
 
+				//!< Stops all connections 
 				void stopAll();
 
-				/**
-				 * Creates new node and adds it to base. Registers client if necessary.
-				 * Synchronous version
-				 */
 				node_ptr createNode(const types::NodeDescription& node_desc);
 				node_ptr createNode(const types::NodeDescription& node_desc, MyUser user);
 
-				/**
-				 * Returns desired nodes - self explanatory
-				 */
 				node_ptr getNode(const types::NodeDescription& node_desc) const;
 				node_ptr getNode(const std::string& node_name) const;
 				std::vector<node_ptr> getAllNodes() const;
@@ -54,9 +48,6 @@ namespace sp2p {
 
 				network_ptr createNetwork(const types::NetworkDescription& network_desc);
 
-				/**
-				 * Returns desired networks - self explanatory
-				 */
 				network_ptr getNetwork(const types::NetworkDescription& network_desc) const;
 				network_ptr getNetwork(const std::string& network_name) const;
 				std::vector<network_ptr> getAllNetworks() const;
@@ -65,14 +56,28 @@ namespace sp2p {
 				void removeNetwork(const std::string& network_name);
 
 				/**
-				 * Saves manager state 
+				 * Saves manager state
+				 * both information about nodes/networks and private keys/certificates
 				 */
 				void saveState();
+				/**
+				 * Saves manager state
+				 * both information about nodes/networks and private keys/certificates
+				 */
 				void saveState(const std::string& dest_file);
 
+				/**
+				 * Loads manager state from disk
+				 */
 				void loadState();
+				/**
+				 * Loads manager state from disk
+				 */
 				void loadState(const std::string& source_file);
 
+				/**
+				 * Clears manager's data
+				 */
 				void clear();
 
 				void setDataManager(DataManager& dataManager);

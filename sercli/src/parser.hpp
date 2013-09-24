@@ -20,6 +20,9 @@ namespace sp2p {
         template <typename Mess, typename Enable = void>
             class Parser;
 
+		/**
+		 * Abstract parser class 
+		 */
         template <typename Mess>
             class Parser <Mess, typename std::enable_if<std::is_base_of<Message, Mess>::value>::type> {
 
@@ -33,12 +36,20 @@ namespace sp2p {
             };
 
 
+		/**
+		 * Parser to build NodeResponse from bytes received from Node
+		 */
         class NodeResponseParser : public Parser<NodeResponse> {
 
             public:
 
 				~NodeResponseParser() = default;
                 void reset();
+
+				/**
+				 * @Returns error on failure, indeterminate when not enaugh data was delivered
+				 * or ok on success
+				 */
                 parse_result parse(NodeResponse&, const char data[], int length);
 
             private:

@@ -60,6 +60,9 @@ namespace sp2p {
             ServerDescription getServerDescriptionFromProto(const protocol::NodeMessage::ListServers::Server& server,
                     const NetworkDescription& network_desc);
 
+            /**
+             * Creates NodeError according to error message delivered by Node 
+             */
             NodeError getDefaultError(protocol::NodeMessage::ResponseType responseCode);
 
         } /* namespace utils */

@@ -18,6 +18,9 @@ namespace sp2p {
 
 		namespace enc {
 
+			/**
+			 * Exception casted when error related to encryption occurs
+			 */
 			class EncryptionException : public std::exception {
 
 				public:
@@ -30,6 +33,9 @@ namespace sp2p {
 
 
 			// utility functions
+			/**
+			 * @param bits length of a private key
+			 */
 			Botan::Private_Key* generatePrivateKey(std::uint32_t bits);
 
 			void savePrivateKeyToFile(const Botan::Private_Key& key, const std::string& filename, const std::string& password="");
@@ -41,6 +47,10 @@ namespace sp2p {
 			void saveCertificateToFile(const Botan::X509_Certificate& cert, const std::string& filename);
 			Botan::X509_Certificate* getCertificateFromFile(const std::string& filename);
 
+			/**
+			 * Abstract class being an inheritance base for disk space 
+			 * stores for various ecnryption related data
+			 */
 			class ElementStore {
 
 				public:
@@ -67,6 +77,10 @@ namespace sp2p {
 					std::string name, filename, path = ".";
 			};
 
+			/**
+			 * Class being a Private Key store taking care both for 
+			 * saving/loading data from disk and keeping it simply in memory
+			 */
 			class PrivateKeyStore : public ElementStore {
 
 				public:
@@ -93,6 +107,10 @@ namespace sp2p {
 
 			typedef std::shared_ptr<PrivateKeyStore> priv_st_ptr;
 
+			/**
+			 * Class being a Public Key store taking care both for 
+			 * saving/loading data from disk and keeping it simply in memory
+			 */
 			class PublicKeyStore : public ElementStore {
 
 				public:
@@ -117,6 +135,10 @@ namespace sp2p {
 
 			typedef std::shared_ptr<PublicKeyStore> pub_st_ptr;
 
+			/**
+			 * Class being a Certificate store taking care both for 
+			 * saving/loading data from disk and keeping it simply in memory
+			 */
 			class CertificateStore : public ElementStore {
 
 				public:

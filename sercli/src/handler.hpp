@@ -12,6 +12,10 @@ namespace sp2p {
     namespace sercli {
 
 
+        /**
+         * Class whose purpose is to control application logic during communication process.
+         * It is meant to be used inside Connection class
+         */
         template <typename Request, typename Response> 
             class Handler {
                 static_assert(std::is_base_of<Message, Request>::value, "Request is not type of Message");
@@ -28,6 +32,9 @@ namespace sp2p {
             };
 
 
+        /**
+         * Template specialization class to be used when exchanging information with Nodes
+         */
         template <typename Request, typename Response>
             using handler_ptr = std::shared_ptr<Handler<Request, Response>>;
 

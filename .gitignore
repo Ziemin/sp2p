@@ -13,4 +13,8 @@ build
 sercli/test/resources/*
 *.o
 *.pem
+*.dox
+Dokumentacja
+*.crt
+*.prv
 

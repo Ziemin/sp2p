@@ -27,6 +27,7 @@ namespace sp2p {
 
         /**
          * Wrapper over Connection<NodeRequest, NodeResponse>
+         * It is a specialization to deal with node
          */
         class NodeConnection : boost::noncopyable, 
         public std::enable_shared_from_this<NodeConnection> {
@@ -39,12 +40,19 @@ namespace sp2p {
 
                 void connect(const types::NodeDescription& node_desc);
 
+                //!< Handlers signature is void handler(error_code ec)
                 template <typename ConnectHandler>                    
                     void asyncConnect(const types::NodeDescription& node_desc, ConnectHandler handler);
 
                 void disconnect();
 
+                /**
+                 * Resets timer whose purpose is to destroy idle connections
+                 */
                 void resetDeadlineTimer(std::uint64_t seconds = global::node_timeout_seconds);
+                /**
+                 * Stops timer whose purpose is to destroy idle connections
+                 */
                 void stopDeadlineTimer();
 
                 connection_ptr<NodeRequest, NodeResponse> getConnection() const;

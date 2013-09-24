@@ -24,8 +24,10 @@ namespace sp2p {
 
             typedef src::severity_logger_mt<trivial::severity_level> Logger;
 
+			//!< global serverity logger used by different classes
 			BOOST_LOG_GLOBAL_LOGGER(sp2p_lg, src::severity_logger_mt<trivial::severity_level>);
 
+			//!< Function initializaing logger
 			void init();
 
 		}

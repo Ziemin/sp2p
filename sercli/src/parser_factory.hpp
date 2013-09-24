@@ -7,6 +7,9 @@
 namespace sp2p {
     namespace sercli {
 
+        /**
+         * Abstract template factory returning parser
+         */
         template<typename Message>
             class ParserFactory {
 
@@ -16,6 +19,9 @@ namespace sp2p {
                     virtual parser_ptr<Message> getParser() = 0;
             };
 
+        /**
+         * Factory returning parser for NodeResponses
+         */
         class NodeParserFactory : ParserFactory<NodeResponse> {
 
             public:

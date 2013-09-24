@@ -246,7 +246,10 @@ namespace sp2p {
             opts.organization = node_desc.node_name;
             opts.country = "Pl";
 
-            if(private_keys.empty()) return NodeError::OTHER;
+            if(private_keys.empty()) {
+                BOOST_LOG_SEV(lg, error) << "No private key available for registration";
+                return NodeError::OTHER;  
+            }
 
             Botan::Private_Key* priv_key = private_keys[0]->getKey();
             if(priv_key == nullptr) {
